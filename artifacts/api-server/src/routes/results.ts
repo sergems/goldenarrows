@@ -1,0 +1,54 @@
+import { Router } from "express";
+import { db } from "@workspace/db";
+import { resultsTable } from "@workspace/db";
+import { eq, desc } from "drizzle-orm";
+import { ListResultsQueryParams, GetResultParams } from "@workspace/api-zod";
+
+const router = Router();
+
+router.get("/results", async (req, res) => {
+  const query = ListResultsQueryParams.safeParse(req.query);
+  if (!query.success) {
+    res.status(400).json({ error: "Invalid query params" });
+    return;
+  }
+  const limit = query.data.limit ?? 20;
+  const rows = await db
+    .select()
+    .from(resultsTable)
+    .orderBy(desc(resultsTable.date))
+    .limit(Number(limit));
+  res.json(rows.map(mapResult));
+});
+
+router.get("/results/:id", async (req, res) => {
+  const params = GetResultParams.safeParse(req.params);
+  if (!params.success) {
+    res.status(400).json({ error: "Invalid params" });
+    return;
+  }
+  const [row] = await db.select().from(resultsTable).where(eq(resultsTable.id, params.data.id));
+  if (!row) {
+    res.status(404).json({ error: "Not found" });
+    return;
+  }
+  res.json(mapResult(row));
+});
+
+function mapResult(row: typeof resultsTable.$inferSelect) {
+  return {
+    id: row.id,
+    date: row.date,
+    homeTeam: row.homeTeam,
+    awayTeam: row.awayTeam,
+    homeScore: row.homeScore,
+    awayScore: row.awayScore,
+    competition: row.competition,
+    venue: row.venue,
+    scorers: row.scorers,
+    matchReport: row.matchReport,
+    highlightUrl: row.highlightUrl,
+  };
+}
+
+export default router;

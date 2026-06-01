@@ -1,0 +1,128 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-border: hsl(var(--card-border));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-popover-border: hsl(var(--popover-border));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary-border: var(--primary-border);
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-secondary-border: var(--secondary-border);
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-muted-border: var(--muted-border);
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-accent-border: var(--accent-border);
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-destructive-border: var(--destructive-border);
+
+  --font-sans: var(--app-font-sans);
+  --font-serif: var(--app-font-serif);
+  --font-mono: var(--app-font-mono);
+  --font-display: var(--app-font-display);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --button-outline: rgba(255,255,255, .10);
+  --badge-outline: rgba(255,255,255, .05);
+
+  --opaque-button-border-intensity: 9;
+  --elevate-1: rgba(255,255,255, .04);
+  --elevate-2: rgba(255,255,255, .09);
+
+  /* Deep dark base, almost black but with a tiny hint of green/cool */
+  --background: 140 10% 4%;
+  --foreground: 0 0% 98%;
+
+  --border: 140 5% 15%;
+  
+  --card: 140 10% 7%;
+  --card-foreground: 0 0% 98%;
+  --card-border: 140 5% 15%;
+
+  --popover: 140 10% 7%;
+  --popover-foreground: 0 0% 98%;
+  --popover-border: 140 5% 15%;
+
+  /* Golden Yellow #FFD700 */
+  --primary: 51 100% 50%;
+  --primary-foreground: 0 0% 0%;
+
+  /* Forest Green #1B5E20 */
+  --secondary: 125 55% 24%;
+  --secondary-foreground: 0 0% 98%;
+
+  --muted: 140 5% 12%;
+  --muted-foreground: 0 0% 60%;
+
+  --accent: 125 55% 24%;
+  --accent-foreground: 0 0% 98%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+
+  --input: 140 5% 20%;
+  --ring: 51 100% 50%;
+  
+  --sidebar: 140 10% 5%;
+  --sidebar-foreground: 0 0% 98%;
+  --sidebar-border: 140 5% 15%;
+  --sidebar-primary: 51 100% 50%;
+  --sidebar-primary-foreground: 0 0% 0%;
+  --sidebar-accent: 125 55% 24%;
+  --sidebar-accent-foreground: 0 0% 98%;
+  --sidebar-ring: 51 100% 50%;
+
+  --app-font-sans: 'Inter', sans-serif;
+  --app-font-display: 'Clash Display', 'Inter', sans-serif;
+  
+  --radius: .5rem;
+}
+
+/* Force dark mode */
+.dark {
+  --background: 140 10% 4%;
+  --foreground: 0 0% 98%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight;
+  }
+}
