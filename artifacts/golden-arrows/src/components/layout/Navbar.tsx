@@ -19,8 +19,9 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 border-b border-white/5">
-      <div className="container mx-auto flex h-18 items-center justify-between px-4 gap-4">
-        {/* Logo */}
+      <div className="container mx-auto flex h-18 items-center justify-center px-4 gap-8 relative">
+
+        {/* Logo + Club name */}
         <Link href="/" className="flex items-center gap-3 flex-shrink-0" onClick={() => setOpen(false)}>
           <img
             src={logo}
@@ -37,7 +38,7 @@ export function Navbar() {
           </div>
         </Link>
 
-        {/* Desktop Nav */}
+        {/* Desktop Nav — sits right next to the logo */}
         <nav className="hidden md:flex items-center gap-1">
           {NAV_LINKS.map(link => {
             const active = location === link.href || (link.href !== "/" && location.startsWith(link.href));
@@ -57,9 +58,9 @@ export function Navbar() {
           })}
         </nav>
 
-        {/* Mobile Toggle */}
+        {/* Mobile hamburger — absolute right so it doesn't push the centered group */}
         <button
-          className="md:hidden p-2 rounded text-white/70 hover:text-white transition-colors"
+          className="md:hidden absolute right-4 p-2 rounded text-white/70 hover:text-white transition-colors"
           onClick={() => setOpen(v => !v)}
           aria-label="Toggle menu"
         >
@@ -67,7 +68,7 @@ export function Navbar() {
         </button>
       </div>
 
-      {/* Gold accent line */}
+      {/* Gold–green accent line */}
       <div className="h-0.5 w-full bg-gradient-to-r from-secondary via-primary to-secondary" />
 
       {/* Mobile Menu */}
