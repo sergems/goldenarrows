@@ -1,6 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { useGetNextFixture } from "@workspace/api-client-react";
 import logo from "@assets/Lamontville_Golden_Arrows_logo_1780312879951.svg";
 
 const NAV_LINKS = [
@@ -13,9 +14,32 @@ const NAV_LINKS = [
   { href: "/club", label: "Club" },
 ];
 
+function isSameDay(dateStr: string) {
+  const today = new Date();
+  const d = new Date(dateStr);
+  return (
+    d.getFullYear() === today.getFullYear() &&
+    d.getMonth() === today.getMonth() &&
+    d.getDate() === today.getDate()
+  );
+}
+
+function isMatchLive(dateStr: string, timeStr?: string | null) {
+  const now = new Date();
+  const kickoff = new Date(`${dateStr}T${timeStr || "15:00:00"}`);
+  const elapsed = (now.getTime() - kickoff.getTime()) / (1000 * 60);
+  return elapsed >= 0 && elapsed <= 105;
+}
+
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const [location] = useLocation();
+  const { data: nextFixture } = useGetNextFixture();
+
+  const matchToday = nextFixture ? isSameDay(nextFixture.date) : false;
+  const live = matchToday && nextFixture
+    ? isMatchLive(nextFixture.date, nextFixture.time)
+    : false;
 
   return (
     <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 border-b border-white/5">
@@ -38,7 +62,7 @@ export function Navbar() {
           </div>
         </Link>
 
-        {/* Desktop Nav — sits right next to the logo */}
+        {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-1">
           {NAV_LINKS.map(link => {
             const active = location === link.href || (link.href !== "/" && location.startsWith(link.href));
@@ -47,9 +71,7 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={`px-4 py-2 text-sm font-bold uppercase tracking-wider rounded transition-colors ${
-                  active
-                    ? "text-primary"
-                    : "text-white/70 hover:text-white hover:bg-white/5"
+                  active ? "text-primary" : "text-white/70 hover:text-white hover:bg-white/5"
                 }`}
               >
                 {link.label}
@@ -58,7 +80,37 @@ export function Navbar() {
           })}
         </nav>
 
-        {/* Mobile hamburger — absolute right so it doesn't push the centered group */}
+        {/* Match day / Live badge — shown on desktop right side */}
+        {matchToday && (
+          <Link
+            href="/"
+            className={`hidden md:flex items-center gap-2 absolute right-4 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${
+              live
+                ? "bg-red-600 text-white"
+                : "bg-primary text-black"
+            }`}
+          >
+            {live ? (
+              <>
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+                </span>
+                Live
+              </>
+            ) : (
+              <>
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-black opacity-50" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-black" />
+                </span>
+                Match Day
+              </>
+            )}
+          </Link>
+        )}
+
+        {/* Mobile hamburger */}
         <button
           className="md:hidden absolute right-4 p-2 rounded text-white/70 hover:text-white transition-colors"
           onClick={() => setOpen(v => !v)}
@@ -68,8 +120,23 @@ export function Navbar() {
         </button>
       </div>
 
-      {/* Gold–green accent line */}
-      <div className="h-0.5 w-full bg-gradient-to-r from-secondary via-primary to-secondary" />
+      {/* Accent line — gold when match day, otherwise green→gold→green */}
+      <div
+        className={`h-0.5 w-full ${
+          live
+            ? "bg-red-500"
+            : matchToday
+            ? "bg-primary"
+            : "bg-gradient-to-r from-secondary via-primary to-secondary"
+        }`}
+      />
+
+      {/* Mobile match-day strip */}
+      {matchToday && (
+        <div className={`md:hidden text-center py-1 text-xs font-bold uppercase tracking-widest ${live ? "bg-red-600 text-white" : "bg-primary text-black"}`}>
+          {live ? "● Match Live Now" : "● Match Day — Today"}
+        </div>
+      )}
 
       {/* Mobile Menu */}
       {open && (
