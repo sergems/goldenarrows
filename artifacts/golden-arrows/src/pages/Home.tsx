@@ -4,6 +4,7 @@ import {
   useListResults,
   useGetLeagueTable,
   useListPlayers,
+  useListSlides,
   type Fixture,
 } from "@workspace/api-client-react";
 import { Link } from "wouter";
@@ -81,6 +82,50 @@ function Countdown({ date }: { date: string }) {
   );
 }
 
+// ─── Hero background slider ───────────────────────────────────────────────────
+
+function HeroBackground({ children }: { children?: React.ReactNode }) {
+  const { data: slides } = useListSlides();
+  const active = slides?.filter(s => s.active) ?? [];
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    if (active.length <= 1) return;
+    const id = setInterval(() => setIdx(i => (i + 1) % active.length), 6000);
+    return () => clearInterval(id);
+  }, [active.length]);
+
+  return (
+    <div className="absolute inset-0 z-0">
+      {active.length > 0 ? (
+        active.map((slide, i) => (
+          <div
+            key={slide.id}
+            className="absolute inset-0 transition-opacity duration-1000"
+            style={{ opacity: i === idx ? 1 : 0 }}
+          >
+            <img src={slide.imageUrl} alt={slide.title} className="w-full h-full object-cover" />
+          </div>
+        ))
+      ) : (
+        <img src={heroStadium} alt="Stadium" className="w-full h-full object-cover" />
+      )}
+      {children}
+      {active.length > 1 && (
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2 pointer-events-auto">
+          {active.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIdx(i)}
+              className={`rounded-full transition-all duration-300 ${i === idx ? "w-6 h-2 bg-primary" : "w-2 h-2 bg-white/40 hover:bg-white/60"}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Match-day hero ───────────────────────────────────────────────────────────
 
 function MatchDayHero({ fixture }: { fixture: Fixture }) {
@@ -92,15 +137,13 @@ function MatchDayHero({ fixture }: { fixture: Fixture }) {
 
   return (
     <section className="relative min-h-[80vh] w-full overflow-hidden flex items-center">
-      {/* Background — stadium with heavy green tint */}
-      <div className="absolute inset-0 z-0">
-        <img src={heroStadium} alt="Stadium" className="w-full h-full object-cover scale-110" />
+      {/* Background — slider with heavy green tint */}
+      <HeroBackground>
         <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/75 to-background" />
-        {/* Animated green pulse when live */}
         {live && (
           <div className="absolute inset-0 animate-pulse bg-red-900/10" />
         )}
-      </div>
+      </HeroBackground>
 
       <div className="container relative z-10 mx-auto px-4 py-24 text-center">
         <motion.div
@@ -241,10 +284,9 @@ function MatchDayHero({ fixture }: { fixture: Fixture }) {
 function NormalHero() {
   return (
     <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden flex items-center">
-      <div className="absolute inset-0 z-0">
-        <img src={heroStadium} alt="Stadium" className="w-full h-full object-cover" />
+      <HeroBackground>
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30" />
-      </div>
+      </HeroBackground>
 
       <div className="container relative z-10 mx-auto px-4 text-center mt-16">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>

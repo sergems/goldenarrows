@@ -5,6 +5,7 @@ import { AdminLayout } from "./AdminLayout";
 import { Plus, Trash2, X, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ImageUpload } from "@/components/ui/ImageUpload";
 
 function GalleryForm({ onClose }: { onClose: () => void }) {
   const queryClient = useQueryClient();
@@ -55,14 +56,28 @@ function GalleryForm({ onClose }: { onClose: () => void }) {
               </select>
             </div>
           </div>
-          <div>
-            <label className="text-sm text-muted-foreground mb-2 block">URL (image or YouTube) *</label>
-            <Input name="url" value={form.url} onChange={handle} required placeholder="https://..." />
-          </div>
-          <div>
-            <label className="text-sm text-muted-foreground mb-2 block">Thumbnail URL</label>
-            <Input name="thumbnailUrl" value={form.thumbnailUrl} onChange={handle} placeholder="https://... (optional)" />
-          </div>
+          {form.type === "photo" ? (
+            <ImageUpload
+              label="Photo"
+              required
+              value={form.url}
+              onChange={url => setForm(f => ({ ...f, url, thumbnailUrl: url }))}
+            />
+          ) : (
+            <div>
+              <label className="text-sm text-muted-foreground mb-2 block">YouTube or Video URL *</label>
+              <Input name="url" value={form.url} onChange={handle} required placeholder="https://youtube.com/..." />
+            </div>
+          )}
+          {form.type === "video" && (
+            <div>
+              <label className="text-sm text-muted-foreground mb-2 block">Thumbnail Image</label>
+              <ImageUpload
+                value={form.thumbnailUrl}
+                onChange={url => setForm(f => ({ ...f, thumbnailUrl: url }))}
+              />
+            </div>
+          )}
           <div>
             <label className="text-sm text-muted-foreground mb-2 block">Caption</label>
             <Input name="caption" value={form.caption} onChange={handle} />

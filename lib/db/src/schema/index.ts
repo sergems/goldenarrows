@@ -7,3 +7,4 @@ export * from "./gallery";
 export * from "./sponsors";
 export * from "./league";
 export * from "./enquiries";
+export * from "./slides";

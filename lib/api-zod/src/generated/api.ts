@@ -17,6 +17,75 @@ export const HealthCheckResponse = zod.object({
 
 
 /**
+ * @summary List hero slides
+ */
+export const ListSlidesResponseItem = zod.object({
+  "id": zod.number(),
+  "title": zod.string(),
+  "imageUrl": zod.string(),
+  "subtitle": zod.string().nullish(),
+  "link": zod.string().nullish(),
+  "linkLabel": zod.string().nullish(),
+  "sortOrder": zod.number(),
+  "active": zod.boolean(),
+  "createdAt": zod.string()
+})
+export const ListSlidesResponse = zod.array(ListSlidesResponseItem)
+
+
+/**
+ * @summary Create a hero slide (admin)
+ */
+export const CreateSlideBody = zod.object({
+  "title": zod.string(),
+  "imageUrl": zod.string(),
+  "subtitle": zod.string().optional(),
+  "link": zod.string().optional(),
+  "linkLabel": zod.string().optional(),
+  "sortOrder": zod.number().optional(),
+  "active": zod.boolean().optional()
+})
+
+
+/**
+ * @summary Update a slide (admin)
+ */
+export const UpdateSlideParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateSlideBody = zod.object({
+  "title": zod.string().optional(),
+  "imageUrl": zod.string().optional(),
+  "subtitle": zod.string().optional(),
+  "link": zod.string().optional(),
+  "linkLabel": zod.string().optional(),
+  "sortOrder": zod.number().optional(),
+  "active": zod.boolean().optional()
+})
+
+export const UpdateSlideResponse = zod.object({
+  "id": zod.number(),
+  "title": zod.string(),
+  "imageUrl": zod.string(),
+  "subtitle": zod.string().nullish(),
+  "link": zod.string().nullish(),
+  "linkLabel": zod.string().nullish(),
+  "sortOrder": zod.number(),
+  "active": zod.boolean(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Delete a slide (admin)
+ */
+export const DeleteSlideParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+
+/**
  * @summary Submit a contact enquiry (public)
  */
 export const CreateEnquiryBody = zod.object({

@@ -7,6 +7,7 @@ import { Plus, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { ImageUpload } from "@/components/ui/ImageUpload";
 
 function NewsForm({ onClose }: { onClose: () => void }) {
   const queryClient = useQueryClient();
@@ -53,10 +54,12 @@ function NewsForm({ onClose }: { onClose: () => void }) {
               </select>
             </div>
           </div>
-          <div>
-            <label className="text-sm text-muted-foreground mb-2 block">Image URL *</label>
-            <Input name="imageUrl" value={form.imageUrl} onChange={handle} required placeholder="https://..." />
-          </div>
+          <ImageUpload
+            label="Article Image"
+            required
+            value={form.imageUrl}
+            onChange={url => setForm(f => ({ ...f, imageUrl: url }))}
+          />
           <div>
             <label className="text-sm text-muted-foreground mb-2 block">Excerpt *</label>
             <Textarea name="excerpt" value={form.excerpt} onChange={handle} required placeholder="Short summary..." rows={2} />

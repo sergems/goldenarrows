@@ -179,6 +179,41 @@ export interface Sponsor {
   tier: string;
 }
 
+export interface Slide {
+  id: number;
+  title: string;
+  imageUrl: string;
+  /** @nullable */
+  subtitle?: string | null;
+  /** @nullable */
+  link?: string | null;
+  /** @nullable */
+  linkLabel?: string | null;
+  sortOrder: number;
+  active: boolean;
+  createdAt: string;
+}
+
+export interface SlideInput {
+  title: string;
+  imageUrl: string;
+  subtitle?: string;
+  link?: string;
+  linkLabel?: string;
+  sortOrder?: number;
+  active?: boolean;
+}
+
+export interface SlideUpdate {
+  title?: string;
+  imageUrl?: string;
+  subtitle?: string;
+  link?: string;
+  linkLabel?: string;
+  sortOrder?: number;
+  active?: boolean;
+}
+
 export interface MatchResultInput {
   date: string;
   homeTeam: string;
