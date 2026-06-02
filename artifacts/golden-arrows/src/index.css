@@ -51,79 +51,75 @@
 }
 
 :root {
-  --button-outline: rgba(255,255,255, .10);
-  --badge-outline: rgba(255,255,255, .05);
+  --button-outline: rgba(255,255,255, .12);
+  --badge-outline: rgba(255,255,255, .07);
 
   --opaque-button-border-intensity: 9;
   --elevate-1: rgba(255,255,255, .04);
-  --elevate-2: rgba(255,255,255, .09);
+  --elevate-2: rgba(255,255,255, .08);
 
   /* ============================================
-     OFFICIAL LAMONTVILLE GOLDEN ARROWS FC COLORS
-     Extracted directly from the club crest SVG
+     LAMONTVILLE GOLDEN ARROWS FC
+     Dominant: Club Green #207F3E
+     Accent: Club Gold #FCDA00 + White
      ============================================ */
 
-  /* Deep dark background — tinted with club green #207F3E */
-  --background: 139 20% 5%;
+  /* Deep forest green — clearly green, not near-black */
+  --background: 139 55% 8%;
   --foreground: 0 0% 97%;
 
-  --border: 139 8% 16%;
+  --border: 139 35% 18%;
 
-  /* Card surfaces — slightly lighter green-tinted dark */
-  --card: 139 15% 8%;
+  /* Card: slightly lighter green */
+  --card: 139 50% 11%;
   --card-foreground: 0 0% 97%;
-  --card-border: 139 8% 16%;
+  --card-border: 139 35% 18%;
 
-  --popover: 139 15% 8%;
+  --popover: 139 50% 11%;
   --popover-foreground: 0 0% 97%;
-  --popover-border: 139 8% 16%;
+  --popover-border: 139 35% 18%;
 
-  /* PRIMARY: Club Gold #FCDA00 — the iconic arrows colour */
-  /* hsl(52, 100%, 49%) */
+  /* PRIMARY: Club Gold #FCDA00 */
   --primary: 52 100% 49%;
   --primary-foreground: 0 0% 0%;
 
-  /* SECONDARY: Club Forest Green #207F3E — the shield background */
-  /* hsl(139, 60%, 31%) */
-  --secondary: 139 60% 31%;
+  /* SECONDARY: Club Green #207F3E — lighter variant for surfaces */
+  --secondary: 139 55% 22%;
   --secondary-foreground: 0 0% 98%;
 
-  --muted: 139 8% 13%;
-  --muted-foreground: 0 0% 58%;
+  --muted: 139 40% 14%;
+  --muted-foreground: 139 15% 65%;
 
-  /* Accent: same as secondary green for consistency */
-  --accent: 139 60% 31%;
+  --accent: 139 55% 22%;
   --accent-foreground: 0 0% 98%;
 
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 98%;
 
-  --input: 139 8% 18%;
+  --input: 139 40% 16%;
   --ring: 52 100% 49%;
 
-  --sidebar: 139 20% 6%;
+  --sidebar: 139 55% 7%;
   --sidebar-foreground: 0 0% 97%;
-  --sidebar-border: 139 8% 16%;
+  --sidebar-border: 139 35% 18%;
   --sidebar-primary: 52 100% 49%;
   --sidebar-primary-foreground: 0 0% 0%;
-  --sidebar-accent: 139 60% 31%;
+  --sidebar-accent: 139 55% 22%;
   --sidebar-accent-foreground: 0 0% 98%;
   --sidebar-ring: 52 100% 49%;
 
-  /* Club colour raw values for direct use */
+  /* Raw club colours for direct CSS use */
   --club-gold: #FCDA00;
-  --club-gold-accent: #E1E322;
   --club-green: #207F3E;
+  --club-green-dark: #155228;
   --club-cream: #F6F3B4;
 
-  /* Fonts */
   --app-font-sans: 'Inter', system-ui, sans-serif;
   --app-font-display: 'Bebas Neue', 'Barlow Condensed', system-ui, sans-serif;
 
   --radius: .375rem;
 }
 
-/* Force dark mode always */
 html {
   color-scheme: dark;
 }
@@ -139,16 +135,14 @@ html {
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-display;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.04em;
   }
 }
 
-/* Club gold glow utility */
 .glow-gold {
-  box-shadow: 0 0 20px rgba(252, 218, 0, 0.3), 0 0 60px rgba(252, 218, 0, 0.1);
+  box-shadow: 0 0 24px rgba(252, 218, 0, 0.35), 0 0 64px rgba(252, 218, 0, 0.12);
 }
 
-/* Green glow utility */
 .glow-green {
-  box-shadow: 0 0 20px rgba(32, 127, 62, 0.4);
+  box-shadow: 0 0 24px rgba(32, 127, 62, 0.5);
 }
