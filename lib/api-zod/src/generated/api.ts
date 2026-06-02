@@ -355,6 +355,23 @@ export const GetNextFixtureResponse = zod.object({
 
 
 /**
+ * @summary Create a match result (admin)
+ */
+export const CreateResultBody = zod.object({
+  "date": zod.string(),
+  "homeTeam": zod.string(),
+  "awayTeam": zod.string(),
+  "homeScore": zod.number(),
+  "awayScore": zod.number(),
+  "competition": zod.string(),
+  "venue": zod.string().optional(),
+  "scorers": zod.array(zod.string()).optional(),
+  "matchReport": zod.string().optional(),
+  "highlightUrl": zod.string().optional()
+})
+
+
+/**
  * @summary List recent match results
  */
 export const ListResultsQueryParams = zod.object({

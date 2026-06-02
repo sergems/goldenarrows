@@ -179,6 +179,19 @@ export interface Sponsor {
   tier: string;
 }
 
+export interface MatchResultInput {
+  date: string;
+  homeTeam: string;
+  awayTeam: string;
+  homeScore: number;
+  awayScore: number;
+  competition: string;
+  venue?: string;
+  scorers?: string[];
+  matchReport?: string;
+  highlightUrl?: string;
+}
+
 export type EnquiryStatus = typeof EnquiryStatus[keyof typeof EnquiryStatus];
 
 

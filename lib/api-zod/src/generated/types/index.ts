@@ -26,6 +26,7 @@ export * from './listNewsParams';
 export * from './listPlayersParams';
 export * from './listResultsParams';
 export * from './matchResult';
+export * from './matchResultInput';
 export * from './newsArticle';
 export * from './newsInput';
 export * from './player';

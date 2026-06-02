@@ -2,9 +2,19 @@ import { Router } from "express";
 import { db } from "@workspace/db";
 import { resultsTable } from "@workspace/db";
 import { eq, desc } from "drizzle-orm";
-import { ListResultsQueryParams, GetResultParams } from "@workspace/api-zod";
+import { ListResultsQueryParams, GetResultParams, CreateResultBody } from "@workspace/api-zod";
 
 const router = Router();
+
+router.post("/results", async (req, res) => {
+  const body = CreateResultBody.safeParse(req.body);
+  if (!body.success) {
+    res.status(400).json({ error: "Invalid body", details: body.error.issues });
+    return;
+  }
+  const [row] = await db.insert(resultsTable).values(body.data).returning();
+  res.status(201).json(mapResult(row));
+});
 
 router.get("/results", async (req, res) => {
   const query = ListResultsQueryParams.safeParse(req.query);

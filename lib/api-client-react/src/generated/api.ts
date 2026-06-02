@@ -35,6 +35,7 @@ import type {
   ListPlayersParams,
   ListResultsParams,
   MatchResult,
+  MatchResultInput,
   NewsArticle,
   NewsInput,
   Player,
@@ -1487,6 +1488,77 @@ export function useGetNextFixture<TData = Awaited<ReturnType<typeof getNextFixtu
 
 
 
+
+export const getCreateResultUrl = () => {
+
+
+
+
+  return `/api/results`
+}
+
+/**
+ * @summary Create a match result (admin)
+ */
+export const createResult = async (matchResultInput: MatchResultInput, options?: RequestInit): Promise<MatchResult> => {
+
+  return customFetch<MatchResult>(getCreateResultUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      matchResultInput,)
+  }
+);}
+
+
+
+
+export const getCreateResultMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createResult>>, TError,{data: BodyType<MatchResultInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createResult>>, TError,{data: BodyType<MatchResultInput>}, TContext> => {
+
+const mutationKey = ['createResult'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createResult>>, {data: BodyType<MatchResultInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createResult(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateResultMutationResult = NonNullable<Awaited<ReturnType<typeof createResult>>>
+    export type CreateResultMutationBody = BodyType<MatchResultInput>
+    export type CreateResultMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Create a match result (admin)
+ */
+export const useCreateResult = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createResult>>, TError,{data: BodyType<MatchResultInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createResult>>,
+        TError,
+        {data: BodyType<MatchResultInput>},
+        TContext
+      > => {
+      return useMutation(getCreateResultMutationOptions(options));
+    }
 
 export const getListResultsUrl = (params?: ListResultsParams,) => {
   const normalizedParams = new URLSearchParams();

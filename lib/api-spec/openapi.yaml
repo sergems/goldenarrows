@@ -388,6 +388,23 @@ paths:
 
   # ── RESULTS ───────────────────────────────────────────────────────────────
   /results:
+    post:
+      operationId: createResult
+      tags: [results]
+      summary: Create a match result (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MatchResultInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MatchResult"
     get:
       operationId: listResults
       tags: [results]
@@ -704,6 +721,22 @@ components:
         logoUrl: { type: string }
         websiteUrl: { type: ["string", "null"] }
         tier: { type: string }
+
+    # ── RESULTS (write) ───────────────────────────────────────────────────
+    MatchResultInput:
+      type: object
+      required: [date, homeTeam, awayTeam, homeScore, awayScore, competition]
+      properties:
+        date: { type: string }
+        homeTeam: { type: string }
+        awayTeam: { type: string }
+        homeScore: { type: integer }
+        awayScore: { type: integer }
+        competition: { type: string }
+        venue: { type: string }
+        scorers: { type: array, items: { type: string } }
+        matchReport: { type: string }
+        highlightUrl: { type: string }
 
     # ── ENQUIRIES ─────────────────────────────────────────────────────────
     Enquiry:
