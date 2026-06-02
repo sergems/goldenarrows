@@ -4,6 +4,7 @@ import {
   useListResults,
   useGetLeagueTable,
   useListPlayers,
+  type Fixture,
 } from "@workspace/api-client-react";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
@@ -82,7 +83,7 @@ function Countdown({ date }: { date: string }) {
 
 // ─── Match-day hero ───────────────────────────────────────────────────────────
 
-function MatchDayHero({ fixture }: { fixture: ReturnType<typeof useGetNextFixture>["data"] }) {
+function MatchDayHero({ fixture }: { fixture: Fixture }) {
   if (!fixture) return null;
 
   const kickoffDate = new Date(`${fixture.date}T${fixture.time || "15:00:00"}`);
