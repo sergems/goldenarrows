@@ -6,3 +6,4 @@ export * from "./results";
 export * from "./gallery";
 export * from "./sponsors";
 export * from "./league";
+export * from "./enquiries";

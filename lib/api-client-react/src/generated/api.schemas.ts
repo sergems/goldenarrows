@@ -179,6 +179,47 @@ export interface Sponsor {
   tier: string;
 }
 
+export type EnquiryStatus = typeof EnquiryStatus[keyof typeof EnquiryStatus];
+
+
+export const EnquiryStatus = {
+  unread: 'unread',
+  read: 'read',
+  resolved: 'resolved',
+} as const;
+
+export interface Enquiry {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  subject: string;
+  message: string;
+  status: EnquiryStatus;
+  createdAt: string;
+}
+
+export interface EnquiryInput {
+  firstName: string;
+  lastName: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+export type EnquiryUpdateStatus = typeof EnquiryUpdateStatus[keyof typeof EnquiryUpdateStatus];
+
+
+export const EnquiryUpdateStatus = {
+  unread: 'unread',
+  read: 'read',
+  resolved: 'resolved',
+} as const;
+
+export interface EnquiryUpdate {
+  status?: EnquiryUpdateStatus;
+}
+
 export interface StatsSummary {
   leaguePosition: number;
   played: number;
@@ -193,6 +234,12 @@ export interface StatsSummary {
   cleanSheets: number;
   winRate?: number;
 }
+
+export type ListEnquiriesParams = {
+status?: string;
+limit?: number;
+offset?: number;
+};
 
 export type ListNewsParams = {
 category?: string;

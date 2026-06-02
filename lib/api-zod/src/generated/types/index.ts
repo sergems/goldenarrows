@@ -6,6 +6,11 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from './enquiry';
+export * from './enquiryInput';
+export * from './enquiryStatus';
+export * from './enquiryUpdate';
+export * from './enquiryUpdateStatus';
 export * from './fixture';
 export * from './galleryInput';
 export * from './galleryInputType';
@@ -13,6 +18,7 @@ export * from './galleryItem';
 export * from './galleryItemType';
 export * from './healthStatus';
 export * from './leagueTableEntry';
+export * from './listEnquiriesParams';
 export * from './listFixturesParams';
 export * from './listGalleryParams';
 export * from './listGalleryType';

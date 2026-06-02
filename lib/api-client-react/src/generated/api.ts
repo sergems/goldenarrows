@@ -20,11 +20,15 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  Enquiry,
+  EnquiryInput,
+  EnquiryUpdate,
   Fixture,
   GalleryInput,
   GalleryItem,
   HealthStatus,
   LeagueTableEntry,
+  ListEnquiriesParams,
   ListFixturesParams,
   ListGalleryParams,
   ListNewsParams,
@@ -129,6 +133,303 @@ export function useHealthCheck<TData = Awaited<ReturnType<typeof healthCheck>>, 
 
 
 
+
+export const getCreateEnquiryUrl = () => {
+
+
+
+
+  return `/api/enquiries`
+}
+
+/**
+ * @summary Submit a contact enquiry (public)
+ */
+export const createEnquiry = async (enquiryInput: EnquiryInput, options?: RequestInit): Promise<Enquiry> => {
+
+  return customFetch<Enquiry>(getCreateEnquiryUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      enquiryInput,)
+  }
+);}
+
+
+
+
+export const getCreateEnquiryMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createEnquiry>>, TError,{data: BodyType<EnquiryInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createEnquiry>>, TError,{data: BodyType<EnquiryInput>}, TContext> => {
+
+const mutationKey = ['createEnquiry'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createEnquiry>>, {data: BodyType<EnquiryInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createEnquiry(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateEnquiryMutationResult = NonNullable<Awaited<ReturnType<typeof createEnquiry>>>
+    export type CreateEnquiryMutationBody = BodyType<EnquiryInput>
+    export type CreateEnquiryMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Submit a contact enquiry (public)
+ */
+export const useCreateEnquiry = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createEnquiry>>, TError,{data: BodyType<EnquiryInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createEnquiry>>,
+        TError,
+        {data: BodyType<EnquiryInput>},
+        TContext
+      > => {
+      return useMutation(getCreateEnquiryMutationOptions(options));
+    }
+
+export const getListEnquiriesUrl = (params?: ListEnquiriesParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/enquiries?${stringifiedParams}` : `/api/enquiries`
+}
+
+/**
+ * @summary List all enquiries (admin)
+ */
+export const listEnquiries = async (params?: ListEnquiriesParams, options?: RequestInit): Promise<Enquiry[]> => {
+
+  return customFetch<Enquiry[]>(getListEnquiriesUrl(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListEnquiriesQueryKey = (params?: ListEnquiriesParams,) => {
+    return [
+    `/api/enquiries`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getListEnquiriesQueryOptions = <TData = Awaited<ReturnType<typeof listEnquiries>>, TError = ErrorType<unknown>>(params?: ListEnquiriesParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listEnquiries>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListEnquiriesQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listEnquiries>>> = ({ signal }) => listEnquiries(params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listEnquiries>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListEnquiriesQueryResult = NonNullable<Awaited<ReturnType<typeof listEnquiries>>>
+export type ListEnquiriesQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List all enquiries (admin)
+ */
+
+export function useListEnquiries<TData = Awaited<ReturnType<typeof listEnquiries>>, TError = ErrorType<unknown>>(
+ params?: ListEnquiriesParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listEnquiries>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListEnquiriesQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getUpdateEnquiryUrl = (id: number,) => {
+
+
+
+
+  return `/api/enquiries/${id}`
+}
+
+/**
+ * @summary Update enquiry status (admin)
+ */
+export const updateEnquiry = async (id: number,
+    enquiryUpdate: EnquiryUpdate, options?: RequestInit): Promise<Enquiry> => {
+
+  return customFetch<Enquiry>(getUpdateEnquiryUrl(id),
+  {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      enquiryUpdate,)
+  }
+);}
+
+
+
+
+export const getUpdateEnquiryMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateEnquiry>>, TError,{id: number;data: BodyType<EnquiryUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateEnquiry>>, TError,{id: number;data: BodyType<EnquiryUpdate>}, TContext> => {
+
+const mutationKey = ['updateEnquiry'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateEnquiry>>, {id: number;data: BodyType<EnquiryUpdate>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateEnquiry(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateEnquiryMutationResult = NonNullable<Awaited<ReturnType<typeof updateEnquiry>>>
+    export type UpdateEnquiryMutationBody = BodyType<EnquiryUpdate>
+    export type UpdateEnquiryMutationError = ErrorType<void>
+
+    /**
+ * @summary Update enquiry status (admin)
+ */
+export const useUpdateEnquiry = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateEnquiry>>, TError,{id: number;data: BodyType<EnquiryUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof updateEnquiry>>,
+        TError,
+        {id: number;data: BodyType<EnquiryUpdate>},
+        TContext
+      > => {
+      return useMutation(getUpdateEnquiryMutationOptions(options));
+    }
+
+export const getDeleteEnquiryUrl = (id: number,) => {
+
+
+
+
+  return `/api/enquiries/${id}`
+}
+
+/**
+ * @summary Delete an enquiry (admin)
+ */
+export const deleteEnquiry = async (id: number, options?: RequestInit): Promise<void> => {
+
+  return customFetch<void>(getDeleteEnquiryUrl(id),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+export const getDeleteEnquiryMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteEnquiry>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteEnquiry>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteEnquiry'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteEnquiry>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteEnquiry(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteEnquiryMutationResult = NonNullable<Awaited<ReturnType<typeof deleteEnquiry>>>
+
+    export type DeleteEnquiryMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Delete an enquiry (admin)
+ */
+export const useDeleteEnquiry = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteEnquiry>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deleteEnquiry>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getDeleteEnquiryMutationOptions(options));
+    }
 
 export const getListNewsUrl = (params?: ListNewsParams,) => {
   const normalizedParams = new URLSearchParams();

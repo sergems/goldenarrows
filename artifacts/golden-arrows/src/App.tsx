@@ -24,6 +24,7 @@ import AdminDashboard from "@/pages/admin/Dashboard";
 import AdminNews from "@/pages/admin/AdminNews";
 import AdminSquad from "@/pages/admin/AdminSquad";
 import AdminGallery from "@/pages/admin/AdminGallery";
+import AdminEnquiries from "@/pages/admin/AdminEnquiries";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 30_000 } },
@@ -97,6 +98,9 @@ function Router() {
       </Route>
       <Route path="/admin/gallery">
         <AdminGallery />
+      </Route>
+      <Route path="/admin/enquiries">
+        <AdminEnquiries />
       </Route>
 
       <Route>

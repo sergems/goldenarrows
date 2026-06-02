@@ -1,117 +1,209 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Phone, Mail, Facebook, Instagram, Twitter, Youtube } from "lucide-react";
+import { MapPin, Phone, Mail, Facebook, Instagram, Twitter, Youtube, CheckCircle, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useCreateEnquiry } from "@workspace/api-client-react";
 
 export default function Contact() {
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  function handleSubmit(e: React.FormEvent) {
+  const mutation = useCreateEnquiry();
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setSent(true);
+    setError(null);
+    mutation.mutate(
+      { data: form },
+      {
+        onSuccess: () => setSent(true),
+        onError: () => setError("Something went wrong. Please try again."),
+      }
+    );
   }
 
   return (
     <div className="min-h-screen">
+      {/* Header */}
       <div className="bg-card py-20 border-b border-white/5">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="font-display font-bold text-5xl uppercase tracking-tight mb-4">
+          <p className="text-primary font-bold uppercase tracking-[0.3em] text-xs mb-3">Get in Touch</p>
+          <h1 className="font-display text-5xl uppercase mb-4" style={{ letterSpacing: "0.06em" }}>
             Contact <span className="text-primary">Us</span>
           </h1>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            Get in touch with Lamontville Golden Arrows FC.
+            Reach out to Lamontville Golden Arrows FC — we'd love to hear from you.
           </p>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-16 max-w-5xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+
           {/* Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
-            <h2 className="font-display font-bold text-2xl uppercase tracking-tight mb-6">Send a <span className="text-primary">Message</span></h2>
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+            <h2 className="font-display text-2xl uppercase mb-6" style={{ letterSpacing: "0.06em" }}>
+              Send a <span className="text-primary">Message</span>
+            </h2>
+
             {sent ? (
-              <div className="bg-secondary/20 border border-secondary/30 rounded-xl p-8 text-center">
-                <div className="font-display font-bold text-2xl text-primary mb-2">Thank You!</div>
-                <p className="text-muted-foreground">Your message has been received. We will get back to you shortly.</p>
-              </div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-secondary/20 border border-secondary/40 rounded-xl p-10 text-center"
+              >
+                <CheckCircle className="h-12 w-12 text-primary mx-auto mb-4" />
+                <div className="font-display text-2xl text-primary mb-2" style={{ letterSpacing: "0.06em" }}>
+                  Message Sent!
+                </div>
+                <p className="text-muted-foreground mb-6">
+                  Thanks for reaching out. We'll get back to you as soon as possible.
+                </p>
+                <button
+                  onClick={() => { setSent(false); setForm({ firstName: "", lastName: "", email: "", subject: "", message: "" }); }}
+                  className="text-sm font-bold uppercase tracking-wider text-primary hover:underline"
+                >
+                  Send another message
+                </button>
+              </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm text-muted-foreground mb-2 block">First Name</label>
-                    <Input placeholder="John" required />
+                    <label className="text-xs text-muted-foreground mb-2 block font-bold uppercase tracking-wider">First Name</label>
+                    <Input
+                      name="firstName"
+                      value={form.firstName}
+                      onChange={handleChange}
+                      placeholder="John"
+                      required
+                      className="bg-card border-white/10"
+                    />
                   </div>
                   <div>
-                    <label className="text-sm text-muted-foreground mb-2 block">Last Name</label>
-                    <Input placeholder="Doe" required />
+                    <label className="text-xs text-muted-foreground mb-2 block font-bold uppercase tracking-wider">Last Name</label>
+                    <Input
+                      name="lastName"
+                      value={form.lastName}
+                      onChange={handleChange}
+                      placeholder="Doe"
+                      required
+                      className="bg-card border-white/10"
+                    />
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm text-muted-foreground mb-2 block">Email Address</label>
-                  <Input type="email" placeholder="john@example.com" required />
+                  <label className="text-xs text-muted-foreground mb-2 block font-bold uppercase tracking-wider">Email Address</label>
+                  <Input
+                    type="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder="john@example.com"
+                    required
+                    className="bg-card border-white/10"
+                  />
                 </div>
                 <div>
-                  <label className="text-sm text-muted-foreground mb-2 block">Subject</label>
-                  <Input placeholder="General Enquiry" required />
+                  <label className="text-xs text-muted-foreground mb-2 block font-bold uppercase tracking-wider">Subject</label>
+                  <Input
+                    name="subject"
+                    value={form.subject}
+                    onChange={handleChange}
+                    placeholder="General Enquiry"
+                    required
+                    className="bg-card border-white/10"
+                  />
                 </div>
                 <div>
-                  <label className="text-sm text-muted-foreground mb-2 block">Message</label>
-                  <Textarea placeholder="Your message..." rows={5} required />
+                  <label className="text-xs text-muted-foreground mb-2 block font-bold uppercase tracking-wider">Message</label>
+                  <Textarea
+                    name="message"
+                    value={form.message}
+                    onChange={handleChange}
+                    placeholder="Your message..."
+                    rows={5}
+                    required
+                    className="bg-card border-white/10 resize-none"
+                  />
                 </div>
-                <Button type="submit" className="w-full font-bold uppercase tracking-wider">
-                  Send Message
+
+                {error && (
+                  <p className="text-red-400 text-sm bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3">
+                    {error}
+                  </p>
+                )}
+
+                <Button
+                  type="submit"
+                  disabled={mutation.isPending}
+                  className="w-full font-bold uppercase tracking-wider h-12"
+                >
+                  {mutation.isPending ? (
+                    <span className="flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" /> Sending…
+                    </span>
+                  ) : (
+                    "Send Message"
+                  )}
                 </Button>
               </form>
             )}
           </motion.div>
 
           {/* Club Info */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="space-y-8"
-          >
-            <h2 className="font-display font-bold text-2xl uppercase tracking-tight mb-6">Club <span className="text-primary">Information</span></h2>
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-8">
+            <h2 className="font-display text-2xl uppercase mb-6" style={{ letterSpacing: "0.06em" }}>
+              Club <span className="text-primary">Information</span>
+            </h2>
 
             <div className="space-y-5">
-              <div className="flex items-start gap-4">
-                <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary flex-shrink-0">
-                  <MapPin className="h-5 w-5" />
+              {[
+                {
+                  icon: <MapPin className="h-5 w-5" />,
+                  label: "Headquarters",
+                  content: (
+                    <>Princess Magogo Stadium<br />KwaMashu, Durban<br />KwaZulu-Natal, 4051<br />South Africa</>
+                  ),
+                },
+                {
+                  icon: <Phone className="h-5 w-5" />,
+                  label: "Telephone",
+                  content: "+27 31 000 0000",
+                },
+                {
+                  icon: <Mail className="h-5 w-5" />,
+                  label: "Email",
+                  content: "info@goldenarrowsfc.co.za",
+                },
+              ].map(item => (
+                <div key={item.label} className="flex items-start gap-4">
+                  <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary flex-shrink-0">
+                    {item.icon}
+                  </div>
+                  <div>
+                    <div className="font-bold text-sm mb-1">{item.label}</div>
+                    <div className="text-muted-foreground text-sm leading-relaxed">{item.content}</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="font-bold mb-1">Headquarters</div>
-                  <div className="text-muted-foreground text-sm">Princess Magogo Stadium<br />KwaMashu, Durban<br />KwaZulu-Natal, 4051<br />South Africa</div>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary flex-shrink-0">
-                  <Phone className="h-5 w-5" />
-                </div>
-                <div>
-                  <div className="font-bold mb-1">Telephone</div>
-                  <div className="text-muted-foreground text-sm">+27 31 000 0000</div>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary flex-shrink-0">
-                  <Mail className="h-5 w-5" />
-                </div>
-                <div>
-                  <div className="font-bold mb-1">Email</div>
-                  <div className="text-muted-foreground text-sm">info@goldenarrowsfc.co.za</div>
-                </div>
-              </div>
+              ))}
             </div>
 
             <div>
-              <h3 className="font-display font-bold text-lg mb-4 text-primary uppercase tracking-wider">Follow Us</h3>
+              <h3 className="font-display text-base uppercase mb-4 text-primary" style={{ letterSpacing: "0.1em" }}>Follow Us</h3>
               <div className="flex gap-3">
                 {[
                   { icon: <Facebook className="h-5 w-5" />, label: "Facebook" },
@@ -131,7 +223,6 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Map placeholder */}
             <div className="rounded-xl overflow-hidden bg-card border border-white/5 aspect-video flex items-center justify-center">
               <div className="text-center">
                 <MapPin className="h-10 w-10 text-primary mx-auto mb-2" />

@@ -1,17 +1,21 @@
 import { Link, useLocation } from "wouter";
-import { LayoutDashboard, Newspaper, Users, Image, X, Menu } from "lucide-react";
+import { LayoutDashboard, Newspaper, Users, Image, MessageSquare, X, Menu } from "lucide-react";
 import { useState } from "react";
+import { useListEnquiries } from "@workspace/api-client-react";
 
 const NAV = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/news", label: "News", icon: Newspaper },
   { href: "/admin/squad", label: "Squad", icon: Users },
   { href: "/admin/gallery", label: "Gallery", icon: Image },
+  { href: "/admin/enquiries", label: "Enquiries", icon: MessageSquare },
 ];
 
 export function AdminLayout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
   const [open, setOpen] = useState(false);
+  const { data: enquiries } = useListEnquiries({ status: "unread" });
+  const unreadCount = enquiries?.length ?? 0;
 
   return (
     <div className="min-h-screen flex bg-background">
@@ -33,6 +37,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
         <nav className="flex-1 p-4 space-y-1">
           {NAV.map(item => {
             const active = location === item.href || (item.href !== "/admin" && location.startsWith(item.href));
+            const badge = item.href === "/admin/enquiries" && unreadCount > 0 ? unreadCount : null;
             return (
               <Link
                 key={item.href}
@@ -44,6 +49,11 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
               >
                 <item.icon className="h-4 w-4" />
                 {item.label}
+                {badge && (
+                  <span className={`ml-auto text-xs font-bold px-2 py-0.5 rounded-full ${active ? "bg-black/20 text-black" : "bg-primary text-black"}`}>
+                    {badge}
+                  </span>
+                )}
               </Link>
             );
           })}
@@ -56,7 +66,6 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
 
-      {/* Overlay */}
       {open && <div className="fixed inset-0 z-30 bg-black/50 md:hidden" onClick={() => setOpen(false)} />}
 
       {/* Main */}

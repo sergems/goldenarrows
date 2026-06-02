@@ -17,6 +17,71 @@ export const HealthCheckResponse = zod.object({
 
 
 /**
+ * @summary Submit a contact enquiry (public)
+ */
+export const CreateEnquiryBody = zod.object({
+  "firstName": zod.string(),
+  "lastName": zod.string(),
+  "email": zod.string(),
+  "subject": zod.string(),
+  "message": zod.string()
+})
+
+
+/**
+ * @summary List all enquiries (admin)
+ */
+export const ListEnquiriesQueryParams = zod.object({
+  "status": zod.coerce.string().optional(),
+  "limit": zod.coerce.number().optional(),
+  "offset": zod.coerce.number().optional()
+})
+
+export const ListEnquiriesResponseItem = zod.object({
+  "id": zod.number(),
+  "firstName": zod.string(),
+  "lastName": zod.string(),
+  "email": zod.string(),
+  "subject": zod.string(),
+  "message": zod.string(),
+  "status": zod.enum(['unread', 'read', 'resolved']),
+  "createdAt": zod.string()
+})
+export const ListEnquiriesResponse = zod.array(ListEnquiriesResponseItem)
+
+
+/**
+ * @summary Update enquiry status (admin)
+ */
+export const UpdateEnquiryParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateEnquiryBody = zod.object({
+  "status": zod.enum(['unread', 'read', 'resolved']).optional()
+})
+
+export const UpdateEnquiryResponse = zod.object({
+  "id": zod.number(),
+  "firstName": zod.string(),
+  "lastName": zod.string(),
+  "email": zod.string(),
+  "subject": zod.string(),
+  "message": zod.string(),
+  "status": zod.enum(['unread', 'read', 'resolved']),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Delete an enquiry (admin)
+ */
+export const DeleteEnquiryParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+
+/**
  * @summary List news articles
  */
 export const ListNewsQueryParams = zod.object({
