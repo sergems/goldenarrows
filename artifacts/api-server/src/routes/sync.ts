@@ -18,9 +18,14 @@ async function apiFetch(path: string) {
   return res.json();
 }
 
-function currentSeason() {
-  const now = new Date();
-  return now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1;
+async function getLatestAccessibleSeason(): Promise<number> {
+  for (const year of [2024, 2023, 2022]) {
+    try {
+      const data = await apiFetch(`/standings?league=${PSL_LEAGUE_ID}&season=${year}`);
+      if (data.response?.[0]?.league?.standings?.[0]?.length > 0) return year;
+    } catch { /* try next */ }
+  }
+  return 2024;
 }
 
 router.post("/sync/fixtures", async (_req, res) => {
@@ -29,7 +34,7 @@ router.post("/sync/fixtures", async (_req, res) => {
     return;
   }
   try {
-    const season = currentSeason();
+    const season = await getLatestAccessibleSeason();
     const data = await apiFetch(`/fixtures?league=${PSL_LEAGUE_ID}&team=${TEAM_ID}&season=${season}&status=NS`);
     const fixtures = data.response as Array<{
       fixture: { date: string; venue: { name: string }; status: { short: string } };
@@ -47,18 +52,13 @@ router.post("/sync/fixtures", async (_req, res) => {
       const venue = f.fixture.venue?.name ?? "TBC";
       const competition = f.league.name;
 
-      const existing = await db.select({ id: fixturesTable.id }).from(fixturesTable)
-        .limit(1);
-      const alreadyExists = existing.some(() => false);
-      if (!alreadyExists) {
-        await db.insert(fixturesTable).values({
-          date, time, homeTeam, awayTeam, venue, competition, completed: false,
-        }).onConflictDoNothing();
-        upserted++;
-      }
+      await db.insert(fixturesTable).values({
+        date, time, homeTeam, awayTeam, venue, competition, completed: false,
+      }).onConflictDoNothing();
+      upserted++;
     }
 
-    res.json({ synced: upserted, total: fixtures.length, season });
+    res.json({ synced: upserted, total: fixtures.length, season, note: fixtures.length === 0 ? "No upcoming fixtures found — the free API plan only covers completed seasons." : undefined });
   } catch (err: unknown) {
     res.status(500).json({ error: err instanceof Error ? err.message : "Sync failed" });
   }
@@ -70,7 +70,7 @@ router.post("/sync/results", async (_req, res) => {
     return;
   }
   try {
-    const season = currentSeason();
+    const season = await getLatestAccessibleSeason();
     const data = await apiFetch(`/fixtures?league=${PSL_LEAGUE_ID}&team=${TEAM_ID}&season=${season}&status=FT`);
     const matches = data.response as Array<{
       fixture: { date: string; venue: { name: string } };
@@ -107,7 +107,7 @@ router.post("/sync/table", async (_req, res) => {
     return;
   }
   try {
-    const season = currentSeason();
+    const season = await getLatestAccessibleSeason();
     const data = await apiFetch(`/standings?league=${PSL_LEAGUE_ID}&season=${season}`);
     const standings = data.response?.[0]?.league?.standings?.[0] as Array<{
       rank: number; team: { name: string };
