@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict vpJjgPfbb29rnVON1bnTuEgJzm1y8IXqvPHKzqyXyKNy2BInKL4tYzU9pDCBaBP
+\restrict 95lvb7PgpmcuXnLgwcPei4KghzrgJ5xkrGCX3irckOOuEWNTfN6aTezjc6abJ3g
 
 -- Dumped from database version 16.10
 -- Dumped by pg_dump version 16.10
@@ -17,6 +17,22 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
+
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+-- *not* creating schema, since initdb creates it
+
+
+ALTER SCHEMA public OWNER TO postgres;
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA public IS '';
+
 
 SET default_tablespace = '';
 
@@ -525,11 +541,11 @@ COPY public.enquiries (id, first_name, last_name, email, subject, message, statu
 --
 
 COPY public.fixtures (id, date, "time", home_team, away_team, competition, venue, ticket_url, completed, created_at) FROM stdin;
-1	2025-06-07	15:00	Golden Arrows FC	Mamelodi Sundowns	DStv Premiership	Princess Magogo Stadium	\N	f	2026-06-01 10:51:26.789401+00
-2	2025-06-14	15:00	AmaZulu FC	Golden Arrows FC	DStv Premiership	Moses Mabhida Stadium	\N	f	2026-06-01 10:51:28.040813+00
-3	2025-06-21	15:00	Golden Arrows FC	Orlando Pirates	DStv Premiership	Princess Magogo Stadium	\N	f	2026-06-01 10:51:29.259643+00
-4	2025-06-28	15:00	Kaizer Chiefs	Golden Arrows FC	DStv Premiership	FNB Stadium	\N	f	2026-06-01 10:51:30.702173+00
-5	2025-07-05	15:00	Golden Arrows FC	Cape Town City	DStv Premiership	Princess Magogo Stadium	\N	f	2026-06-01 10:51:31.907605+00
+1	2026-06-14	15:00	Golden Arrows FC	Mamelodi Sundowns	DStv Premiership	Princess Magogo Stadium	\N	f	2026-06-01 10:51:26.789401+00
+2	2026-06-21	15:00	AmaZulu FC	Golden Arrows FC	DStv Premiership	Moses Mabhida Stadium	\N	f	2026-06-01 10:51:28.040813+00
+3	2026-06-28	15:00	Golden Arrows FC	Orlando Pirates	DStv Premiership	Princess Magogo Stadium	\N	f	2026-06-01 10:51:29.259643+00
+4	2026-07-05	15:00	Kaizer Chiefs	Golden Arrows FC	DStv Premiership	FNB Stadium	\N	f	2026-06-01 10:51:30.702173+00
+5	2026-07-12	15:00	Golden Arrows FC	Cape Town City	DStv Premiership	Princess Magogo Stadium	\N	f	2026-06-01 10:51:31.907605+00
 \.
 
 
@@ -546,22 +562,22 @@ COPY public.gallery (id, title, type, url, thumbnail_url, category, caption, pub
 --
 
 COPY public.league_table (id, "position", team, logo_url, played, won, drawn, lost, goals_for, goals_against, goal_difference, points, is_golden_arrows, updated_at) FROM stdin;
-1	1	Mamelodi Sundowns	\N	26	18	5	3	52	18	34	59	f	2026-06-01 10:49:31.709695+00
-2	2	Orlando Pirates	\N	26	16	4	6	44	24	20	52	f	2026-06-01 10:49:33.095487+00
-3	3	Kaizer Chiefs	\N	26	14	5	7	38	27	11	47	f	2026-06-01 10:49:34.341177+00
-4	4	Cape Town City	\N	26	12	6	8	35	28	7	42	f	2026-06-01 10:49:35.747671+00
-5	5	Stellenbosch FC	\N	26	11	8	7	32	26	6	41	f	2026-06-01 10:49:37.110657+00
-6	6	Supersport United	\N	26	11	7	8	30	25	5	40	f	2026-06-01 10:49:38.308955+00
-7	7	AmaZulu FC	\N	26	10	8	8	28	26	2	38	f	2026-06-01 10:49:39.604032+00
-8	8	Golden Arrows FC	\N	26	10	7	9	31	30	1	37	t	2026-06-01 10:49:40.851385+00
-9	9	Sekhukhune United	\N	26	9	8	9	27	30	-3	35	f	2026-06-01 10:49:42.145204+00
-10	10	TS Galaxy	\N	26	9	7	10	25	31	-6	34	f	2026-06-01 10:49:43.258674+00
-11	11	Chippa United	\N	26	8	7	11	24	33	-9	31	f	2026-06-01 10:49:44.448418+00
-12	12	Swallows FC	\N	26	7	8	11	22	34	-12	29	f	2026-06-01 10:50:00.457572+00
-13	13	Polokwane City	\N	26	7	7	12	21	36	-15	28	f	2026-06-01 10:50:05.845284+00
-14	14	Maritzburg United	\N	26	6	6	14	19	40	-21	24	f	2026-06-01 10:50:06.958502+00
-15	15	Richards Bay FC	\N	26	5	5	16	18	45	-27	20	f	2026-06-01 10:50:08.173437+00
-16	16	Royal AM	\N	26	3	4	19	15	52	-37	13	f	2026-06-01 10:50:09.483158+00
+17	1	Mamelodi Sundowns	\N	28	24	1	3	65	13	52	73	f	2026-06-07 18:18:54.291642+00
+18	2	Orlando Pirates	\N	28	19	4	5	43	20	23	61	f	2026-06-07 18:18:54.291642+00
+19	3	Stellenbosch	\N	28	13	9	6	34	21	13	48	f	2026-06-07 18:18:54.291642+00
+20	4	Sekhukhune United	\N	28	13	7	8	39	31	8	46	f	2026-06-07 18:18:54.291642+00
+21	5	TS Galaxy	\N	28	8	11	9	30	30	0	35	f	2026-06-07 18:18:54.291642+00
+22	6	Amazulu	\N	28	10	5	13	29	34	-5	35	f	2026-06-07 18:18:54.291642+00
+23	7	Polokwane City	\N	28	8	10	10	19	25	-6	34	f	2026-06-07 18:18:54.291642+00
+24	8	Richards Bay	\N	28	9	6	13	19	26	-7	33	f	2026-06-07 18:18:54.291642+00
+25	9	Kaizer Chiefs	\N	28	8	8	12	25	32	-7	32	f	2026-06-07 18:18:54.291642+00
+26	10	Marumo Gallants	\N	28	8	8	12	26	39	-13	32	f	2026-06-07 18:18:54.291642+00
+27	11	Chippa United	\N	28	8	7	13	22	28	-6	31	f	2026-06-07 18:18:54.291642+00
+28	12	Golden Arrows	\N	28	7	10	11	20	32	-12	31	t	2026-06-07 18:18:54.291642+00
+29	13	Magesi	\N	28	8	7	13	19	31	-12	31	f	2026-06-07 18:18:54.291642+00
+30	14	Supersport United	\N	28	6	9	13	18	30	-12	27	f	2026-06-07 18:18:54.291642+00
+31	15	Cape Town City	\N	28	7	6	15	15	31	-16	27	f	2026-06-07 18:18:54.291642+00
+32	16	Royal AM	\N	0	0	0	0	0	0	0	0	f	2026-06-07 18:18:54.291642+00
 \.
 
 
@@ -575,8 +591,7 @@ COPY public.news (id, title, slug, excerpt, content, category, image_url, featur
 4	Junior Arrows Youth Academy Trials Open	youth-academy-trials-2025	Golden Arrows FC is pleased to announce open trials for the Junior Arrows Youth Academy for talented players aged 10-16.	Golden Arrows FC is pleased to announce open trials for the Junior Arrows Youth Academy for talented players aged 10-16.	community	https://images.unsplash.com/photo-1594381898411-846e7d193883?w=800	f	Community Team	{youth,academy,community}	2026-05-11 10:52:14.754139+00	2026-06-01 10:52:14.754139+00
 5	Club Partners With Durban Community Schools	community-schools-partnership	As part of our ongoing commitment to KwaZulu-Natal, Golden Arrows has launched a new educational partnership with 10 Durban schools.	As part of our ongoing commitment to KwaZulu-Natal, Golden Arrows has launched a new educational partnership with 10 Durban schools.	community	https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800	f	Community Team	{community,education,KZN}	2026-05-10 10:52:15.913125+00	2026-06-01 10:52:15.913125+00
 6	New Away Kit Unveiled for 2025/26 Season	away-kit-unveil-2025-26	Golden Arrows FC is delighted to unveil the stunning new away kit for the upcoming 2025/26 DStv Premiership season.	Golden Arrows FC is delighted to unveil the stunning new away kit for the upcoming 2025/26 DStv Premiership season.	club-news	https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800	f	Arrows Media	{kit,fashion,2025-26}	2026-05-06 10:52:17.261668+00	2026-06-01 10:52:17.261668+00
-7	Golden Arrows Sign Sibusiso Ngidi	golden-arrows-sign-sibusiso-ngidi-1780386487626	Lamontville Golden Arrows FC are delighted to announce the signing of Sibusiso Ngidi, South African forward.	South African forward Sibusiso Ngidi joins Lamontville Golden Arrows FC. The 22-year-old signing wears the number 27 shirt and is set to strengthen the Abafana Bes'thende squad for the seasons ahead.\n\n"We are delighted to welcome Sibusiso to the club. He brings quality and experience that will benefit the whole squad," said a club spokesperson.\n\nSibusiso Ngidi is available immediately and the club wishes him every success in the famous Golden Arrows colours.	Transfer News	https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80	f	Golden Arrows FC	{Transfer,Squad,Signing}	2026-06-02 07:48:11.402772+00	2026-06-02 07:48:11.402772+00
-10	Golden Arrows Sign Junior Lukichwa	golden-arrows-sign-junior-lukichwa-1780425861065	Lamontville Golden Arrows FC are delighted to announce the signing of Junior Lukichwa, Congolese forward.	Congolese forward Junior Lukichwa joins Lamontville Golden Arrows FC. The 22-year-old signing wears the number 19 shirt and is set to strengthen the Abafana Bes'thende squad.\n\n"We are delighted to welcome Junior to the club," said a club spokesperson.\n\nJunior Lukichwa is available immediately and the club wishes him every success in the famous Golden Arrows colours.	Transfer News	https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80	f	Golden Arrows FC	{Transfer,Squad,Signing}	2026-06-02 18:44:23.754325+00	2026-06-02 18:44:23.754325+00
+11	Golden Arrows Sign Sere Mulayi	golden-arrows-sign-sere-mulayi-1780851457720	Lamontville Golden Arrows FC are delighted to announce the signing of Sere Mulayi, Zambian forward.	Zambian forward Sere Mulayi joins Lamontville Golden Arrows FC. The 22-year-old signing wears the number 95 shirt and is set to strengthen the Abafana Bes'thende squad.\n\n"We are delighted to welcome Sere to the club," said a club spokesperson.\n\nSere Mulayi is available immediately and the club wishes him every success in the famous Golden Arrows colours.	Transfer News	/api/uploads/1780851445683-bp6ddt.jpeg	f	Golden Arrows FC	{Transfer,Squad,Signing}	2026-06-07 16:57:40.084629+00	2026-06-07 16:57:40.084629+00
 \.
 
 
@@ -600,9 +615,9 @@ COPY public.players (id, name, "position", number, nationality, age, photo_url, 
 14	Serge Malema	Forward	17	South African	26			11	26	0	2026-06-01 13:49:24.794201+00
 15	Sibusiso Ngidi	Forward	27	South African	22			0	0	0	2026-06-02 07:48:11.075545+00
 16	Alan Boots	Goalkeeper	58	Zambian	26			0	0	0	2026-06-02 07:50:31.483385+00
-1	THAKASANI MBANJWA	Goalkeeper	27	South African	29	/api/uploads/1780387872007-rm9ef4.jpg	First-choice goalkeeper, known for commanding his area and sharp reflexes.	13	0	0	2026-06-01 10:50:31.69361+00
 17	Junoir Lukichwa	Forward	16	South African	22			0	0	0	2026-06-02 18:41:56.906215+00
 18	Junior Lukichwa	Forward	19	Congolese	22			0	0	0	2026-06-02 18:44:23.308901+00
+19	Sere Mulayi	Forward	95	Zambian	22	/api/uploads/1780851445683-bp6ddt.jpeg		5	12	0	2026-06-07 16:57:39.787165+00
 \.
 
 
@@ -625,8 +640,8 @@ COPY public.results (id, date, home_team, away_team, home_score, away_score, com
 --
 
 COPY public.slides (id, title, image_url, subtitle, link, link_label, sort_order, active, created_at) FROM stdin;
-2	Golden Birthdays	/api/uploads/1780388317426-tq8o6q.png	We celebrate you			0	t	2026-06-02 08:18:55.311658+00
 1	Abafana Bes'thende	/api/uploads/1780388118425-ajmqpp.jpg	The Pride of KwaZulu-Natal. Passion, Spirit, and Electric Football.			1	t	2026-06-02 08:15:52.782447+00
+2	Golden Birthdays	/api/uploads/1780388317426-tq8o6q.png	We celebrate you			0	t	2026-06-02 08:18:55.311658+00
 \.
 
 
@@ -683,21 +698,21 @@ SELECT pg_catalog.setval('public.gallery_id_seq', 1, false);
 -- Name: league_table_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.league_table_id_seq', 16, true);
+SELECT pg_catalog.setval('public.league_table_id_seq', 32, true);
 
 
 --
 -- Name: news_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.news_id_seq', 10, true);
+SELECT pg_catalog.setval('public.news_id_seq', 11, true);
 
 
 --
 -- Name: players_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.players_id_seq', 18, true);
+SELECT pg_catalog.setval('public.players_id_seq', 19, true);
 
 
 --
@@ -817,8 +832,15 @@ ALTER TABLE ONLY public.staff
 
 
 --
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE USAGE ON SCHEMA public FROM PUBLIC;
+
+
+--
 -- PostgreSQL database dump complete
 --
 
-\unrestrict vpJjgPfbb29rnVON1bnTuEgJzm1y8IXqvPHKzqyXyKNy2BInKL4tYzU9pDCBaBP
+\unrestrict 95lvb7PgpmcuXnLgwcPei4KghzrgJ5xkrGCX3irckOOuEWNTfN6aTezjc6abJ3g
 
