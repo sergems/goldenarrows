@@ -40,6 +40,37 @@ router.get("/fixtures/next", async (_req, res) => {
   res.json(mapFixture(row));
 });
 
+router.post("/fixtures", async (req, res) => {
+  const { date, time, homeTeam, awayTeam, competition, venue, ticketUrl } = req.body;
+  if (!date || !homeTeam || !awayTeam || !competition || !venue) {
+    res.status(400).json({ error: "Missing required fields" });
+    return;
+  }
+  const [row] = await db.insert(fixturesTable).values({
+    date, time: time || null, homeTeam, awayTeam, competition, venue,
+    ticketUrl: ticketUrl || null, completed: false,
+  }).returning();
+  res.status(201).json(mapFixture(row));
+});
+
+router.patch("/fixtures/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  if (isNaN(id)) { res.status(400).json({ error: "Invalid id" }); return; }
+  const updates: Record<string, unknown> = {};
+  const fields = ["date","time","homeTeam","awayTeam","competition","venue","ticketUrl","completed"];
+  for (const f of fields) if (req.body[f] !== undefined) updates[f] = req.body[f];
+  const [row] = await db.update(fixturesTable).set(updates).where(eq(fixturesTable.id, id)).returning();
+  if (!row) { res.status(404).json({ error: "Not found" }); return; }
+  res.json(mapFixture(row));
+});
+
+router.delete("/fixtures/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  if (isNaN(id)) { res.status(400).json({ error: "Invalid id" }); return; }
+  await db.delete(fixturesTable).where(eq(fixturesTable.id, id));
+  res.status(204).end();
+});
+
 function mapFixture(row: typeof fixturesTable.$inferSelect) {
   return {
     id: row.id,
@@ -50,6 +81,7 @@ function mapFixture(row: typeof fixturesTable.$inferSelect) {
     competition: row.competition,
     venue: row.venue,
     ticketUrl: row.ticketUrl,
+    completed: row.completed,
   };
 }
 

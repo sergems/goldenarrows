@@ -45,6 +45,24 @@ router.get("/results/:id", async (req, res) => {
   res.json(mapResult(row));
 });
 
+router.patch("/results/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  if (isNaN(id)) { res.status(400).json({ error: "Invalid id" }); return; }
+  const fields = ["date","homeTeam","awayTeam","homeScore","awayScore","competition","venue","scorers","matchReport","highlightUrl"];
+  const updates: Record<string, unknown> = {};
+  for (const f of fields) if (req.body[f] !== undefined) updates[f] = req.body[f];
+  const [row] = await db.update(resultsTable).set(updates).where(eq(resultsTable.id, id)).returning();
+  if (!row) { res.status(404).json({ error: "Not found" }); return; }
+  res.json(mapResult(row));
+});
+
+router.delete("/results/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  if (isNaN(id)) { res.status(400).json({ error: "Invalid id" }); return; }
+  await db.delete(resultsTable).where(eq(resultsTable.id, id));
+  res.status(204).end();
+});
+
 function mapResult(row: typeof resultsTable.$inferSelect) {
   return {
     id: row.id,

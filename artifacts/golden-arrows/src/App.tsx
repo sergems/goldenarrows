@@ -26,6 +26,8 @@ import AdminSquad from "@/pages/admin/AdminSquad";
 import AdminGallery from "@/pages/admin/AdminGallery";
 import AdminEnquiries from "@/pages/admin/AdminEnquiries";
 import AdminSlides from "@/pages/admin/AdminSlides";
+import AdminFixtures from "@/pages/admin/AdminFixtures";
+import AdminLeagueTable from "@/pages/admin/AdminLeagueTable";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 30_000 } },
@@ -105,6 +107,12 @@ function Router() {
       </Route>
       <Route path="/admin/enquiries">
         <AdminEnquiries />
+      </Route>
+      <Route path="/admin/fixtures">
+        <AdminFixtures />
+      </Route>
+      <Route path="/admin/league-table">
+        <AdminLeagueTable />
       </Route>
 
       <Route>

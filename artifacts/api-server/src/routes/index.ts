@@ -12,6 +12,7 @@ import leagueRouter from "./league";
 import galleryRouter from "./gallery";
 import sponsorsRouter from "./sponsors";
 import statsRouter from "./stats";
+import syncRouter from "./sync";
 
 const router: IRouter = Router();
 
@@ -28,5 +29,6 @@ router.use(leagueRouter);
 router.use(galleryRouter);
 router.use(sponsorsRouter);
 router.use(statsRouter);
+router.use(syncRouter);
 
 export default router;
