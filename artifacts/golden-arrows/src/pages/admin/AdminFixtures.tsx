@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { AdminLayout } from "./AdminLayout";
-import { Plus, Trash2, X, Pencil, Loader2, CheckCircle, Calendar } from "lucide-react";
+import { Plus, Trash2, X, Pencil, Loader2, CheckCircle, Calendar, RefreshCw, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { Fixture } from "@workspace/api-client-react";
@@ -149,6 +149,23 @@ export default function AdminFixtures() {
   const [showCreate, setShowCreate] = useState(false);
   const [editing, setEditing] = useState<FixtureWithCompleted | null>(null);
   const [deleting, setDeleting] = useState<number | null>(null);
+  const [syncing, setSyncing] = useState(false);
+  const [syncMsg, setSyncMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
+
+  async function syncFromApi() {
+    setSyncing(true);
+    setSyncMsg(null);
+    try {
+      const res = await fetch("/api/sync/fixtures", { method: "POST" });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? "Sync failed");
+      setSyncMsg({ type: "ok", text: json.message ?? "Fixtures synced!" });
+      reload();
+    } catch (e: unknown) {
+      setSyncMsg({ type: "err", text: e instanceof Error ? e.message : "Sync failed" });
+    }
+    setSyncing(false);
+  }
 
   async function handleDelete(id: number) {
     if (!confirm("Delete this fixture?")) return;
@@ -171,15 +188,35 @@ export default function AdminFixtures() {
       {showCreate && <FixtureForm mode="create" onClose={() => setShowCreate(false)} onSaved={reload} />}
       {editing && <FixtureForm mode="edit" initial={editing} onClose={() => setEditing(null)} onSaved={reload} />}
 
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="font-display font-bold text-3xl uppercase tracking-tight">Fixtures</h1>
           <p className="text-muted-foreground mt-1">{fixtures?.length ?? 0} upcoming fixtures</p>
         </div>
-        <Button onClick={() => setShowCreate(true)} className="flex items-center gap-2">
-          <Plus className="h-4 w-4" /> Add Fixture
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" onClick={syncFromApi} disabled={syncing} className="flex items-center gap-2" title="Pull live fixtures from API-Football">
+            <RefreshCw className={`h-4 w-4 ${syncing ? "animate-spin" : ""}`} />
+            {syncing ? "Syncing…" : "Sync from API"}
+          </Button>
+          <Button onClick={() => setShowCreate(true)} className="flex items-center gap-2">
+            <Plus className="h-4 w-4" /> Add Fixture
+          </Button>
+        </div>
       </div>
+
+      {syncMsg && (
+        <div className={`flex items-center gap-2 text-sm rounded-xl p-3 mb-6 border ${
+          syncMsg.type === "ok"
+            ? "bg-green-900/20 border-green-700/30 text-green-400"
+            : "bg-red-900/20 border-red-700/30 text-red-400"
+        }`}>
+          <AlertCircle className="h-4 w-4 flex-shrink-0" />
+          {syncMsg.text}
+          {syncMsg.type === "err" && syncMsg.text.includes("FOOTBALL_API_KEY") && (
+            <span className="ml-1">— add it as a secret in your Replit environment.</span>
+          )}
+        </div>
+      )}
 
       {loading && <div className="text-muted-foreground">Loading…</div>}
 

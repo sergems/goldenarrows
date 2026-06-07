@@ -17,6 +17,23 @@ export default function AdminLeagueTable() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [syncing, setSyncing] = useState(false);
+  const [syncMsg, setSyncMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
+
+  async function syncFromApi() {
+    setSyncing(true);
+    setSyncMsg(null);
+    try {
+      const res = await fetch("/api/sync/table", { method: "POST" });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? "Sync failed");
+      setSyncMsg({ type: "ok", text: json.message ?? "Table synced!" });
+      await load();
+    } catch (e: unknown) {
+      setSyncMsg({ type: "err", text: e instanceof Error ? e.message : "Sync failed" });
+    }
+    setSyncing(false);
+  }
 
   const load = async () => {
     setLoading(true);
@@ -68,12 +85,30 @@ export default function AdminLeagueTable() {
           <Button variant="outline" onClick={load} disabled={loading} className="flex items-center gap-2">
             <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} /> Reload
           </Button>
+          <Button variant="outline" onClick={syncFromApi} disabled={syncing || loading} className="flex items-center gap-2" title="Pull live standings from API-Football">
+            <RefreshCw className={`h-4 w-4 ${syncing ? "animate-spin" : ""}`} />
+            {syncing ? "Syncing…" : "Sync from API"}
+          </Button>
           <Button onClick={save} disabled={saving || loading} className="flex items-center gap-2">
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             {saving ? "Saving…" : saved ? "Saved ✓" : "Save Changes"}
           </Button>
         </div>
       </div>
+
+      {syncMsg && (
+        <div className={`flex items-center gap-2 text-sm rounded-xl p-3 mb-4 border ${
+          syncMsg.type === "ok"
+            ? "bg-green-900/20 border-green-700/30 text-green-400"
+            : "bg-red-900/20 border-red-700/30 text-red-400"
+        }`}>
+          <AlertCircle className="h-4 w-4 flex-shrink-0" />
+          {syncMsg.text}
+          {syncMsg.type === "err" && syncMsg.text.includes("FOOTBALL_API_KEY") && (
+            <span className="ml-1">— add it as a secret in your Replit environment.</span>
+          )}
+        </div>
+      )}
 
       {error && (
         <div className="flex items-center gap-2 text-red-400 bg-red-900/20 border border-red-700/30 rounded-xl p-4 mb-6 text-sm">
