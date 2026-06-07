@@ -114,8 +114,8 @@
   --club-green-dark: #155228;
   --club-cream: #F6F3B4;
 
-  --app-font-sans: 'Inter', system-ui, sans-serif;
-  --app-font-display: 'Bebas Neue', 'Barlow Condensed', system-ui, sans-serif;
+  --app-font-sans: 'DM Sans', system-ui, sans-serif;
+  --app-font-display: 'Barlow Condensed', system-ui, sans-serif;
 
   --radius: .375rem;
 }

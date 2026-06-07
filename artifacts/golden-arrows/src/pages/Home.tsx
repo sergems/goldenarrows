@@ -82,7 +82,7 @@ function Countdown({ date }: { date: string }) {
   );
 }
 
-// ─── Hero background slider ───────────────────────────────────────────────────
+// ─── Hero background slider (used by MatchDayHero only) ──────────────────────
 
 function HeroBackground({ children }: { children?: React.ReactNode }) {
   const { data: slides } = useListSlides();
@@ -111,17 +111,6 @@ function HeroBackground({ children }: { children?: React.ReactNode }) {
         <img src={heroStadium} alt="Stadium" className="w-full h-full object-cover" />
       )}
       {children}
-      {active.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2 pointer-events-auto">
-          {active.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setIdx(i)}
-              className={`rounded-full transition-all duration-300 ${i === idx ? "w-6 h-2 bg-primary" : "w-2 h-2 bg-white/40 hover:bg-white/60"}`}
-            />
-          ))}
-        </div>
-      )}
     </div>
   );
 }
@@ -282,36 +271,116 @@ function MatchDayHero({ fixture }: { fixture: Fixture }) {
 // ─── Normal hero ─────────────────────────────────────────────────────────────
 
 function NormalHero() {
+  const { data: slides } = useListSlides();
+  const active = slides?.filter(s => s.active) ?? [];
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    if (active.length <= 1) return;
+    const id = setInterval(() => setIdx(i => (i + 1) % active.length), 6000);
+    return () => clearInterval(id);
+  }, [active.length]);
+
+  const currentSlide = active[idx];
+
   return (
     <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden flex items-center">
-      <HeroBackground>
+      {/* Background images */}
+      <div className="absolute inset-0 z-0">
+        {active.length > 0 ? (
+          active.map((slide, i) => (
+            <div
+              key={slide.id}
+              className="absolute inset-0 transition-opacity duration-1000"
+              style={{ opacity: i === idx ? 1 : 0 }}
+            >
+              <img src={slide.imageUrl} alt={slide.title} className="w-full h-full object-cover" />
+            </div>
+          ))
+        ) : (
+          <img src={heroStadium} alt="Stadium" className="w-full h-full object-cover" />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30" />
-      </HeroBackground>
-
-      <div className="container relative z-10 mx-auto px-4 text-center mt-16">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-          <p className="text-primary font-bold uppercase tracking-[0.3em] text-sm mb-4">
-            DStv Premiership · Durban, South Africa
-          </p>
-          <h1 className="font-display text-6xl md:text-8xl lg:text-9xl text-white uppercase mb-4 drop-shadow-lg" style={{ letterSpacing: "0.08em" }}>
-            Abafana{" "}
-            <span className="text-primary" style={{ letterSpacing: "0.08em" }}>
-              Bes'thende
-            </span>
-          </h1>
-          <p className="text-lg md:text-xl text-white/80 font-medium mb-10 max-w-xl mx-auto">
-            The Pride of KwaZulu-Natal. Passion, Spirit, and Electric Football.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/fixtures" className="bg-primary text-black font-bold uppercase tracking-wider px-8 py-4 rounded-sm hover:bg-primary/90 transition-colors">
-              View Fixtures
-            </Link>
-            <Link href="/squad" className="bg-white/10 backdrop-blur border border-white/25 text-white font-bold uppercase tracking-wider px-8 py-4 rounded-sm hover:bg-white/20 transition-colors">
-              Meet The Squad
-            </Link>
-          </div>
-        </motion.div>
       </div>
+
+      {/* Per-slide text — animated on each slide change */}
+      <div className="container relative z-10 mx-auto px-4 text-center mt-16">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentSlide ? currentSlide.id : "default"}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.6 }}
+          >
+            {currentSlide ? (
+              <>
+                <h1 className="font-display text-6xl md:text-8xl lg:text-9xl text-white uppercase mb-4 drop-shadow-lg" style={{ letterSpacing: "0.08em" }}>
+                  {currentSlide.title.includes(" ") ? (
+                    <>
+                      {currentSlide.title.split(" ").slice(0, -1).join(" ")}{" "}
+                      <span className="text-primary">
+                        {currentSlide.title.split(" ").slice(-1)[0]}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-primary">{currentSlide.title}</span>
+                  )}
+                </h1>
+                {currentSlide.subtitle && (
+                  <p className="text-lg md:text-xl text-white/80 font-medium mb-10 max-w-xl mx-auto">
+                    {currentSlide.subtitle}
+                  </p>
+                )}
+                {currentSlide.link && currentSlide.linkLabel && (
+                  <div className="flex flex-wrap justify-center gap-4">
+                    <Link
+                      href={currentSlide.link}
+                      className="bg-primary text-black font-bold uppercase tracking-wider px-8 py-4 rounded-sm hover:bg-primary/90 transition-colors"
+                    >
+                      {currentSlide.linkLabel}
+                    </Link>
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                <p className="text-primary font-bold uppercase tracking-[0.3em] text-sm mb-4">
+                  DStv Premiership · Durban, South Africa
+                </p>
+                <h1 className="font-display text-6xl md:text-8xl lg:text-9xl text-white uppercase mb-4 drop-shadow-lg" style={{ letterSpacing: "0.08em" }}>
+                  Abafana{" "}
+                  <span className="text-primary">Bes'thende</span>
+                </h1>
+                <p className="text-lg md:text-xl text-white/80 font-medium mb-10 max-w-xl mx-auto">
+                  The Pride of KwaZulu-Natal. Passion, Spirit, and Electric Football.
+                </p>
+                <div className="flex flex-wrap justify-center gap-4">
+                  <Link href="/fixtures" className="bg-primary text-black font-bold uppercase tracking-wider px-8 py-4 rounded-sm hover:bg-primary/90 transition-colors">
+                    View Fixtures
+                  </Link>
+                  <Link href="/squad" className="bg-white/10 backdrop-blur border border-white/25 text-white font-bold uppercase tracking-wider px-8 py-4 rounded-sm hover:bg-white/20 transition-colors">
+                    Meet The Squad
+                  </Link>
+                </div>
+              </>
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Dot navigation */}
+      {active.length > 1 && (
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+          {active.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIdx(i)}
+              className={`rounded-full transition-all duration-300 ${i === idx ? "w-6 h-2 bg-primary" : "w-2 h-2 bg-white/40 hover:bg-white/60"}`}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }
