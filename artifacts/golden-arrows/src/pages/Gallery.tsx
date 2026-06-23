@@ -1,7 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useListGallery } from "@workspace/api-client-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Play } from "lucide-react";
+import { X, Play, Instagram, Facebook } from "lucide-react";
+
+declare global {
+  interface Window {
+    FB?: { XFBML?: { parse: () => void } };
+  }
+}
 
 const CATEGORIES = ["All", "matches", "training", "community", "events"];
 
@@ -9,6 +15,12 @@ export default function Gallery() {
   const [category, setCategory] = useState<string | undefined>(undefined);
   const [type, setType] = useState<"photo" | "video" | undefined>(undefined);
   const [lightbox, setLightbox] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (window.FB?.XFBML) {
+      window.FB.XFBML.parse();
+    }
+  }, []);
 
   const { data: items, isLoading } = useListGallery({
     category: category || undefined,
@@ -105,6 +117,99 @@ export default function Gallery() {
           <div className="text-center text-muted-foreground py-20">No media available in this category.</div>
         )}
       </div>
+
+      {/* ── From Our Social Media Family ─────────────── */}
+      <section className="bg-card border-t border-white/5 py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="font-display font-bold text-4xl uppercase tracking-tight mb-3">
+              From Our <span className="text-primary">Social Media Family</span>
+            </h2>
+            <p className="text-muted-foreground">Follow us and stay connected with Abafana Bes'thende</p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+
+            {/* Facebook Page Plugin */}
+            <div className="flex flex-col items-center">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-full bg-[#1877F2] flex items-center justify-center flex-shrink-0">
+                  <Facebook className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <p className="font-bold text-white text-sm">Lamontville Golden Arrows</p>
+                  <a
+                    href="https://www.facebook.com/LamontvilleGoldenArrows/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#1877F2] text-xs font-bold hover:underline"
+                  >
+                    @LamontvilleGoldenArrows
+                  </a>
+                </div>
+              </div>
+              <div className="rounded-xl overflow-hidden border border-white/10 w-full flex justify-center bg-white">
+                <div
+                  className="fb-page"
+                  data-href="https://www.facebook.com/LamontvilleGoldenArrows/"
+                  data-tabs="timeline"
+                  data-width="500"
+                  data-height="600"
+                  data-small-header="true"
+                  data-adapt-container-width="true"
+                  data-hide-cover="false"
+                  data-show-facepile="false"
+                />
+              </div>
+            </div>
+
+            {/* Instagram follow card */}
+            <div className="flex flex-col items-center">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#f09433] via-[#e6683c] via-[#dc2743] via-[#cc2366] to-[#bc1888] flex items-center justify-center flex-shrink-0">
+                  <Instagram className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <p className="font-bold text-white text-sm">Golden Arrows FC</p>
+                  <a
+                    href="https://www.instagram.com/goldenarrowsfc/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#e1306c] text-xs font-bold hover:underline"
+                  >
+                    @goldenarrowsfc
+                  </a>
+                </div>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-background w-full flex flex-col items-center justify-center text-center px-8 py-16 gap-6" style={{minHeight: 600}}>
+                <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] p-0.5">
+                  <div className="w-full h-full rounded-full bg-background flex items-center justify-center">
+                    <Instagram className="w-10 h-10 text-white" />
+                  </div>
+                </div>
+                <div>
+                  <p className="font-display font-bold text-2xl uppercase text-white mb-2">@goldenarrowsfc</p>
+                  <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
+                    Follow us on Instagram for match-day moments, behind-the-scenes content, and player features.
+                  </p>
+                </div>
+                <a
+                  href="https://www.instagram.com/goldenarrowsfc/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-bold text-white text-sm transition-opacity hover:opacity-90"
+                  style={{background: "linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)"}}
+                >
+                  <Instagram className="w-4 h-4" />
+                  Follow on Instagram
+                </a>
+                <p className="text-white/20 text-xs">Tap to view our latest posts on Instagram</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
 
       {/* Lightbox */}
       <AnimatePresence>
