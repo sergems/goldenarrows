@@ -124,14 +124,6 @@ export default function ClubRecords() {
                 </div>
                 <h3 className="font-display font-bold text-xl mb-2 text-primary">{r.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{r.description}</p>
-                <a
-                  href="https://www.goldenarrowsfc.com/club-records/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 mt-4 text-xs font-bold text-primary/70 hover:text-primary transition-colors"
-                >
-                  View full records <ChevronRight className="h-3 w-3" />
-                </a>
               </motion.div>
             ))}
           </div>
@@ -160,12 +152,6 @@ export default function ClubRecords() {
               </motion.div>
             ))}
           </div>
-          <p className="text-xs text-muted-foreground mt-6 text-center">
-            Full appearance data sourced from{" "}
-            <a href="https://www.goldenarrowsfc.com/club-records/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-              goldenarrowsfc.com/club-records
-            </a>
-          </p>
         </div>
 
       </div>

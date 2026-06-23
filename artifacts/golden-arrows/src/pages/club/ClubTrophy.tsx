@@ -125,12 +125,6 @@ export default function ClubTrophy() {
           ))}
         </div>
 
-        <p className="text-xs text-muted-foreground mt-10 text-center">
-          Data sourced from{" "}
-          <a href="https://www.goldenarrowsfc.com/trophy-cabinet/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-            goldenarrowsfc.com/trophy-cabinet
-          </a>
-        </p>
       </div>
     </div>
   );

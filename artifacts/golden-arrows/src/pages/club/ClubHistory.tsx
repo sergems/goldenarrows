@@ -76,7 +76,7 @@ export default function ClubHistory() {
         {/* Season Archives */}
         <div>
           <h2 className="font-display font-bold text-3xl uppercase tracking-tight mb-2">Season <span className="text-primary">Archive</span></h2>
-          <p className="text-muted-foreground mb-8">All match results and goal scorers from the year 2000 to the end of the last season — sourced from <a href="https://www.goldenarrowsfc.com/history/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">goldenarrowsfc.com</a>.</p>
+          <p className="text-muted-foreground mb-8">All match results and goal scorers from the year 2000 to the end of the last season.</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {SEASONS.map((season, i) => (
               <motion.a
