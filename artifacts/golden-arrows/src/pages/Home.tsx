@@ -390,7 +390,7 @@ function NormalHero() {
 export default function Home() {
   const { data: news } = useListNews({ limit: 3 });
   const { data: nextFixture } = useGetNextFixture();
-  const { data: recentResults } = useListResults({ limit: 6 });
+  const { data: recentResults } = useListResults({ limit: 7 });
   const { data: table } = useGetLeagueTable();
   const { data: players } = useListPlayers();
 
@@ -532,27 +532,6 @@ export default function Home() {
                     );
                   })}
                 </div>
-                {/* Form strip */}
-                {recentResults && recentResults.length > 0 && (
-                  <div className="px-4 py-3.5 border-t border-white/5 flex items-center gap-3">
-                    <span className="text-[10px] text-white/30 uppercase tracking-widest font-bold flex-shrink-0">Recent Form</span>
-                    <div className="flex items-center gap-1.5">
-                      {[...recentResults].reverse().map((result) => {
-                        const gaHome = result.homeTeam.toLowerCase().includes("golden arrows");
-                        const gaAway = result.awayTeam.toLowerCase().includes("golden arrows");
-                        const gaWin = (gaHome && result.homeScore > result.awayScore) || (gaAway && result.awayScore > result.homeScore);
-                        const isDraw = result.homeScore === result.awayScore;
-                        const badge = gaWin ? "W" : isDraw ? "D" : "L";
-                        const cls = gaWin ? "bg-green-600" : isDraw ? "bg-amber-500" : "bg-red-600";
-                        return (
-                          <span key={result.id} className={`${cls} text-[9px] font-black text-white w-5 h-5 rounded-full flex items-center justify-center`}>
-                            {badge}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
 
