@@ -20,6 +20,9 @@ import Shop from "@/pages/Shop";
 import Community from "@/pages/Community";
 import Contact from "@/pages/Contact";
 import Club from "@/pages/Club";
+import ClubHistory from "@/pages/club/ClubHistory";
+import ClubRecords from "@/pages/club/ClubRecords";
+import ClubTrophy from "@/pages/club/ClubTrophy";
 import AdminDashboard from "@/pages/admin/Dashboard";
 import AdminNews from "@/pages/admin/AdminNews";
 import AdminSquad from "@/pages/admin/AdminSquad";
@@ -87,6 +90,15 @@ function Router() {
       </Route>
       <Route path="/club">
         <PublicLayout><Club /></PublicLayout>
+      </Route>
+      <Route path="/club/history">
+        <PublicLayout><ClubHistory /></PublicLayout>
+      </Route>
+      <Route path="/club/records">
+        <PublicLayout><ClubRecords /></PublicLayout>
+      </Route>
+      <Route path="/club/trophy">
+        <PublicLayout><ClubTrophy /></PublicLayout>
       </Route>
 
       {/* Admin — no auth wrapper for now */}

@@ -1,8 +1,14 @@
 import { Link, useLocation } from "wouter";
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { useGetNextFixture } from "@workspace/api-client-react";
 import logo from "@assets/Lamontville_Golden_Arrows_logo_1780312879951.svg";
+
+const THE_CLUB_LINKS = [
+  { href: "/club/history", label: "History" },
+  { href: "/club/records", label: "Records" },
+  { href: "/club/trophy", label: "Trophy Cabinet" },
+];
 
 const NAV_LINKS = [
   { href: "/news", label: "News" },
@@ -11,7 +17,6 @@ const NAV_LINKS = [
   { href: "/results", label: "Results" },
   { href: "/league-table", label: "Table" },
   { href: "/gallery", label: "Gallery" },
-  { href: "/club", label: "Club" },
 ];
 
 function isSameDay(dateStr: string) {
@@ -31,8 +36,56 @@ function isMatchLive(dateStr: string, timeStr?: string | null) {
   return elapsed >= 0 && elapsed <= 105;
 }
 
+function ClubDropdown({ location, onNavigate }: { location: string; onNavigate?: () => void }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const isActive = location.startsWith("/club");
+
+  useEffect(() => {
+    function handler(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(v => !v)}
+        className={`flex items-center gap-1 px-4 py-2 text-sm font-bold uppercase tracking-wider rounded transition-colors ${
+          isActive ? "text-primary" : "text-white/70 hover:text-white hover:bg-white/5"
+        }`}
+      >
+        The Club
+        <ChevronDown className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+
+      {open && (
+        <div className="absolute top-full left-0 mt-1 w-48 bg-background border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50">
+          {THE_CLUB_LINKS.map(link => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => { setOpen(false); onNavigate?.(); }}
+              className={`block px-4 py-3 text-sm font-bold uppercase tracking-wider transition-colors ${
+                location === link.href
+                  ? "text-primary bg-primary/10"
+                  : "text-white/70 hover:text-white hover:bg-white/5"
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const [mobileClubOpen, setMobileClubOpen] = useState(false);
   const [location] = useLocation();
   const { data: nextFixture } = useGetNextFixture();
 
@@ -78,16 +131,15 @@ export function Navbar() {
               </Link>
             );
           })}
+          <ClubDropdown location={location} />
         </nav>
 
-        {/* Match day / Live badge — shown on desktop right side */}
+        {/* Match day / Live badge */}
         {matchToday && (
           <Link
             href="/"
             className={`hidden md:flex items-center gap-2 absolute right-4 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${
-              live
-                ? "bg-red-600 text-white"
-                : "bg-primary text-black"
+              live ? "bg-red-600 text-white" : "bg-primary text-black"
             }`}
           >
             {live ? (
@@ -120,14 +172,10 @@ export function Navbar() {
         </button>
       </div>
 
-      {/* Accent line — gold when match day, otherwise green→gold→green */}
+      {/* Accent line */}
       <div
         className={`h-0.5 w-full ${
-          live
-            ? "bg-red-500"
-            : matchToday
-            ? "bg-primary"
-            : "bg-gradient-to-r from-secondary via-primary to-secondary"
+          live ? "bg-red-500" : matchToday ? "bg-primary" : "bg-gradient-to-r from-secondary via-primary to-secondary"
         }`}
       />
 
@@ -154,6 +202,33 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
+
+            {/* Mobile "The Club" accordion */}
+            <button
+              onClick={() => setMobileClubOpen(v => !v)}
+              className={`flex items-center justify-between px-4 py-3 text-sm font-bold uppercase tracking-wider rounded transition-colors w-full ${
+                location.startsWith("/club") ? "text-primary bg-primary/10" : "text-white/70 hover:text-white hover:bg-white/5"
+              }`}
+            >
+              The Club
+              <ChevronDown className={`h-3.5 w-3.5 transition-transform ${mobileClubOpen ? "rotate-180" : ""}`} />
+            </button>
+            {mobileClubOpen && (
+              <div className="pl-4 flex flex-col gap-1">
+                {THE_CLUB_LINKS.map(link => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => { setOpen(false); setMobileClubOpen(false); }}
+                    className={`px-4 py-3 text-sm font-bold uppercase tracking-wider rounded transition-colors ${
+                      location === link.href ? "text-primary bg-primary/10" : "text-white/60 hover:text-white hover:bg-white/5"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            )}
           </nav>
         </div>
       )}
