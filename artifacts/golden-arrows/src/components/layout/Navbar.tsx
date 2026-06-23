@@ -13,10 +13,10 @@ const THE_CLUB_LINKS = [
 const NAV_LINKS = [
   { href: "/news", label: "News" },
   { href: "/squad", label: "Squad" },
+  { href: "/gallery", label: "Fan Zone" },
   { href: "/fixtures", label: "Fixtures" },
   { href: "/results", label: "Results" },
   { href: "/league-table", label: "Table" },
-  { href: "/gallery", label: "Fan Zone" },
   { href: "https://goldenarrowsfc.co.za/", label: "Shop", external: true },
 ];
 
