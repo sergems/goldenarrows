@@ -17,6 +17,7 @@ const NAV_LINKS = [
   { href: "/results", label: "Results" },
   { href: "/league-table", label: "Table" },
   { href: "/gallery", label: "Gallery" },
+  { href: "https://goldenarrowsfc.co.za/", label: "Shop", external: true },
 ];
 
 function isSameDay(dateStr: string) {
@@ -117,9 +118,20 @@ export function Navbar() {
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-1">
+          <ClubDropdown location={location} />
           {NAV_LINKS.map(link => {
-            const active = location === link.href || (link.href !== "/" && location.startsWith(link.href));
-            return (
+            const active = !link.external && (location === link.href || (link.href !== "/" && location.startsWith(link.href)));
+            return link.external ? (
+              <a
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 text-sm font-bold uppercase tracking-wider rounded transition-colors text-white/70 hover:text-white hover:bg-white/5"
+              >
+                {link.label}
+              </a>
+            ) : (
               <Link
                 key={link.href}
                 href={link.href}
@@ -131,7 +143,6 @@ export function Navbar() {
               </Link>
             );
           })}
-          <ClubDropdown location={location} />
         </nav>
 
         {/* Match day / Live badge */}
@@ -190,19 +201,6 @@ export function Navbar() {
       {open && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-background/98 backdrop-blur border-b border-white/5 shadow-xl z-50">
           <nav className="container mx-auto px-4 py-4 flex flex-col gap-1">
-            {NAV_LINKS.map(link => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className={`px-4 py-3 text-sm font-bold uppercase tracking-wider rounded transition-colors ${
-                  location === link.href ? "text-primary bg-primary/10" : "text-white/70 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-
             {/* Mobile "The Club" accordion */}
             <button
               onClick={() => setMobileClubOpen(v => !v)}
@@ -228,6 +226,32 @@ export function Navbar() {
                   </Link>
                 ))}
               </div>
+            )}
+
+            {NAV_LINKS.map(link =>
+              link.external ? (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setOpen(false)}
+                  className="px-4 py-3 text-sm font-bold uppercase tracking-wider rounded transition-colors text-white/70 hover:text-white hover:bg-white/5"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className={`px-4 py-3 text-sm font-bold uppercase tracking-wider rounded transition-colors ${
+                    location === link.href ? "text-primary bg-primary/10" : "text-white/70 hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              )
             )}
           </nav>
         </div>
