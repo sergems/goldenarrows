@@ -485,7 +485,7 @@ export default function Home() {
                   All Results →
                 </Link>
               </div>
-              <div className="space-y-3">
+              <div className="bg-background border border-white/5 rounded-xl overflow-hidden divide-y divide-white/5">
                 {recentResults?.map((result) => {
                   const gaHome = result.homeTeam.toLowerCase().includes("golden arrows");
                   const gaAway = result.awayTeam.toLowerCase().includes("golden arrows");
@@ -495,30 +495,28 @@ export default function Home() {
                   const badgeCls = gaWin ? "bg-green-600 text-white" : isDraw ? "bg-amber-500 text-black" : "bg-red-600 text-white";
                   return (
                     <Link key={result.id} href={`/results/${result.id}`} className="block group">
-                      <div className="bg-background border border-white/5 rounded-xl px-5 py-4 hover:border-primary/30 transition-colors">
-                        <div className="text-[10px] text-white/35 uppercase tracking-widest mb-3 font-bold">
-                          {format(new Date(result.date), "MMM d, yyyy")} · {result.competition}
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <span className={`flex-1 text-right font-display font-bold text-base truncate ${gaHome ? "text-primary" : "text-white/70"}`}>
-                            {result.homeTeam}
-                          </span>
-                          <div className="flex items-center gap-1.5 flex-shrink-0">
-                            <div className="bg-card border border-white/10 rounded-lg w-8 h-8 flex items-center justify-center font-display font-black text-base text-white">
-                              {result.homeScore}
-                            </div>
-                            <span className="text-white/20 text-xs font-bold">–</span>
-                            <div className="bg-card border border-white/10 rounded-lg w-8 h-8 flex items-center justify-center font-display font-black text-base text-white">
-                              {result.awayScore}
-                            </div>
+                      <div className="px-4 py-2.5 hover:bg-white/3 transition-colors flex items-center gap-3">
+                        <span className="text-[10px] text-white/30 uppercase tracking-widest font-bold w-20 flex-shrink-0">
+                          {format(new Date(result.date), "MMM d")}
+                        </span>
+                        <span className={`flex-1 text-right text-sm font-bold truncate ${gaHome ? "text-primary" : "text-white/70"}`}>
+                          {result.homeTeam}
+                        </span>
+                        <div className="flex items-center gap-1 flex-shrink-0">
+                          <div className="bg-card border border-white/10 rounded w-6 h-6 flex items-center justify-center font-display font-black text-sm text-white">
+                            {result.homeScore}
                           </div>
-                          <span className={`flex-1 font-display font-bold text-base truncate ${gaAway ? "text-primary" : "text-white/70"}`}>
-                            {result.awayTeam}
-                          </span>
-                          <span className={`text-[10px] font-black uppercase w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${badgeCls}`}>
-                            {badge}
-                          </span>
+                          <span className="text-white/20 text-[10px] font-bold">–</span>
+                          <div className="bg-card border border-white/10 rounded w-6 h-6 flex items-center justify-center font-display font-black text-sm text-white">
+                            {result.awayScore}
+                          </div>
                         </div>
+                        <span className={`flex-1 text-sm font-bold truncate ${gaAway ? "text-primary" : "text-white/70"}`}>
+                          {result.awayTeam}
+                        </span>
+                        <span className={`text-[10px] font-black uppercase w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${badgeCls}`}>
+                          {badge}
+                        </span>
                       </div>
                     </Link>
                   );
