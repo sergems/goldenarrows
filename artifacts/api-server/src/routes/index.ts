@@ -13,6 +13,7 @@ import galleryRouter from "./gallery";
 import sponsorsRouter from "./sponsors";
 import statsRouter from "./stats";
 import syncRouter from "./sync";
+import socialRouter from "./social";
 
 const router: IRouter = Router();
 
@@ -30,5 +31,6 @@ router.use(galleryRouter);
 router.use(sponsorsRouter);
 router.use(statsRouter);
 router.use(syncRouter);
+router.use(socialRouter);
 
 export default router;
