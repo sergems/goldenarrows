@@ -16,7 +16,7 @@ const NAV_LINKS = [
   { href: "/fixtures", label: "Fixtures" },
   { href: "/results", label: "Results" },
   { href: "/league-table", label: "Table" },
-  { href: "/gallery", label: "Gallery" },
+  { href: "/gallery", label: "Fan Zone" },
   { href: "https://goldenarrowsfc.co.za/", label: "Shop", external: true },
 ];
 
