@@ -473,10 +473,10 @@ export default function Home() {
       {/* ── Results + Table ──────────────────────── */}
       <section className="bg-card py-20 border-y border-white/5">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-stretch">
 
             {/* Recent Results — 3 cols */}
-            <div className="lg:col-span-3">
+            <div className="lg:col-span-3 flex flex-col">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="font-display font-bold text-2xl uppercase tracking-tight">
                   Recent <span className="text-primary">Results</span>
@@ -485,17 +485,17 @@ export default function Home() {
                   All Results →
                 </Link>
               </div>
-              <div className="bg-background border border-white/5 rounded-xl overflow-hidden">
+              <div className="bg-background border border-white/5 rounded-xl overflow-hidden flex flex-col flex-1">
                 {/* Header */}
-                <div className="flex items-center gap-3 px-4 py-3 border-b border-white/5 text-[10px] text-white/30 uppercase tracking-widest font-bold">
+                <div className="flex items-center gap-3 px-4 py-3 border-b border-white/5 text-[10px] text-white/30 uppercase tracking-widest font-bold flex-shrink-0">
                   <span className="w-14 flex-shrink-0">Date</span>
                   <span className="flex-1 text-right">Home</span>
                   <span className="w-16 text-center flex-shrink-0">Score</span>
                   <span className="flex-1">Away</span>
                   <span className="w-6 flex-shrink-0 text-center">Res</span>
                 </div>
-                {/* Rows */}
-                <div className="divide-y divide-white/5">
+                {/* Rows — stretch to fill remaining height */}
+                <div className="divide-y divide-white/5 flex flex-col flex-1">
                   {recentResults?.map((result) => {
                     const gaHome = result.homeTeam.toLowerCase().includes("golden arrows");
                     const gaAway = result.awayTeam.toLowerCase().includes("golden arrows");
@@ -504,8 +504,8 @@ export default function Home() {
                     const badge = gaWin ? "W" : isDraw ? "D" : "L";
                     const badgeCls = gaWin ? "bg-green-600 text-white" : isDraw ? "bg-amber-500 text-black" : "bg-red-600 text-white";
                     return (
-                      <Link key={result.id} href={`/results/${result.id}`} className="block group">
-                        <div className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/3 transition-colors">
+                      <Link key={result.id} href={`/results/${result.id}`} className="flex flex-1 group">
+                        <div className="flex flex-1 items-center gap-3 px-4 hover:bg-white/3 transition-colors">
                           <span className="text-[10px] text-white/30 uppercase tracking-widest font-bold w-14 flex-shrink-0">
                             {format(new Date(result.date), "MMM d")}
                           </span>
@@ -536,7 +536,7 @@ export default function Home() {
             </div>
 
             {/* League Table — 2 cols */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 flex flex-col">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="font-display font-bold text-2xl uppercase tracking-tight">
                   League <span className="text-primary">Table</span>
@@ -545,8 +545,8 @@ export default function Home() {
                   Full Table →
                 </Link>
               </div>
-              <div className="bg-background border border-white/5 rounded-xl overflow-hidden">
-                <table className="w-full text-sm">
+              <div className="bg-background border border-white/5 rounded-xl overflow-hidden flex-1">
+                <table className="w-full text-sm h-full">
                   <thead>
                     <tr className="border-b border-white/5 text-[10px] text-white/30 uppercase tracking-widest font-bold">
                       <th className="px-4 py-3 text-left w-8">#</th>
