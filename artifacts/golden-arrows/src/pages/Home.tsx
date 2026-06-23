@@ -390,7 +390,7 @@ function NormalHero() {
 export default function Home() {
   const { data: news } = useListNews({ limit: 3 });
   const { data: nextFixture } = useGetNextFixture();
-  const { data: recentResults } = useListResults({ limit: 7 });
+  const { data: recentResults } = useListResults({ limit: 6 });
   const { data: table } = useGetLeagueTable();
   const { data: players } = useListPlayers();
 
