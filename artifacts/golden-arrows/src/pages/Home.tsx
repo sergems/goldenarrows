@@ -473,36 +473,52 @@ export default function Home() {
       {/* ── Results + Table ──────────────────────── */}
       <section className="bg-card py-20 border-y border-white/5">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            <div className="lg:col-span-2">
-              <div className="flex justify-between items-end mb-8">
-                <h2 className="font-display text-3xl uppercase" style={{ letterSpacing: "0.06em" }}>
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
+
+            {/* Recent Results — 3 cols */}
+            <div className="lg:col-span-3">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="font-display font-bold text-2xl uppercase tracking-tight">
                   Recent <span className="text-primary">Results</span>
                 </h2>
-                <Link href="/results" className="text-white/50 hover:text-primary transition-colors font-medium uppercase tracking-wider text-sm">
-                  All Results &rarr;
+                <Link href="/results" className="text-white/40 hover:text-primary transition-colors font-bold uppercase tracking-widest text-xs">
+                  All Results →
                 </Link>
               </div>
               <div className="space-y-3">
                 {recentResults?.map((result) => {
-                  const isWin = result.homeTeam === "Golden Arrows" ? result.homeScore > result.awayScore : result.awayScore > result.homeScore;
+                  const gaHome = result.homeTeam.toLowerCase().includes("golden arrows");
+                  const gaAway = result.awayTeam.toLowerCase().includes("golden arrows");
+                  const gaWin = (gaHome && result.homeScore > result.awayScore) || (gaAway && result.awayScore > result.homeScore);
                   const isDraw = result.homeScore === result.awayScore;
-                  const badge = isWin ? "W" : isDraw ? "D" : "L";
-                  const badgeColor = isWin ? "bg-green-600" : isDraw ? "bg-yellow-600" : "bg-red-600";
+                  const badge = gaWin ? "W" : isDraw ? "D" : "L";
+                  const badgeCls = gaWin ? "bg-green-600 text-white" : isDraw ? "bg-amber-500 text-black" : "bg-red-600 text-white";
                   return (
-                    <Link key={result.id} href={`/results/${result.id}`} className="block">
-                      <div className="bg-background border border-white/5 rounded-lg px-6 py-5 hover:border-primary/40 transition-colors flex flex-col md:flex-row items-center justify-between gap-4">
-                        <div className="text-xs text-white/40 uppercase tracking-wider">
+                    <Link key={result.id} href={`/results/${result.id}`} className="block group">
+                      <div className="bg-background border border-white/5 rounded-xl px-5 py-4 hover:border-primary/30 transition-colors">
+                        <div className="text-[10px] text-white/35 uppercase tracking-widest mb-3 font-bold">
                           {format(new Date(result.date), "MMM d, yyyy")} · {result.competition}
                         </div>
-                        <div className="flex items-center gap-4 font-display text-xl" style={{ letterSpacing: "0.04em" }}>
-                          <span className={result.homeScore > result.awayScore ? "text-white" : "text-white/50"}>{result.homeTeam}</span>
-                          <div className="bg-card border border-white/10 px-4 py-1.5 rounded text-primary font-bold">
-                            {result.homeScore} – {result.awayScore}
+                        <div className="flex items-center gap-3">
+                          <span className={`flex-1 text-right font-display font-bold text-base truncate ${gaHome ? "text-primary" : "text-white/70"}`}>
+                            {result.homeTeam}
+                          </span>
+                          <div className="flex items-center gap-1.5 flex-shrink-0">
+                            <div className="bg-card border border-white/10 rounded-lg w-8 h-8 flex items-center justify-center font-display font-black text-base text-white">
+                              {result.homeScore}
+                            </div>
+                            <span className="text-white/20 text-xs font-bold">–</span>
+                            <div className="bg-card border border-white/10 rounded-lg w-8 h-8 flex items-center justify-center font-display font-black text-base text-white">
+                              {result.awayScore}
+                            </div>
                           </div>
-                          <span className={result.awayScore > result.homeScore ? "text-white" : "text-white/50"}>{result.awayTeam}</span>
+                          <span className={`flex-1 font-display font-bold text-base truncate ${gaAway ? "text-primary" : "text-white/70"}`}>
+                            {result.awayTeam}
+                          </span>
+                          <span className={`text-[10px] font-black uppercase w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${badgeCls}`}>
+                            {badge}
+                          </span>
                         </div>
-                        <span className={`text-xs font-bold uppercase px-3 py-1 rounded-full text-white ${badgeColor}`}>{badge}</span>
                       </div>
                     </Link>
                   );
@@ -510,38 +526,46 @@ export default function Home() {
               </div>
             </div>
 
-            <div>
-              <h2 className="font-display text-3xl uppercase mb-8" style={{ letterSpacing: "0.06em" }}>
-                League <span className="text-primary">Table</span>
-              </h2>
-              <div className="bg-background border border-white/5 rounded-lg overflow-hidden">
+            {/* League Table — 2 cols */}
+            <div className="lg:col-span-2">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="font-display font-bold text-2xl uppercase tracking-tight">
+                  League <span className="text-primary">Table</span>
+                </h2>
+                <Link href="/league-table" className="text-white/40 hover:text-primary transition-colors font-bold uppercase tracking-widest text-xs">
+                  Full Table →
+                </Link>
+              </div>
+              <div className="bg-background border border-white/5 rounded-xl overflow-hidden">
                 <table className="w-full text-sm">
-                  <thead className="bg-card text-white/40 border-b border-white/5">
-                    <tr>
-                      <th className="px-4 py-3 text-left font-normal w-8">#</th>
-                      <th className="px-4 py-3 text-left font-normal">Team</th>
-                      <th className="px-4 py-3 text-center font-normal w-8">P</th>
-                      <th className="px-4 py-3 text-center font-normal w-8">Pts</th>
+                  <thead>
+                    <tr className="border-b border-white/5 text-[10px] text-white/30 uppercase tracking-widest font-bold">
+                      <th className="px-4 py-3 text-left w-8">#</th>
+                      <th className="px-4 py-3 text-left">Team</th>
+                      <th className="px-3 py-3 text-center w-10">P</th>
+                      <th className="px-3 py-3 text-center w-10">Pts</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/5">
-                    {table?.slice(0, 6).map((row) => (
-                      <tr key={row.team} className={row.isGoldenArrows ? "bg-primary/15 text-primary font-bold" : ""}>
-                        <td className="px-4 py-3 text-left text-white/50">{row.position}</td>
-                        <td className="px-4 py-3 text-left">{row.team}</td>
-                        <td className="px-4 py-3 text-center text-white/50">{row.played}</td>
-                        <td className="px-4 py-3 text-center font-bold">{row.points}</td>
+                    {table?.slice(0, 10).map((row) => (
+                      <tr key={row.team} className={`transition-colors ${row.isGoldenArrows ? "bg-primary/10" : "hover:bg-white/2"}`}>
+                        <td className={`px-4 py-2.5 text-left text-xs font-bold ${row.isGoldenArrows ? "text-primary" : "text-white/30"}`}>
+                          {row.position}
+                        </td>
+                        <td className={`px-4 py-2.5 text-left text-sm font-bold truncate max-w-[100px] ${row.isGoldenArrows ? "text-primary" : ""}`}>
+                          {row.team}
+                        </td>
+                        <td className="px-3 py-2.5 text-center text-xs text-white/40">{row.played}</td>
+                        <td className={`px-3 py-2.5 text-center text-sm font-black ${row.isGoldenArrows ? "text-primary" : ""}`}>
+                          {row.points}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <div className="p-4 bg-card text-center border-t border-white/5">
-                  <Link href="/league-table" className="text-sm uppercase tracking-wider font-bold hover:text-primary transition-colors">
-                    Full Table &rarr;
-                  </Link>
-                </div>
               </div>
             </div>
+
           </div>
         </div>
       </section>
