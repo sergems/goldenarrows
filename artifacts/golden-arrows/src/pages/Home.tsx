@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { format, differenceInSeconds } from "date-fns";
 import { useState, useEffect } from "react";
 import { MapPin, Clock } from "lucide-react";
+import { TeamCrest } from "@/components/TeamCrest";
 import heroStadium from "@/assets/hero-stadium.png";
 import playerPlaceholder from "@/assets/player-placeholder.png";
 import trophiesImg from "@assets/trophies-won_1780384913023.png";
@@ -509,9 +510,12 @@ export default function Home() {
                           <span className="text-[9px] sm:text-[10px] text-white/30 uppercase tracking-widest font-bold w-10 sm:w-14 flex-shrink-0">
                             {format(new Date(result.date), "MMM d")}
                           </span>
-                          <span className={`flex-1 text-right text-[11px] sm:text-sm font-bold truncate ${gaHome ? "text-primary" : "text-white/60"}`}>
-                            {result.homeTeam}
-                          </span>
+                          <div className={`flex items-center gap-1 flex-1 justify-end min-w-0`}>
+                            <span className={`text-right text-[11px] sm:text-sm font-bold truncate ${gaHome ? "text-primary" : "text-white/60"}`}>
+                              {result.homeTeam}
+                            </span>
+                            <TeamCrest name={result.homeTeam} size="xs" className="flex-shrink-0" />
+                          </div>
                           <div className="flex items-center gap-0.5 sm:gap-1 w-14 sm:w-16 justify-center flex-shrink-0">
                             <div className="bg-card border border-white/10 rounded w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center font-display font-black text-xs sm:text-sm text-white">
                               {result.homeScore}
@@ -521,9 +525,12 @@ export default function Home() {
                               {result.awayScore}
                             </div>
                           </div>
-                          <span className={`flex-1 text-[11px] sm:text-sm font-bold truncate ${gaAway ? "text-primary" : "text-white/60"}`}>
-                            {result.awayTeam}
-                          </span>
+                          <div className="flex items-center gap-1 flex-1 min-w-0">
+                            <TeamCrest name={result.awayTeam} size="xs" className="flex-shrink-0" />
+                            <span className={`text-[11px] sm:text-sm font-bold truncate ${gaAway ? "text-primary" : "text-white/60"}`}>
+                              {result.awayTeam}
+                            </span>
+                          </div>
                           <span className={`text-[8px] sm:text-[10px] font-black uppercase w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center flex-shrink-0 ${badgeCls}`}>
                             {badge}
                           </span>
@@ -561,8 +568,11 @@ export default function Home() {
                         <td className={`px-4 py-2.5 text-left text-xs font-bold ${row.isGoldenArrows ? "text-primary" : "text-white/30"}`}>
                           {row.position}
                         </td>
-                        <td className={`px-4 py-2.5 text-left text-sm font-bold truncate max-w-[100px] ${row.isGoldenArrows ? "text-primary" : ""}`}>
-                          {row.team}
+                        <td className={`px-4 py-2.5 text-left text-sm font-bold max-w-[120px] ${row.isGoldenArrows ? "text-primary" : ""}`}>
+                          <div className="flex items-center gap-2">
+                            <TeamCrest name={row.team} size="xs" className="flex-shrink-0" />
+                            <span className="truncate">{row.team}</span>
+                          </div>
                         </td>
                         <td className="px-3 py-2.5 text-center text-xs text-white/40">{row.played}</td>
                         <td className={`px-3 py-2.5 text-center text-sm font-black ${row.isGoldenArrows ? "text-primary" : ""}`}>
