@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useListGallery } from "@workspace/api-client-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Play, Instagram, Facebook } from "lucide-react";
+import { X, Play, Instagram, Facebook, ExternalLink } from "lucide-react";
 
 declare global {
   interface Window {
@@ -31,93 +31,101 @@ export default function Gallery() {
   const { data: items, isLoading } = useListGallery({
     category: category || undefined,
     type: type || undefined,
-    limit: 50,
   });
+
+  const fbPosts = socialPosts.filter(p => p.platform === "facebook");
+  const igPosts = socialPosts.filter(p => p.platform === "instagram");
 
   return (
     <div className="min-h-screen">
+      {/* Hero */}
       <div className="bg-card py-20 border-b border-white/5">
         <div className="container mx-auto px-4 text-center">
           <h1 className="font-display font-bold text-5xl uppercase tracking-tight mb-4">
-            Media <span className="text-primary">Gallery</span>
+            Fan <span className="text-primary">Zone</span>
           </h1>
-          <p className="text-muted-foreground">Photos and videos from matches, training, and community events.</p>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Photos, videos, and social highlights from Abafana Bes'thende.
+          </p>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12">
-        {/* Type Toggle */}
-        <div className="flex items-center justify-center gap-4 mb-6">
-          {(["All", "photo", "video"] as const).map(t => (
+      {/* Filters */}
+      <div className="sticky top-16 z-30 bg-background/95 backdrop-blur border-b border-white/5 py-3">
+        <div className="container mx-auto px-4 flex items-center gap-3 flex-wrap">
+          {CATEGORIES.map(c => (
             <button
-              key={t}
-              onClick={() => setType(t === "All" ? undefined : t)}
-              className={`px-6 py-2 rounded font-bold uppercase tracking-wider text-sm transition-colors ${
-                (t === "All" && !type) || t === type
+              key={c}
+              onClick={() => setCategory(c === "All" ? undefined : c)}
+              className={`px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider transition-colors ${
+                (c === "All" && !category) || category === c
                   ? "bg-primary text-black"
-                  : "bg-card border border-white/10 text-muted-foreground hover:text-foreground"
+                  : "bg-white/5 text-muted-foreground hover:bg-white/10"
               }`}
             >
-              {t === "All" ? "All Media" : t === "photo" ? "Photos" : "Videos"}
+              {c}
             </button>
           ))}
+          <div className="ml-auto flex gap-2">
+            {(["photo", "video"] as const).map(t => (
+              <button
+                key={t}
+                onClick={() => setType(type === t ? undefined : t)}
+                className={`px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider transition-colors ${
+                  type === t ? "bg-primary text-black" : "bg-white/5 text-muted-foreground hover:bg-white/10"
+                }`}
+              >
+                {t === "photo" ? "📷 Photos" : "🎬 Videos"}
+              </button>
+            ))}
+          </div>
         </div>
+      </div>
 
-        {/* Category Filter */}
-        <div className="flex gap-2 flex-wrap justify-center mb-10">
-          {CATEGORIES.map(cat => (
-            <button
-              key={cat}
-              onClick={() => setCategory(cat === "All" ? undefined : cat)}
-              className={`px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-colors ${
-                (cat === "All" && !category) || cat === category
-                  ? "bg-secondary text-white"
-                  : "bg-card border border-white/10 text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
+      {/* Gallery Grid */}
+      <div className="container mx-auto px-4 py-12">
+        {isLoading && (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="aspect-square rounded-xl bg-card animate-pulse" />
+            ))}
+          </div>
+        )}
 
-        {isLoading && <div className="text-center text-muted-foreground py-20">Loading gallery...</div>}
-
-        {/* Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-          {items?.map((item, i) => (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: i * 0.04 }}
-              className="group relative aspect-square rounded-lg overflow-hidden cursor-pointer bg-card"
-              onClick={() => item.type === "photo" ? setLightbox(item.url) : window.open(item.url, "_blank")}
-            >
-              <img
-                src={item.thumbnailUrl || item.url}
-                alt={item.title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                {item.type === "video" ? (
-                  <Play className="h-10 w-10 text-white" />
-                ) : (
-                  <div className="h-10 w-10 rounded-full border-2 border-white flex items-center justify-center">
-                    <div className="h-5 w-5 rounded-sm border-2 border-white" />
-                  </div>
-                )}
-              </div>
-              <div className="absolute top-2 right-2">
-                {item.type === "video" && (
-                  <span className="bg-primary text-black text-xs font-bold px-2 py-0.5 rounded">VIDEO</span>
-                )}
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                <p className="text-white text-xs font-bold truncate">{item.title}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        {!isLoading && items && items.length > 0 && (
+          <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+            {items.map((item, i) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: i * 0.05 }}
+                className="break-inside-avoid"
+              >
+                <div
+                  className="relative rounded-xl overflow-hidden cursor-pointer group border border-white/5 hover:border-primary/30 transition-colors"
+                  onClick={() => item.type === "photo" && setLightbox(item.url)}
+                >
+                  {item.type === "video" ? (
+                    <video src={item.url} className="w-full object-cover" />
+                  ) : (
+                    <img src={item.url} alt={item.caption || ""} className="w-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  )}
+                  {item.type === "video" && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                      <Play className="h-12 w-12 text-white drop-shadow-lg" />
+                    </div>
+                  )}
+                  {item.caption && (
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <p className="text-white text-xs leading-snug">{item.caption}</p>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
 
         {!isLoading && (!items || items.length === 0) && (
           <div className="text-center text-muted-foreground py-20">No media available in this category.</div>
@@ -125,80 +133,104 @@ export default function Gallery() {
       </div>
 
       {/* ── From Our Social Media Family ─────────────── */}
-      <section className="bg-card border-t border-white/5 py-20">
+      <section className="bg-card border-t border-white/5 py-14">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="font-display font-bold text-4xl uppercase tracking-tight mb-3">
+          <div className="text-center mb-10">
+            <h2 className="font-display font-bold text-4xl uppercase tracking-tight mb-2">
               From Our <span className="text-primary">Social Media Family</span>
             </h2>
-            <p className="text-muted-foreground">Follow us and stay connected with Abafana Bes'thende</p>
+            <p className="text-muted-foreground text-sm">Follow us and stay connected with Abafana Bes'thende</p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
 
-            {/* Facebook Posts */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-full bg-[#1877F2] flex items-center justify-center flex-shrink-0">
-                  <Facebook className="w-5 h-5 text-white" />
+            {/* ── Facebook ── */}
+            <div className="bg-background rounded-2xl border border-white/10 overflow-hidden">
+              {/* Header */}
+              <div className="flex items-center gap-3 px-4 py-3 border-b border-white/5">
+                <div className="w-8 h-8 rounded-full bg-[#1877F2] flex items-center justify-center flex-shrink-0">
+                  <Facebook className="w-4 h-4 text-white" />
                 </div>
-                <div>
-                  <p className="font-bold text-white text-sm">Lamontville Golden Arrows</p>
-                  <a href="https://www.facebook.com/LamontvilleGoldenArrows/" target="_blank" rel="noopener noreferrer"
-                    className="text-[#1877F2] text-xs font-bold hover:underline">
-                    @LamontvilleGoldenArrows
-                  </a>
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-white text-sm leading-none">Lamontville Golden Arrows</p>
+                  <p className="text-[#1877F2] text-xs mt-0.5">@LamontvilleGoldenArrows</p>
                 </div>
+                <a
+                  href="https://www.facebook.com/LamontvilleGoldenArrows/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#1877F2]/10 text-[#1877F2] text-xs font-bold hover:bg-[#1877F2]/20 transition-colors flex-shrink-0"
+                >
+                  Follow <ExternalLink className="w-3 h-3" />
+                </a>
               </div>
-              {socialPosts.filter(p => p.platform === "facebook").length > 0 ? (
-                <div className="space-y-4">
-                  {socialPosts.filter(p => p.platform === "facebook").map(post => (
-                    <div key={post.id} className="rounded-xl overflow-hidden border border-white/10" style={{background: "#fff"}}>
+
+              {/* Posts */}
+              {fbPosts.length > 0 ? (
+                <div>
+                  {fbPosts.map((post, idx) => (
+                    <div
+                      key={post.id}
+                      className={`overflow-hidden ${idx < fbPosts.length - 1 ? "border-b border-white/5" : ""}`}
+                      style={{ maxHeight: "480px" }}
+                    >
                       <div
                         className="fb-post"
                         data-href={post.post_url}
-                        data-width="750"
+                        data-width="600"
                         data-show-text="true"
-                        style={{width: "100%"}}
                       />
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="rounded-xl border border-white/10 bg-background flex flex-col items-center justify-center text-center px-8 py-16 gap-4">
-                  <div className="w-16 h-16 rounded-full bg-[#1877F2]/10 flex items-center justify-center">
-                    <Facebook className="w-8 h-8 text-[#1877F2]" />
+                <div className="flex flex-col items-center justify-center text-center px-8 py-14 gap-4">
+                  <div className="w-14 h-14 rounded-full bg-[#1877F2]/10 flex items-center justify-center">
+                    <Facebook className="w-7 h-7 text-[#1877F2]" />
                   </div>
                   <div>
                     <p className="font-bold text-white mb-1">Follow us on Facebook</p>
                     <p className="text-muted-foreground text-sm">Stay up to date with our latest news and updates.</p>
                   </div>
                   <a href="https://www.facebook.com/LamontvilleGoldenArrows/" target="_blank" rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#1877F2] font-bold text-white text-sm hover:opacity-90 transition-opacity">
+                    className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#1877F2] font-bold text-white text-sm hover:opacity-90 transition-opacity">
                     <Facebook className="w-4 h-4" /> Follow on Facebook
                   </a>
                 </div>
               )}
             </div>
 
-            {/* Instagram */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center flex-shrink-0">
-                  <Instagram className="w-5 h-5 text-white" />
+            {/* ── Instagram ── */}
+            <div className="bg-background rounded-2xl border border-white/10 overflow-hidden">
+              {/* Header */}
+              <div className="flex items-center gap-3 px-4 py-3 border-b border-white/5">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center flex-shrink-0">
+                  <Instagram className="w-4 h-4 text-white" />
                 </div>
-                <div>
-                  <p className="font-bold text-white text-sm">Golden Arrows FC</p>
-                  <a href="https://www.instagram.com/goldenarrowsfc/" target="_blank" rel="noopener noreferrer"
-                    className="text-[#e1306c] text-xs font-bold hover:underline">
-                    @goldenarrowsfc
-                  </a>
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-white text-sm leading-none">Golden Arrows FC</p>
+                  <p className="text-[#e1306c] text-xs mt-0.5">@goldenarrowsfc</p>
                 </div>
+                <a
+                  href="https://www.instagram.com/goldenarrowsfc/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold hover:opacity-80 transition-opacity flex-shrink-0"
+                  style={{ background: "linear-gradient(135deg, #f09433, #dc2743, #bc1888)", color: "#fff" }}
+                >
+                  Follow <ExternalLink className="w-3 h-3" />
+                </a>
               </div>
-              {socialPosts.filter(p => p.platform === "instagram").length > 0 ? (
-                <div className="space-y-4">
-                  {socialPosts.filter(p => p.platform === "instagram").map(post => (
-                    <div key={post.id} className="rounded-xl overflow-hidden border border-white/10 flex justify-center" style={{background: "#fff"}}>
+
+              {/* Posts */}
+              {igPosts.length > 0 ? (
+                <div>
+                  {igPosts.map((post, idx) => (
+                    <div
+                      key={post.id}
+                      className={`overflow-hidden flex justify-center bg-white ${idx < igPosts.length - 1 ? "border-b border-white/5" : ""}`}
+                      style={{ maxHeight: "540px" }}
+                    >
                       <blockquote
                         className="instagram-media"
                         data-instgrm-permalink={post.post_url}
@@ -206,7 +238,6 @@ export default function Gallery() {
                         style={{
                           background: "#FFF",
                           border: 0,
-                          borderRadius: "3px",
                           margin: "0",
                           maxWidth: "540px",
                           minWidth: "326px",
@@ -222,21 +253,19 @@ export default function Gallery() {
                   ))}
                 </div>
               ) : (
-                <div className="rounded-xl border border-white/10 bg-background flex flex-col items-center justify-center text-center px-8 py-16 gap-6">
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] p-0.5">
+                <div className="flex flex-col items-center justify-center text-center px-8 py-14 gap-4">
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] p-0.5">
                     <div className="w-full h-full rounded-full bg-background flex items-center justify-center">
-                      <Instagram className="w-10 h-10 text-white" />
+                      <Instagram className="w-7 h-7 text-white" />
                     </div>
                   </div>
                   <div>
-                    <p className="font-display font-bold text-2xl uppercase text-white mb-2">@goldenarrowsfc</p>
-                    <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
-                      Follow us on Instagram for match-day moments, behind-the-scenes content, and player features.
-                    </p>
+                    <p className="font-bold text-white mb-1">@goldenarrowsfc</p>
+                    <p className="text-muted-foreground text-sm">Follow us for match-day moments and behind-the-scenes content.</p>
                   </div>
                   <a href="https://www.instagram.com/goldenarrowsfc/" target="_blank" rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-bold text-white text-sm hover:opacity-90 transition-opacity"
-                    style={{background: "linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)"}}>
+                    className="inline-flex items-center gap-2 px-5 py-2 rounded-full font-bold text-white text-sm hover:opacity-90 transition-opacity"
+                    style={{ background: "linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)" }}>
                     <Instagram className="w-4 h-4" /> Follow on Instagram
                   </a>
                 </div>
@@ -265,8 +294,8 @@ export default function Gallery() {
             </button>
             <img
               src={lightbox}
-              alt="Gallery"
-              className="max-w-full max-h-[90vh] object-contain rounded-lg"
+              alt=""
+              className="max-w-full max-h-full object-contain rounded-lg"
               onClick={e => e.stopPropagation()}
             />
           </motion.div>

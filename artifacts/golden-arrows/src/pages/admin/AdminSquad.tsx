@@ -12,6 +12,18 @@ import { Input } from "@/components/ui/input";
 import { ImageUpload } from "@/components/ui/ImageUpload";
 import playerPlaceholder from "@/assets/player-placeholder.png";
 
+const POSITIONS = [
+  "Goalkeeper",
+  "Defender",
+  "Midfielder",
+  "Forward",
+  "Coach",
+  "Assistant Coach",
+];
+
+const COACHING_POSITIONS = ["Coach", "Assistant Coach"];
+const isCoach = (pos: string) => COACHING_POSITIONS.includes(pos);
+
 function slugify(name: string) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
@@ -19,19 +31,31 @@ function slugify(name: string) {
 function buildAnnouncement(form: {
   name: string; position: string; nationality: string; age: number; number: number; photoUrl: string;
 }) {
-  const title = `Golden Arrows Sign ${form.name}`;
-  const slug = `golden-arrows-sign-${slugify(form.name)}-${Date.now()}`;
-  const article =
-    `${form.nationality} ${form.position.toLowerCase()} ${form.name} joins Lamontville Golden Arrows FC. ` +
-    `The ${form.age > 0 ? `${form.age}-year-old` : "new"} signing wears the number ${form.number} shirt and is set to strengthen the Abafana Bes'thende squad.\n\n` +
-    `"We are delighted to welcome ${form.name.split(" ")[0]} to the club," said a club spokesperson.\n\n` +
-    `${form.name} is available immediately and the club wishes him every success in the famous Golden Arrows colours.`;
+  const isCoachingRole = isCoach(form.position);
+  const title = isCoachingRole
+    ? `Golden Arrows Appoint ${form.name} as ${form.position}`
+    : `Golden Arrows Sign ${form.name}`;
+  const slug = `${isCoachingRole ? "golden-arrows-appoint" : "golden-arrows-sign"}-${slugify(form.name)}-${Date.now()}`;
+  const article = isCoachingRole
+    ? `${form.nationality} ${form.position.toLowerCase()} ${form.name} joins Lamontville Golden Arrows FC as ${form.position.toLowerCase()}. ` +
+      `${form.age > 0 ? `The ${form.age}-year-old` : "The"} experienced tactician is set to guide Abafana Bes'thende this season.\n\n` +
+      `"We are thrilled to welcome ${form.name.split(" ")[0]} to the club and look forward to the expertise they will bring," said a club spokesperson.`
+    : `${form.nationality} ${form.position.toLowerCase()} ${form.name} joins Lamontville Golden Arrows FC. ` +
+      `The ${form.age > 0 ? `${form.age}-year-old` : "new"} signing wears the number ${form.number} shirt and is set to strengthen the Abafana Bes'thende squad.\n\n` +
+      `"We are delighted to welcome ${form.name.split(" ")[0]} to the club," said a club spokesperson.\n\n` +
+      `${form.name} is available immediately and the club wishes him every success in the famous Golden Arrows colours.`;
+
   return {
     title, slug,
-    excerpt: `Lamontville Golden Arrows FC are delighted to announce the signing of ${form.name}, ${form.nationality} ${form.position.toLowerCase()}.`,
-    content: article, category: "Transfer News",
+    excerpt: isCoachingRole
+      ? `Lamontville Golden Arrows FC are pleased to announce the appointment of ${form.name} as ${form.position}.`
+      : `Lamontville Golden Arrows FC are delighted to announce the signing of ${form.name}, ${form.nationality} ${form.position.toLowerCase()}.`,
+    content: article,
+    category: isCoachingRole ? "Club News" : "Transfer News",
     imageUrl: form.photoUrl || "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80",
-    author: "Golden Arrows FC", tags: ["Transfer", "Squad", "Signing"], featured: false,
+    author: "Golden Arrows FC",
+    tags: isCoachingRole ? ["Coaching", "Management", "Club News"] : ["Transfer", "Squad", "Signing"],
+    featured: false,
   };
 }
 
@@ -70,7 +94,9 @@ function PlayerForm({
       : DEFAULT_FORM
   );
   const [createAnnouncement, setCreateAnnouncement] = useState(mode === "create");
-  const [done, setDone] = useState<{ name: string; withArticle: boolean } | null>(null);
+  const [done, setDone] = useState<{ name: string; withArticle: boolean; isCoach: boolean } | null>(null);
+
+  const coachMode = isCoach(form.position);
 
   function handle(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     const val = e.target.type === "number" ? Number(e.target.value) : e.target.value;
@@ -92,15 +118,17 @@ function PlayerForm({
     }
     queryClient.invalidateQueries({ queryKey: getListPlayersQueryKey() });
     if (mode === "edit") { onClose(); return; }
-    setDone({ name: form.name, withArticle: createAnnouncement });
+    setDone({ name: form.name, withArticle: createAnnouncement, isCoach: coachMode });
   }
+
+  const label = coachMode ? "Coaching Staff" : "Player";
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
       <div className="bg-card border border-white/10 rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b border-white/5">
           <h2 className="font-display font-bold text-xl uppercase tracking-tight">
-            {mode === "edit" ? `Edit — ${initial?.name}` : "Add Player"}
+            {mode === "edit" ? `Edit — ${initial?.name}` : `Add ${label}`}
           </h2>
           <button onClick={onClose}><X className="h-5 w-5 text-muted-foreground" /></button>
         </div>
@@ -108,13 +136,15 @@ function PlayerForm({
         {done ? (
           <div className="p-10 text-center">
             <CheckCircle className="h-12 w-12 text-primary mx-auto mb-4" />
-            <div className="font-display font-bold text-xl uppercase mb-2" style={{ letterSpacing: "0.06em" }}>Player Added!</div>
+            <div className="font-display font-bold text-xl uppercase mb-2" style={{ letterSpacing: "0.06em" }}>
+              {done.isCoach ? "Coach Added!" : "Player Added!"}
+            </div>
             <p className="text-muted-foreground text-sm mb-2">
               <strong className="text-foreground">{done.name}</strong> has been added to the squad.
             </p>
             {done.withArticle && (
               <div className="flex items-center justify-center gap-2 text-sm text-primary font-bold mt-1 mb-6">
-                <Megaphone className="h-4 w-4" /> Signing announcement created in News
+                <Megaphone className="h-4 w-4" /> Announcement created in News
               </div>
             )}
             <div className="flex gap-3 justify-center">
@@ -125,7 +155,7 @@ function PlayerForm({
         ) : (
           <form onSubmit={submit} className="p-6 space-y-4">
             <ImageUpload
-              label="Player Photo"
+              label={coachMode ? "Photo" : "Player Photo"}
               value={form.photoUrl}
               onChange={url => setForm(f => ({ ...f, photoUrl: url }))}
             />
@@ -134,35 +164,52 @@ function PlayerForm({
                 <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Full Name *</label>
                 <Input name="name" value={form.name} onChange={handle} required placeholder="e.g. Sibusiso Mthethwa" />
               </div>
+
               <div>
-                <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Position</label>
+                <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Role / Position</label>
                 <select name="position" value={form.position} onChange={handle} className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm">
-                  <option>Goalkeeper</option>
-                  <option>Defender</option>
-                  <option>Midfielder</option>
-                  <option>Forward</option>
+                  <optgroup label="Players">
+                    <option>Goalkeeper</option>
+                    <option>Defender</option>
+                    <option>Midfielder</option>
+                    <option>Forward</option>
+                  </optgroup>
+                  <optgroup label="Coaching Staff">
+                    <option>Coach</option>
+                    <option>Assistant Coach</option>
+                  </optgroup>
                 </select>
               </div>
-              <div>
-                <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Squad Number</label>
-                <Input name="number" type="number" value={form.number} onChange={handle} min={1} />
-              </div>
+
+              {!coachMode && (
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Squad Number</label>
+                  <Input name="number" type="number" value={form.number} onChange={handle} min={1} />
+                </div>
+              )}
+
               <div>
                 <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Nationality</label>
-                <Input name="nationality" value={form.nationality} onChange={handle} />
+                <Input name="nationality" value={form.nationality} onChange={handle} placeholder="e.g. South African, Brazilian…" />
               </div>
+
               <div>
                 <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Age</label>
-                <Input name="age" type="number" value={form.age} onChange={handle} min={15} max={50} />
+                <Input name="age" type="number" value={form.age} onChange={handle} min={15} max={80} />
               </div>
-              <div>
-                <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Appearances</label>
-                <Input name="appearances" type="number" value={form.appearances} onChange={handle} min={0} />
-              </div>
-              <div>
-                <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Goals</label>
-                <Input name="goals" type="number" value={form.goals} onChange={handle} min={0} />
-              </div>
+
+              {!coachMode && (
+                <>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Appearances</label>
+                    <Input name="appearances" type="number" value={form.appearances} onChange={handle} min={0} />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Goals</label>
+                    <Input name="goals" type="number" value={form.goals} onChange={handle} min={0} />
+                  </div>
+                </>
+              )}
             </div>
 
             {mode === "create" && (
@@ -178,10 +225,14 @@ function PlayerForm({
                 <div>
                   <div className="flex items-center gap-2 font-bold text-sm mb-0.5">
                     <Megaphone className={`h-4 w-4 ${createAnnouncement ? "text-primary" : "text-muted-foreground"}`} />
-                    <span className={createAnnouncement ? "text-foreground" : "text-muted-foreground"}>Create signing announcement</span>
+                    <span className={createAnnouncement ? "text-foreground" : "text-muted-foreground"}>
+                      {coachMode ? "Create appointment announcement" : "Create signing announcement"}
+                    </span>
                   </div>
                   <p className="text-xs text-muted-foreground leading-snug">
-                    Publishes a <em>"Golden Arrows Sign {form.name || "[Player Name]"}"</em> news article in Transfer News.
+                    {coachMode
+                      ? `Publishes a "Golden Arrows Appoint ${form.name || "[Name]"} as ${form.position}" news article.`
+                      : `Publishes a "Golden Arrows Sign ${form.name || "[Player Name]"}" news article in Transfer News.`}
                   </p>
                 </div>
               </div>
@@ -195,7 +246,7 @@ function PlayerForm({
                     <Loader2 className="h-4 w-4 animate-spin" />
                     {mode === "edit" ? "Saving…" : createPlayer.isPending ? "Adding…" : "Announcing…"}
                   </span>
-                ) : mode === "edit" ? "Save Changes" : createAnnouncement ? "Add & Announce" : "Add Player"}
+                ) : mode === "edit" ? "Save Changes" : createAnnouncement ? "Add & Announce" : `Add ${label}`}
               </Button>
             </div>
           </form>
@@ -203,6 +254,13 @@ function PlayerForm({
       </div>
     </div>
   );
+}
+
+const SECTION_ORDER = ["Coach", "Assistant Coach", "Goalkeeper", "Defender", "Midfielder", "Forward"];
+
+function positionGroup(pos: string): string {
+  if (COACHING_POSITIONS.includes(pos)) return pos;
+  return pos; // exact position
 }
 
 export default function AdminSquad() {
@@ -213,10 +271,23 @@ export default function AdminSquad() {
   const [editing, setEditing] = useState<Player | null>(null);
 
   async function handleDelete(id: number) {
-    if (!confirm("Remove this player from the squad?")) return;
+    if (!confirm("Remove this person from the squad?")) return;
     await deletePlayer.mutateAsync({ id });
     queryClient.invalidateQueries({ queryKey: getListPlayersQueryKey() });
   }
+
+  // Group and sort
+  const groups: Record<string, typeof players> = {};
+  SECTION_ORDER.forEach(pos => { groups[pos] = []; });
+  players?.forEach(p => {
+    const key = SECTION_ORDER.find(s => s.toLowerCase() === p.position.toLowerCase()) ?? p.position;
+    if (!groups[key]) groups[key] = [];
+    groups[key]!.push(p);
+  });
+
+  const totalCount = players?.length ?? 0;
+  const coachCount = players?.filter(p => isCoach(p.position)).length ?? 0;
+  const playerCount = totalCount - coachCount;
 
   return (
     <AdminLayout>
@@ -226,50 +297,67 @@ export default function AdminSquad() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="font-display font-bold text-3xl uppercase tracking-tight">Squad Management</h1>
-          <p className="text-muted-foreground mt-1">{players?.length ?? 0} players in the squad</p>
+          <p className="text-muted-foreground mt-1">
+            {playerCount} player{playerCount !== 1 ? "s" : ""} · {coachCount} coaching staff
+          </p>
         </div>
         <Button onClick={() => setShowCreate(true)} className="flex items-center gap-2">
-          <Plus className="h-4 w-4" /> Add Player
+          <Plus className="h-4 w-4" /> Add to Squad
         </Button>
       </div>
 
       {isLoading && <div className="text-muted-foreground">Loading...</div>}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {players?.map(player => (
-          <div key={player.id} className="bg-card border border-white/5 rounded-xl overflow-hidden hover:border-white/10 transition-colors group">
-            <div className="aspect-square relative overflow-hidden bg-gradient-to-br from-secondary/20 to-primary/10">
-              <img src={player.photoUrl || playerPlaceholder} alt={player.name} className="w-full h-full object-cover" />
-              <div className="absolute top-2 right-2 font-display font-black text-3xl text-white/20">{player.number}</div>
-              {/* Action buttons appear on hover */}
-              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                <button
-                  onClick={() => setEditing(player)}
-                  className="flex items-center gap-1.5 px-3 py-2 bg-primary text-black font-bold text-xs uppercase tracking-wider rounded-lg"
-                >
-                  <Pencil className="h-3.5 w-3.5" /> Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(player.id)}
-                  className="flex items-center gap-1.5 px-3 py-2 bg-red-600/80 text-white font-bold text-xs uppercase tracking-wider rounded-lg"
-                >
-                  <Trash2 className="h-3.5 w-3.5" /> Remove
-                </button>
-              </div>
-            </div>
-            <div className="p-4">
-              <div className="text-xs text-primary font-bold uppercase tracking-wider mb-1">{player.position}</div>
-              <div className="font-display font-bold truncate">{player.name}</div>
-              <div className="text-xs text-muted-foreground mt-1">{player.nationality}</div>
-              <div className="flex gap-3 mt-3 text-xs text-muted-foreground">
-                <span><strong className="text-foreground">{player.appearances}</strong> Apps</span>
-                <span><strong className="text-foreground">{player.goals}</strong> Goals</span>
-                <span><strong className="text-foreground">{player.assists}</strong> Assists</span>
-              </div>
+      {!isLoading && Object.entries(groups).map(([section, members]) => {
+        if (!members || members.length === 0) return null;
+        return (
+          <div key={section} className="mb-10">
+            <h2 className="font-display font-bold text-lg uppercase tracking-wider text-muted-foreground mb-4 border-b border-white/5 pb-2">
+              {section === "Coach" ? "Head Coach" : section === "Goalkeeper" ? "Goalkeepers" :
+               section === "Defender" ? "Defenders" : section === "Midfielder" ? "Midfielders" :
+               section === "Forward" ? "Forwards" : section}
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {members.map(person => (
+                <div key={person.id} className="bg-card border border-white/5 rounded-xl overflow-hidden hover:border-white/10 transition-colors group">
+                  <div className="aspect-square relative overflow-hidden bg-gradient-to-br from-secondary/20 to-primary/10">
+                    <img src={person.photoUrl || playerPlaceholder} alt={person.name} className="w-full h-full object-cover" />
+                    {!isCoach(person.position) && (
+                      <div className="absolute top-2 right-2 font-display font-black text-3xl text-white/20">{person.number}</div>
+                    )}
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                      <button
+                        onClick={() => setEditing(person)}
+                        className="flex items-center gap-1.5 px-3 py-2 bg-primary text-black font-bold text-xs uppercase tracking-wider rounded-lg"
+                      >
+                        <Pencil className="h-3.5 w-3.5" /> Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(person.id)}
+                        className="flex items-center gap-1.5 px-3 py-2 bg-red-600/80 text-white font-bold text-xs uppercase tracking-wider rounded-lg"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" /> Remove
+                      </button>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <div className="text-xs text-primary font-bold uppercase tracking-wider mb-1">{person.position}</div>
+                    <div className="font-display font-bold truncate">{person.name}</div>
+                    <div className="text-xs text-muted-foreground mt-1">{person.nationality}</div>
+                    {!isCoach(person.position) && (
+                      <div className="flex gap-3 mt-3 text-xs text-muted-foreground">
+                        <span><strong className="text-foreground">{person.appearances}</strong> Apps</span>
+                        <span><strong className="text-foreground">{person.goals}</strong> Goals</span>
+                        <span><strong className="text-foreground">{person.assists}</strong> Assists</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        ))}
-      </div>
+        );
+      })}
     </AdminLayout>
   );
 }
