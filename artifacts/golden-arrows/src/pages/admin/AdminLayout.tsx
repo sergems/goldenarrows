@@ -28,7 +28,11 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
       <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-card border-r border-white/5 flex flex-col transform transition-transform duration-200 ${open ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
         <div className="h-20 flex items-center px-6 border-b border-white/5">
           <Link href="/" className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-full bg-primary flex items-center justify-center font-display font-bold text-black text-sm">GA</div>
+            <img
+              src={`${import.meta.env.BASE_URL}logo.svg`}
+              alt="Golden Arrows FC"
+              className="h-10 w-auto"
+            />
             <div>
               <div className="font-display font-bold text-sm uppercase tracking-wider">Admin Panel</div>
               <div className="text-xs text-muted-foreground">Golden Arrows FC</div>

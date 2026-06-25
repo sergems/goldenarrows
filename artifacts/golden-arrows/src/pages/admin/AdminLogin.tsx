@@ -41,11 +41,12 @@ export function AdminLogin({ onSuccess }: AdminLoginProps) {
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center mb-8">
-          <div className="h-16 w-16 rounded-full bg-primary flex items-center justify-center font-display font-bold text-black text-xl mb-4">
-            GA
-          </div>
+          <img
+            src={`${import.meta.env.BASE_URL}logo.svg`}
+            alt="Golden Arrows FC"
+            className="h-24 w-auto mb-4"
+          />
           <h1 className="font-display font-bold text-2xl uppercase tracking-wider">Admin Panel</h1>
-          <p className="text-muted-foreground text-sm mt-1">Golden Arrows FC</p>
         </div>
 
         <form onSubmit={handleSubmit} className="bg-card border border-white/10 rounded-xl p-6 space-y-4">
