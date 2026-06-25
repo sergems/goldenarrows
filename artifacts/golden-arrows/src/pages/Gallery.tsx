@@ -24,9 +24,8 @@ export default function Gallery() {
   }, []);
 
   useEffect(() => {
-    if (window.FB?.XFBML) {
-      window.FB.XFBML.parse();
-    }
+    if (window.FB?.XFBML) window.FB.XFBML.parse();
+    if ((window as any).instgrm?.Embeds) (window as any).instgrm.Embeds.process();
   }, [socialPosts]);
 
   const { data: items, isLoading } = useListGallery({
@@ -154,12 +153,13 @@ export default function Gallery() {
               {socialPosts.filter(p => p.platform === "facebook").length > 0 ? (
                 <div className="space-y-4">
                   {socialPosts.filter(p => p.platform === "facebook").map(post => (
-                    <div key={post.id} className="rounded-xl overflow-hidden border border-white/10 bg-white flex justify-center">
+                    <div key={post.id} className="rounded-xl overflow-hidden border border-white/10" style={{background: "#fff"}}>
                       <div
                         className="fb-post"
                         data-href={post.post_url}
-                        data-width="500"
+                        data-width="750"
                         data-show-text="true"
+                        style={{width: "100%"}}
                       />
                     </div>
                   ))}
@@ -195,24 +195,52 @@ export default function Gallery() {
                   </a>
                 </div>
               </div>
-              <div className="rounded-xl border border-white/10 bg-background flex flex-col items-center justify-center text-center px-8 py-16 gap-6">
-                <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] p-0.5">
-                  <div className="w-full h-full rounded-full bg-background flex items-center justify-center">
-                    <Instagram className="w-10 h-10 text-white" />
+              {socialPosts.filter(p => p.platform === "instagram").length > 0 ? (
+                <div className="space-y-4">
+                  {socialPosts.filter(p => p.platform === "instagram").map(post => (
+                    <div key={post.id} className="rounded-xl overflow-hidden border border-white/10 flex justify-center" style={{background: "#fff"}}>
+                      <blockquote
+                        className="instagram-media"
+                        data-instgrm-permalink={post.post_url}
+                        data-instgrm-version="14"
+                        style={{
+                          background: "#FFF",
+                          border: 0,
+                          borderRadius: "3px",
+                          margin: "0",
+                          maxWidth: "540px",
+                          minWidth: "326px",
+                          padding: 0,
+                          width: "calc(100% - 2px)",
+                        }}
+                      >
+                        <a href={post.post_url} target="_blank" rel="noopener noreferrer">
+                          View this post on Instagram
+                        </a>
+                      </blockquote>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="rounded-xl border border-white/10 bg-background flex flex-col items-center justify-center text-center px-8 py-16 gap-6">
+                  <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] p-0.5">
+                    <div className="w-full h-full rounded-full bg-background flex items-center justify-center">
+                      <Instagram className="w-10 h-10 text-white" />
+                    </div>
                   </div>
+                  <div>
+                    <p className="font-display font-bold text-2xl uppercase text-white mb-2">@goldenarrowsfc</p>
+                    <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
+                      Follow us on Instagram for match-day moments, behind-the-scenes content, and player features.
+                    </p>
+                  </div>
+                  <a href="https://www.instagram.com/goldenarrowsfc/" target="_blank" rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-bold text-white text-sm hover:opacity-90 transition-opacity"
+                    style={{background: "linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)"}}>
+                    <Instagram className="w-4 h-4" /> Follow on Instagram
+                  </a>
                 </div>
-                <div>
-                  <p className="font-display font-bold text-2xl uppercase text-white mb-2">@goldenarrowsfc</p>
-                  <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
-                    Follow us on Instagram for match-day moments, behind-the-scenes content, and player features.
-                  </p>
-                </div>
-                <a href="https://www.instagram.com/goldenarrowsfc/" target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-bold text-white text-sm hover:opacity-90 transition-opacity"
-                  style={{background: "linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)"}}>
-                  <Instagram className="w-4 h-4" /> Follow on Instagram
-                </a>
-              </div>
+              )}
             </div>
 
           </div>
