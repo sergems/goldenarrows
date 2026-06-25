@@ -10,6 +10,14 @@ const THE_CLUB_LINKS = [
   { href: "/club/trophy", label: "Trophy Cabinet" },
 ];
 
+const SHOP_LINKS = [
+  { href: "https://goldenarrowsfc.co.za/replicas/", label: "Replica Jerseys" },
+  { href: "https://goldenarrowsfc.co.za/tracksuits/", label: "Tracksuits" },
+  { href: "https://goldenarrowsfc.co.za/clothing/", label: "Clothing" },
+  { href: "https://goldenarrowsfc.co.za/product/arrows-lifestyle-legends-jersey/", label: "Life Style" },
+  { href: "https://goldenarrowsfc.co.za/headwear/", label: "Headwear" },
+];
+
 const NAV_LINKS = [
   { href: "/news", label: "News" },
   { href: "/squad", label: "Squad" },
@@ -17,7 +25,6 @@ const NAV_LINKS = [
   { href: "/fixtures", label: "Fixtures" },
   { href: "/results", label: "Results" },
   { href: "/league-table", label: "Table" },
-  { href: "https://goldenarrowsfc.co.za/", label: "Shop", external: true },
 ];
 
 const BOTTOM_NAV = [
@@ -43,6 +50,79 @@ function isMatchLive(dateStr: string, timeStr?: string | null) {
   const kickoff = new Date(`${dateStr}T${timeStr || "15:00:00"}`);
   const elapsed = (now.getTime() - kickoff.getTime()) / (1000 * 60);
   return elapsed >= 0 && elapsed <= 105;
+}
+
+function ShopDropdown({ onNavigate }: { onNavigate?: () => void }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handler(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(v => !v)}
+        className="flex items-center gap-1 px-3 py-2 text-sm font-bold uppercase tracking-wider rounded transition-colors text-white/70 hover:text-white hover:bg-white/5"
+      >
+        Shop
+        <ChevronDown className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+
+      {open && (
+        <div className="absolute top-full left-0 mt-1 w-52 bg-background border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50">
+          {SHOP_LINKS.map(link => (
+            <a
+              key={link.href}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => { setOpen(false); onNavigate?.(); }}
+              className="block px-4 py-3 text-sm font-bold uppercase tracking-wider transition-colors text-white/70 hover:text-white hover:bg-white/5"
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MobileShopAccordion({ onClose }: { onClose: () => void }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button
+        onClick={() => setOpen(v => !v)}
+        className="flex items-center justify-between px-4 py-4 text-sm font-bold uppercase tracking-wider rounded-xl transition-colors w-full text-white/70 hover:text-white hover:bg-white/5"
+      >
+        Shop
+        <ChevronDown className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && (
+        <div className="pl-4 flex flex-col gap-0.5 pb-1">
+          {SHOP_LINKS.map(link => (
+            <a
+              key={link.href}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={onClose}
+              className="px-4 py-3.5 text-sm font-bold uppercase tracking-wider rounded-xl transition-colors text-white/60 hover:text-white hover:bg-white/5"
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      )}
+    </>
+  );
 }
 
 function ClubDropdown({ location, onNavigate }: { location: string; onNavigate?: () => void }) {
@@ -129,18 +209,8 @@ export function Navbar() {
           <nav className="flex items-center gap-0.5">
             <ClubDropdown location={location} />
             {NAV_LINKS.map(link => {
-              const active = !link.external && (location === link.href || (link.href !== "/" && location.startsWith(link.href)));
-              return link.external ? (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-3 py-2 text-sm font-bold uppercase tracking-wider rounded transition-colors text-white/70 hover:text-white hover:bg-white/5"
-                >
-                  {link.label}
-                </a>
-              ) : (
+              const active = location === link.href || (link.href !== "/" && location.startsWith(link.href));
+              return (
                 <Link
                   key={link.href}
                   href={link.href}
@@ -152,6 +222,7 @@ export function Navbar() {
                 </Link>
               );
             })}
+            <ShopDropdown />
           </nav>
 
           {/* Match day / Live badge — absolutely right */}
@@ -248,31 +319,21 @@ export function Navbar() {
                 </div>
               )}
 
-              {NAV_LINKS.map(link =>
-                link.external ? (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setOpen(false)}
-                    className="px-4 py-4 text-sm font-bold uppercase tracking-wider rounded-xl transition-colors text-white/70 hover:text-white hover:bg-white/5"
-                  >
-                    {link.label}
-                  </a>
-                ) : (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className={`px-4 py-4 text-sm font-bold uppercase tracking-wider rounded-xl transition-colors ${
-                      location === link.href ? "text-primary bg-primary/10" : "text-white/70 hover:text-white hover:bg-white/5"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                )
-              )}
+              {NAV_LINKS.map(link => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className={`px-4 py-4 text-sm font-bold uppercase tracking-wider rounded-xl transition-colors ${
+                    location === link.href ? "text-primary bg-primary/10" : "text-white/70 hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+
+              {/* Shop accordion */}
+              <MobileShopAccordion onClose={() => setOpen(false)} />
 
               <div className="border-t border-white/5 mt-2 pt-2 pb-1">
                 <Link href="/admin" onClick={() => setOpen(false)} className="px-4 py-3 text-xs font-bold uppercase tracking-widest text-white/30 hover:text-white/60 transition-colors block">
