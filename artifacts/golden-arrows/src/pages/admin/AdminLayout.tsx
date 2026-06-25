@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { LayoutDashboard, Newspaper, Users, Image, MessageSquare, X, Menu, MonitorPlay, Calendar, TableProperties, Share2, LogOut, KeyRound } from "lucide-react";
+import { LayoutDashboard, Newspaper, Users, Image, MessageSquare, X, Menu, MonitorPlay, Calendar, TableProperties, Share2, LogOut, KeyRound, Shield } from "lucide-react";
 import { useState } from "react";
 import { useListEnquiries } from "@workspace/api-client-react";
 
@@ -13,6 +13,7 @@ const NAV = [
   { href: "/admin/social-posts", label: "Social Posts", icon: Share2 },
   { href: "/admin/slides", label: "Hero Slides", icon: MonitorPlay },
   { href: "/admin/enquiries", label: "Enquiries", icon: MessageSquare },
+  { href: "/admin/teams", label: "Teams", icon: Shield },
   { href: "/admin/change-password", label: "Change Password", icon: KeyRound },
 ];
 

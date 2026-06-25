@@ -15,11 +15,13 @@ import statsRouter from "./stats";
 import syncRouter from "./sync";
 import socialRouter from "./social";
 import adminRouter from "./admin";
+import teamsRouter from "./teams";
 
 const router: IRouter = Router();
 
 router.use(healthRouter);
 router.use(adminRouter);
+router.use(teamsRouter);
 router.use(uploadRouter);
 router.use(slidesRouter);
 router.use(enquiriesRouter);

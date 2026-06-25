@@ -2,6 +2,7 @@ import { useListResults } from "@workspace/api-client-react";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { Link } from "wouter";
+import { TeamCrest } from "@/components/TeamCrest";
 
 function getOutcome(result: { homeTeam: string; homeScore: number; awayScore: number }) {
   const isHome = result.homeTeam.toLowerCase().includes("arrows") || result.homeTeam.toLowerCase().includes("golden");
@@ -53,11 +54,17 @@ export default function Results() {
                       <div className="flex-1 min-w-0">
                         <div className="text-[10px] text-muted-foreground mb-0.5">{format(new Date(result.date), "MMM d")} · {result.competition}</div>
                         <div className="flex items-center gap-1.5">
-                          <span className="font-bold text-xs truncate flex-1 text-right">{result.homeTeam}</span>
+                          <div className="flex items-center gap-1 flex-1 justify-end min-w-0">
+                            <TeamCrest name={result.homeTeam} size="xs" />
+                            <span className="font-bold text-xs truncate">{result.homeTeam}</span>
+                          </div>
                           <span className="bg-background border border-white/10 px-2 py-0.5 rounded font-display font-bold text-sm text-primary flex-shrink-0">
                             {result.homeScore}–{result.awayScore}
                           </span>
-                          <span className="font-bold text-xs truncate flex-1">{result.awayTeam}</span>
+                          <div className="flex items-center gap-1 flex-1 min-w-0">
+                            <TeamCrest name={result.awayTeam} size="xs" />
+                            <span className="font-bold text-xs truncate">{result.awayTeam}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -70,11 +77,17 @@ export default function Results() {
                       <div className="text-center flex-1">
                         <div className="text-xs text-muted-foreground mb-1">{format(new Date(result.date), "MMM d, yyyy")} &bull; {result.competition}</div>
                         <div className="flex items-center justify-center gap-4">
-                          <span className="font-display font-bold text-lg">{result.homeTeam}</span>
-                          <div className="bg-background border border-white/10 px-4 py-2 rounded-lg font-display font-bold text-xl text-primary">
+                          <div className="flex items-center gap-2 flex-1 justify-end">
+                            <span className="font-display font-bold text-lg">{result.homeTeam}</span>
+                            <TeamCrest name={result.homeTeam} size="sm" />
+                          </div>
+                          <div className="bg-background border border-white/10 px-4 py-2 rounded-lg font-display font-bold text-xl text-primary flex-shrink-0">
                             {result.homeScore} – {result.awayScore}
                           </div>
-                          <span className="font-display font-bold text-lg">{result.awayTeam}</span>
+                          <div className="flex items-center gap-2 flex-1 justify-start">
+                            <TeamCrest name={result.awayTeam} size="sm" />
+                            <span className="font-display font-bold text-lg">{result.awayTeam}</span>
+                          </div>
                         </div>
                       </div>
                       <div className="text-xs text-muted-foreground text-right">
