@@ -41,6 +41,7 @@ import AdminSlides from "@/pages/admin/AdminSlides";
 import AdminFixtures from "@/pages/admin/AdminFixtures";
 import AdminLeagueTable from "@/pages/admin/AdminLeagueTable";
 import AdminSocialPosts from "@/pages/admin/AdminSocialPosts";
+import { AdminGuard } from "@/pages/admin/AdminGuard";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 30_000 } },
@@ -111,33 +112,33 @@ function Router() {
         <PublicLayout><ClubTrophy /></PublicLayout>
       </Route>
 
-      {/* Admin — no auth wrapper for now */}
+      {/* Admin — password protected */}
       <Route path="/admin">
-        <AdminDashboard />
+        <AdminGuard><AdminDashboard /></AdminGuard>
       </Route>
       <Route path="/admin/news">
-        <AdminNews />
+        <AdminGuard><AdminNews /></AdminGuard>
       </Route>
       <Route path="/admin/squad">
-        <AdminSquad />
+        <AdminGuard><AdminSquad /></AdminGuard>
       </Route>
       <Route path="/admin/gallery">
-        <AdminGallery />
+        <AdminGuard><AdminGallery /></AdminGuard>
       </Route>
       <Route path="/admin/slides">
-        <AdminSlides />
+        <AdminGuard><AdminSlides /></AdminGuard>
       </Route>
       <Route path="/admin/enquiries">
-        <AdminEnquiries />
+        <AdminGuard><AdminEnquiries /></AdminGuard>
       </Route>
       <Route path="/admin/fixtures">
-        <AdminFixtures />
+        <AdminGuard><AdminFixtures /></AdminGuard>
       </Route>
       <Route path="/admin/league-table">
-        <AdminLeagueTable />
+        <AdminGuard><AdminLeagueTable /></AdminGuard>
       </Route>
       <Route path="/admin/social-posts">
-        <AdminSocialPosts />
+        <AdminGuard><AdminSocialPosts /></AdminGuard>
       </Route>
 
       <Route>

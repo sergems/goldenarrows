@@ -14,10 +14,12 @@ import sponsorsRouter from "./sponsors";
 import statsRouter from "./stats";
 import syncRouter from "./sync";
 import socialRouter from "./social";
+import adminRouter from "./admin";
 
 const router: IRouter = Router();
 
 router.use(healthRouter);
+router.use(adminRouter);
 router.use(uploadRouter);
 router.use(slidesRouter);
 router.use(enquiriesRouter);
