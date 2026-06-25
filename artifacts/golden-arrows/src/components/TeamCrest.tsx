@@ -29,9 +29,7 @@ export function TeamCrest({ name, logoUrl, size = "md", className = "" }: TeamCr
   if (resolved && !failed) {
     return (
       <div
-        className={`${outer} rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden ${
-          isOurs ? "bg-primary/10 ring-2 ring-primary/30" : "bg-white/5"
-        } ${className}`}
+        className={`${outer} rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden bg-white/5 ${className}`}
       >
         <img
           src={resolved}
@@ -45,10 +43,8 @@ export function TeamCrest({ name, logoUrl, size = "md", className = "" }: TeamCr
 
   return (
     <div
-      className={`${outer} rounded-full flex items-center justify-center flex-shrink-0 font-display font-bold flex-shrink-0 ${
-        isOurs
-          ? "bg-primary/10 text-primary ring-2 ring-primary/30"
-          : "bg-white/10 text-muted-foreground"
+      className={`${outer} rounded-full flex items-center justify-center flex-shrink-0 font-display font-bold ${
+        isOurs ? "bg-primary/10 text-primary" : "bg-white/10 text-muted-foreground"
       } ${text} ${className}`}
     >
       {teamInitials(name)}

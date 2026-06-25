@@ -20,7 +20,6 @@ const NAV_LINKS = [
   { href: "https://goldenarrowsfc.co.za/", label: "Shop", external: true },
 ];
 
-// Bottom nav items (mobile only — most visited pages)
 const BOTTOM_NAV = [
   { href: "/", label: "Home", icon: Home },
   { href: "/news", label: "News", icon: Newspaper },
@@ -63,7 +62,7 @@ function ClubDropdown({ location, onNavigate }: { location: string; onNavigate?:
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(v => !v)}
-        className={`flex items-center gap-1 px-4 py-2 text-sm font-bold uppercase tracking-wider rounded transition-colors ${
+        className={`flex items-center gap-1 px-3 py-2 text-sm font-bold uppercase tracking-wider rounded transition-colors ${
           isActive ? "text-primary" : "text-white/70 hover:text-white hover:bg-white/5"
         }`}
       >
@@ -104,7 +103,6 @@ export function Navbar() {
     ? isMatchLive(nextFixture.date, nextFixture.time)
     : false;
 
-  // Close menu on route change
   useEffect(() => {
     setOpen(false);
     setMobileClubOpen(false);
@@ -113,27 +111,22 @@ export function Navbar() {
   return (
     <>
       <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 border-b border-white/5">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4 relative">
-
-          {/* Logo + Club name */}
+        {/* ── Desktop header ── */}
+        <div className="hidden md:flex items-center justify-center h-16 relative mx-auto max-w-6xl px-6">
+          {/* Logo + Club name — part of centered group */}
           <Link href="/" className="flex items-center gap-3 flex-shrink-0" onClick={() => setOpen(false)}>
-            <img
-              src={logo}
-              alt="Lamontville Golden Arrows FC"
-              className="h-11 w-auto"
-            />
+            <img src={logo} alt="Lamontville Golden Arrows FC" className="h-11 w-auto" />
             <div className="hidden lg:block">
-              <div className="font-display text-xs uppercase tracking-widest text-foreground/80 leading-tight">
-                Lamontville
-              </div>
-              <div className="font-display text-base uppercase tracking-wider text-primary leading-tight">
-                Golden Arrows
-              </div>
+              <div className="font-display text-xs uppercase tracking-widest text-foreground/80 leading-tight">Lamontville</div>
+              <div className="font-display text-base uppercase tracking-wider text-primary leading-tight">Golden Arrows</div>
             </div>
           </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1">
+          {/* Divider */}
+          <div className="w-px h-6 bg-white/10 mx-5 flex-shrink-0" />
+
+          {/* Nav — part of centered group */}
+          <nav className="flex items-center gap-0.5">
             <ClubDropdown location={location} />
             {NAV_LINKS.map(link => {
               const active = !link.external && (location === link.href || (link.href !== "/" && location.startsWith(link.href)));
@@ -143,7 +136,7 @@ export function Navbar() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-4 py-2 text-sm font-bold uppercase tracking-wider rounded transition-colors text-white/70 hover:text-white hover:bg-white/5"
+                  className="px-3 py-2 text-sm font-bold uppercase tracking-wider rounded transition-colors text-white/70 hover:text-white hover:bg-white/5"
                 >
                   {link.label}
                 </a>
@@ -151,7 +144,7 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-4 py-2 text-sm font-bold uppercase tracking-wider rounded transition-colors ${
+                  className={`px-3 py-2 text-sm font-bold uppercase tracking-wider rounded transition-colors ${
                     active ? "text-primary" : "text-white/70 hover:text-white hover:bg-white/5"
                   }`}
                 >
@@ -161,11 +154,11 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Match day / Live badge — desktop */}
+          {/* Match day / Live badge — absolutely right */}
           {matchToday && (
             <Link
               href="/"
-              className={`hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${
+              className={`absolute right-6 flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${
                 live ? "bg-red-600 text-white" : "bg-primary text-black"
               }`}
             >
@@ -188,9 +181,21 @@ export function Navbar() {
               )}
             </Link>
           )}
+        </div>
 
-          {/* Mobile: match day label + hamburger */}
-          <div className="md:hidden flex items-center gap-2">
+        {/* ── Mobile header ── */}
+        <div className="md:hidden flex items-center justify-center h-16 relative px-4">
+          {/* Logo centered */}
+          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0" onClick={() => setOpen(false)}>
+            <img src={logo} alt="Lamontville Golden Arrows FC" className="h-10 w-auto" />
+            <div>
+              <div className="font-display text-[10px] uppercase tracking-widest text-foreground/70 leading-tight">Lamontville</div>
+              <div className="font-display text-sm uppercase tracking-wider text-primary leading-tight">Golden Arrows</div>
+            </div>
+          </Link>
+
+          {/* Match day badge + hamburger — absolutely right */}
+          <div className="absolute right-3 flex items-center gap-2">
             {matchToday && (
               <span className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full ${live ? "bg-red-600 text-white" : "bg-primary text-black"}`}>
                 {live ? "● Live" : "● Match Day"}
@@ -217,7 +222,6 @@ export function Navbar() {
         {open && (
           <div className="md:hidden absolute top-full left-0 right-0 bg-background/98 backdrop-blur border-b border-white/5 shadow-2xl z-50 max-h-[80vh] overflow-y-auto">
             <nav className="container mx-auto px-4 py-3 flex flex-col gap-0.5">
-              {/* The Club accordion */}
               <button
                 onClick={() => setMobileClubOpen(v => !v)}
                 className={`flex items-center justify-between px-4 py-4 text-sm font-bold uppercase tracking-wider rounded-xl transition-colors w-full ${
@@ -280,7 +284,7 @@ export function Navbar() {
         )}
       </header>
 
-      {/* ── Mobile Bottom Navigation Bar ─────────── */}
+      {/* ── Mobile Bottom Navigation Bar ── */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/98 backdrop-blur-md border-t border-white/10 safe-area-inset-bottom">
         <div className="flex items-stretch">
           {BOTTOM_NAV.map(({ href, label, icon: Icon }) => {
