@@ -208,6 +208,7 @@ export function Navbar() {
           {/* Nav — part of centered group */}
           <nav className="flex items-center gap-0.5">
             <ClubDropdown location={location} />
+            <ShopDropdown />
             {NAV_LINKS.map(link => {
               const active = location === link.href || (link.href !== "/" && location.startsWith(link.href));
               return (
@@ -222,7 +223,6 @@ export function Navbar() {
                 </Link>
               );
             })}
-            <ShopDropdown />
           </nav>
 
           {/* Match day / Live badge — absolutely right */}
@@ -319,6 +319,9 @@ export function Navbar() {
                 </div>
               )}
 
+              {/* Shop accordion */}
+              <MobileShopAccordion onClose={() => setOpen(false)} />
+
               {NAV_LINKS.map(link => (
                 <Link
                   key={link.href}
@@ -331,9 +334,6 @@ export function Navbar() {
                   {link.label}
                 </Link>
               ))}
-
-              {/* Shop accordion */}
-              <MobileShopAccordion onClose={() => setOpen(false)} />
 
               <div className="border-t border-white/5 mt-2 pt-2 pb-1">
                 <Link href="/admin" onClick={() => setOpen(false)} className="px-4 py-3 text-xs font-bold uppercase tracking-widest text-white/30 hover:text-white/60 transition-colors block">
