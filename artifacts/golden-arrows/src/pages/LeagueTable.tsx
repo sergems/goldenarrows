@@ -1,23 +1,24 @@
 import { useGetLeagueTable } from "@workspace/api-client-react";
 import { motion } from "framer-motion";
+import { TeamCrest } from "@/components/TeamCrest";
 
 export default function LeagueTable() {
   const { data: table, isLoading } = useGetLeagueTable();
 
   return (
     <div className="min-h-screen">
-      <div className="bg-card py-20 border-b border-white/5">
+      <div className="bg-card py-16 sm:py-20 border-b border-white/5">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="font-display font-bold text-5xl uppercase tracking-tight mb-4">
+          <h1 className="font-display font-bold text-4xl sm:text-5xl uppercase tracking-tight mb-4">
             PSL <span className="text-primary">League Table</span>
           </h1>
-          <p className="text-muted-foreground max-w-xl mx-auto">
+          <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base">
             Current DStv Premiership standings. Golden Arrows highlighted in gold.
           </p>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-16 max-w-5xl">
+      <div className="container mx-auto px-2 sm:px-4 py-10 sm:py-16 max-w-5xl">
         {isLoading && <div className="text-center text-muted-foreground py-20">Loading table...</div>}
 
         {table && (
@@ -27,19 +28,19 @@ export default function LeagueTable() {
             className="bg-card border border-white/5 rounded-xl overflow-hidden"
           >
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="w-full text-sm min-w-[500px]">
                 <thead>
                   <tr className="bg-black/30 text-muted-foreground border-b border-white/5">
-                    <th className="px-4 py-4 text-left font-bold uppercase tracking-wider w-10">#</th>
-                    <th className="px-4 py-4 text-left font-bold uppercase tracking-wider">Club</th>
-                    <th className="px-4 py-4 text-center font-bold uppercase tracking-wider w-12">P</th>
-                    <th className="px-4 py-4 text-center font-bold uppercase tracking-wider w-12">W</th>
-                    <th className="px-4 py-4 text-center font-bold uppercase tracking-wider w-12">D</th>
-                    <th className="px-4 py-4 text-center font-bold uppercase tracking-wider w-12">L</th>
-                    <th className="px-4 py-4 text-center font-bold uppercase tracking-wider w-12">GF</th>
-                    <th className="px-4 py-4 text-center font-bold uppercase tracking-wider w-12">GA</th>
-                    <th className="px-4 py-4 text-center font-bold uppercase tracking-wider w-12">GD</th>
-                    <th className="px-4 py-4 text-center font-bold uppercase tracking-wider w-14">Pts</th>
+                    <th className="px-3 sm:px-4 py-3 text-left font-bold uppercase tracking-wider w-10">#</th>
+                    <th className="px-3 sm:px-4 py-3 text-left font-bold uppercase tracking-wider">Club</th>
+                    <th className="px-2 sm:px-4 py-3 text-center font-bold uppercase tracking-wider w-10">P</th>
+                    <th className="px-2 sm:px-4 py-3 text-center font-bold uppercase tracking-wider w-10">W</th>
+                    <th className="px-2 sm:px-4 py-3 text-center font-bold uppercase tracking-wider w-10">D</th>
+                    <th className="px-2 sm:px-4 py-3 text-center font-bold uppercase tracking-wider w-10">L</th>
+                    <th className="px-2 sm:px-4 py-3 text-center font-bold uppercase tracking-wider w-10 hidden sm:table-cell">GF</th>
+                    <th className="px-2 sm:px-4 py-3 text-center font-bold uppercase tracking-wider w-10 hidden sm:table-cell">GA</th>
+                    <th className="px-2 sm:px-4 py-3 text-center font-bold uppercase tracking-wider w-10">GD</th>
+                    <th className="px-2 sm:px-4 py-3 text-center font-bold uppercase tracking-wider w-12">Pts</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
@@ -55,28 +56,30 @@ export default function LeagueTable() {
                           : "hover:bg-white/2"
                       }
                     >
-                      <td className={`px-4 py-4 text-left font-display font-bold ${row.isGoldenArrows ? "text-primary text-lg" : "text-muted-foreground"}`}>
+                      <td className={`px-3 sm:px-4 py-3 text-left font-display font-bold ${row.isGoldenArrows ? "text-primary text-lg" : "text-muted-foreground"}`}>
                         {row.position}
                       </td>
-                      <td className={`px-4 py-4 text-left font-display font-bold ${row.isGoldenArrows ? "text-primary" : ""}`}>
-                        <div className="flex items-center gap-3">
-                          <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${row.isGoldenArrows ? "bg-primary text-black" : "bg-white/10 text-muted-foreground"}`}>
-                            {row.team.split(" ").map(w => w[0]).slice(0, 2).join("")}
-                          </div>
-                          <span className="truncate">{row.team}</span>
-                          {row.isGoldenArrows && <span className="text-xs bg-primary/20 text-primary border border-primary/30 px-2 py-0.5 rounded uppercase tracking-wider hidden sm:inline">Our Club</span>}
+                      <td className={`px-3 sm:px-4 py-3 text-left font-display font-bold ${row.isGoldenArrows ? "text-primary" : ""}`}>
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          <TeamCrest name={row.team} logoUrl={row.logoUrl} size="xs" />
+                          <span className="truncate max-w-[120px] sm:max-w-none">{row.team}</span>
+                          {row.isGoldenArrows && (
+                            <span className="text-[10px] bg-primary/20 text-primary border border-primary/30 px-1.5 py-0.5 rounded uppercase tracking-wider hidden md:inline flex-shrink-0">
+                              Our Club
+                            </span>
+                          )}
                         </div>
                       </td>
-                      <td className="px-4 py-4 text-center">{row.played}</td>
-                      <td className="px-4 py-4 text-center text-green-400">{row.won}</td>
-                      <td className="px-4 py-4 text-center text-yellow-400">{row.drawn}</td>
-                      <td className="px-4 py-4 text-center text-red-400">{row.lost}</td>
-                      <td className="px-4 py-4 text-center">{row.goalsFor}</td>
-                      <td className="px-4 py-4 text-center">{row.goalsAgainst}</td>
-                      <td className={`px-4 py-4 text-center ${row.goalDifference > 0 ? "text-green-400" : row.goalDifference < 0 ? "text-red-400" : ""}`}>
+                      <td className="px-2 sm:px-4 py-3 text-center">{row.played}</td>
+                      <td className="px-2 sm:px-4 py-3 text-center text-green-400">{row.won}</td>
+                      <td className="px-2 sm:px-4 py-3 text-center text-yellow-400">{row.drawn}</td>
+                      <td className="px-2 sm:px-4 py-3 text-center text-red-400">{row.lost}</td>
+                      <td className="px-2 sm:px-4 py-3 text-center hidden sm:table-cell">{row.goalsFor}</td>
+                      <td className="px-2 sm:px-4 py-3 text-center hidden sm:table-cell">{row.goalsAgainst}</td>
+                      <td className={`px-2 sm:px-4 py-3 text-center ${row.goalDifference > 0 ? "text-green-400" : row.goalDifference < 0 ? "text-red-400" : ""}`}>
                         {row.goalDifference > 0 ? "+" : ""}{row.goalDifference}
                       </td>
-                      <td className={`px-4 py-4 text-center font-display font-black text-lg ${row.isGoldenArrows ? "text-primary" : ""}`}>
+                      <td className={`px-2 sm:px-4 py-3 text-center font-display font-black text-lg ${row.isGoldenArrows ? "text-primary" : ""}`}>
                         {row.points}
                       </td>
                     </motion.tr>
@@ -85,6 +88,10 @@ export default function LeagueTable() {
               </table>
             </div>
           </motion.div>
+        )}
+
+        {!isLoading && (!table || table.length === 0) && (
+          <div className="text-center text-muted-foreground py-20">No standings data available.</div>
         )}
 
         <div className="mt-6 text-xs text-muted-foreground text-center">
