@@ -19,12 +19,12 @@ const SHOP_LINKS = [
 ];
 
 const NAV_LINKS = [
-  { href: "/news", label: "News" },
   { href: "/squad", label: "Squad" },
   { href: "/gallery", label: "Fan Zone" },
   { href: "/fixtures", label: "Fixtures" },
   { href: "/results", label: "Results" },
   { href: "/league-table", label: "Table" },
+  { href: "/news", label: "News" },
 ];
 
 const BOTTOM_NAV = [
@@ -208,7 +208,14 @@ export function Navbar() {
           {/* Nav — part of centered group */}
           <nav className="flex items-center gap-0.5">
             <ClubDropdown location={location} />
-            <ShopDropdown />
+            <a
+              href="https://goldenarrowsfc.co.za/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-2 text-sm font-bold uppercase tracking-wider rounded transition-colors text-white/70 hover:text-white hover:bg-white/5"
+            >
+              Shop
+            </a>
             {NAV_LINKS.map(link => {
               const active = location === link.href || (link.href !== "/" && location.startsWith(link.href));
               return (
@@ -319,8 +326,15 @@ export function Navbar() {
                 </div>
               )}
 
-              {/* Shop accordion */}
-              <MobileShopAccordion onClose={() => setOpen(false)} />
+              <a
+                href="https://goldenarrowsfc.co.za/"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setOpen(false)}
+                className="px-4 py-4 text-sm font-bold uppercase tracking-wider rounded-xl transition-colors text-white/70 hover:text-white hover:bg-white/5"
+              >
+                Shop
+              </a>
 
               {NAV_LINKS.map(link => (
                 <Link
