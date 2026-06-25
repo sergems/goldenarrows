@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { LayoutDashboard, Newspaper, Users, Image, MessageSquare, X, Menu, MonitorPlay, Calendar, TableProperties, Share2 } from "lucide-react";
+import { LayoutDashboard, Newspaper, Users, Image, MessageSquare, X, Menu, MonitorPlay, Calendar, TableProperties, Share2, LogOut } from "lucide-react";
 import { useState } from "react";
 import { useListEnquiries } from "@workspace/api-client-react";
 
@@ -63,10 +63,20 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
           })}
         </nav>
 
-        <div className="p-4 border-t border-white/5">
-          <Link href="/" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+        <div className="p-4 border-t border-white/5 space-y-2">
+          <Link href="/" className="text-xs text-muted-foreground hover:text-primary transition-colors block">
             &larr; Back to Website
           </Link>
+          <button
+            onClick={() => {
+              sessionStorage.removeItem("admin_auth");
+              window.location.reload();
+            }}
+            className="flex items-center gap-2 text-xs text-muted-foreground hover:text-red-400 transition-colors w-full"
+          >
+            <LogOut className="h-3 w-3" />
+            Sign Out
+          </button>
         </div>
       </aside>
 
