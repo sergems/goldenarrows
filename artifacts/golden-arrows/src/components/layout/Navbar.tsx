@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useState, useRef, useEffect } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Home, Newspaper, CalendarDays, Users, Camera } from "lucide-react";
 import { useGetNextFixture } from "@workspace/api-client-react";
 import logo from "@assets/Lamontville_Golden_Arrows_logo_1780312879951.svg";
 
@@ -18,6 +18,15 @@ const NAV_LINKS = [
   { href: "/results", label: "Results" },
   { href: "/league-table", label: "Table" },
   { href: "https://goldenarrowsfc.co.za/", label: "Shop", external: true },
+];
+
+// Bottom nav items (mobile only — most visited pages)
+const BOTTOM_NAV = [
+  { href: "/", label: "Home", icon: Home },
+  { href: "/news", label: "News", icon: Newspaper },
+  { href: "/fixtures", label: "Fixtures", icon: CalendarDays },
+  { href: "/squad", label: "Squad", icon: Users },
+  { href: "/gallery", label: "Fan Zone", icon: Camera },
 ];
 
 function isSameDay(dateStr: string) {
@@ -95,148 +104,46 @@ export function Navbar() {
     ? isMatchLive(nextFixture.date, nextFixture.time)
     : false;
 
+  // Close menu on route change
+  useEffect(() => {
+    setOpen(false);
+    setMobileClubOpen(false);
+  }, [location]);
+
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 border-b border-white/5">
-      <div className="container mx-auto flex h-18 items-center justify-center px-4 gap-8 relative">
+    <>
+      <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 border-b border-white/5">
+        <div className="container mx-auto flex h-16 items-center justify-between px-4 relative">
 
-        {/* Logo + Club name */}
-        <Link href="/" className="flex items-center gap-3 flex-shrink-0" onClick={() => setOpen(false)}>
-          <img
-            src={logo}
-            alt="Lamontville Golden Arrows FC"
-            className="h-14 w-auto"
-          />
-          <div className="hidden lg:block">
-            <div className="font-display text-sm uppercase tracking-widest text-foreground/80 leading-tight">
-              Lamontville
-            </div>
-            <div className="font-display text-lg uppercase tracking-wider text-primary leading-tight">
-              Golden Arrows
-            </div>
-          </div>
-        </Link>
-
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-1">
-          <ClubDropdown location={location} />
-          {NAV_LINKS.map(link => {
-            const active = !link.external && (location === link.href || (link.href !== "/" && location.startsWith(link.href)));
-            return link.external ? (
-              <a
-                key={link.href}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2 text-sm font-bold uppercase tracking-wider rounded transition-colors text-white/70 hover:text-white hover:bg-white/5"
-              >
-                {link.label}
-              </a>
-            ) : (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`px-4 py-2 text-sm font-bold uppercase tracking-wider rounded transition-colors ${
-                  active ? "text-primary" : "text-white/70 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Match day / Live badge */}
-        {matchToday && (
-          <Link
-            href="/"
-            className={`hidden md:flex items-center gap-2 absolute right-4 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${
-              live ? "bg-red-600 text-white" : "bg-primary text-black"
-            }`}
-          >
-            {live ? (
-              <>
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
-                </span>
-                Live
-              </>
-            ) : (
-              <>
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-black opacity-50" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-black" />
-                </span>
-                Match Day
-              </>
-            )}
-          </Link>
-        )}
-
-        {/* Mobile hamburger */}
-        <button
-          className="md:hidden absolute right-4 p-2 rounded text-white/70 hover:text-white transition-colors"
-          onClick={() => setOpen(v => !v)}
-          aria-label="Toggle menu"
-        >
-          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
-      </div>
-
-      {/* Accent line */}
-      <div
-        className={`h-0.5 w-full ${
-          live ? "bg-red-500" : matchToday ? "bg-primary" : "bg-gradient-to-r from-secondary via-primary to-secondary"
-        }`}
-      />
-
-      {/* Mobile match-day strip */}
-      {matchToday && (
-        <div className={`md:hidden text-center py-1 text-xs font-bold uppercase tracking-widest ${live ? "bg-red-600 text-white" : "bg-primary text-black"}`}>
-          {live ? "● Match Live Now" : "● Match Day — Today"}
-        </div>
-      )}
-
-      {/* Mobile Menu */}
-      {open && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-background/98 backdrop-blur border-b border-white/5 shadow-xl z-50">
-          <nav className="container mx-auto px-4 py-4 flex flex-col gap-1">
-            {/* Mobile "The Club" accordion */}
-            <button
-              onClick={() => setMobileClubOpen(v => !v)}
-              className={`flex items-center justify-between px-4 py-3 text-sm font-bold uppercase tracking-wider rounded transition-colors w-full ${
-                location.startsWith("/club") ? "text-primary bg-primary/10" : "text-white/70 hover:text-white hover:bg-white/5"
-              }`}
-            >
-              The Club
-              <ChevronDown className={`h-3.5 w-3.5 transition-transform ${mobileClubOpen ? "rotate-180" : ""}`} />
-            </button>
-            {mobileClubOpen && (
-              <div className="pl-4 flex flex-col gap-1">
-                {THE_CLUB_LINKS.map(link => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => { setOpen(false); setMobileClubOpen(false); }}
-                    className={`px-4 py-3 text-sm font-bold uppercase tracking-wider rounded transition-colors ${
-                      location === link.href ? "text-primary bg-primary/10" : "text-white/60 hover:text-white hover:bg-white/5"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+          {/* Logo + Club name */}
+          <Link href="/" className="flex items-center gap-3 flex-shrink-0" onClick={() => setOpen(false)}>
+            <img
+              src={logo}
+              alt="Lamontville Golden Arrows FC"
+              className="h-11 w-auto"
+            />
+            <div className="hidden lg:block">
+              <div className="font-display text-xs uppercase tracking-widest text-foreground/80 leading-tight">
+                Lamontville
               </div>
-            )}
+              <div className="font-display text-base uppercase tracking-wider text-primary leading-tight">
+                Golden Arrows
+              </div>
+            </div>
+          </Link>
 
-            {NAV_LINKS.map(link =>
-              link.external ? (
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-1">
+            <ClubDropdown location={location} />
+            {NAV_LINKS.map(link => {
+              const active = !link.external && (location === link.href || (link.href !== "/" && location.startsWith(link.href)));
+              return link.external ? (
                 <a
                   key={link.href}
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => setOpen(false)}
-                  className="px-4 py-3 text-sm font-bold uppercase tracking-wider rounded transition-colors text-white/70 hover:text-white hover:bg-white/5"
+                  className="px-4 py-2 text-sm font-bold uppercase tracking-wider rounded transition-colors text-white/70 hover:text-white hover:bg-white/5"
                 >
                   {link.label}
                 </a>
@@ -244,18 +151,159 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  onClick={() => setOpen(false)}
-                  className={`px-4 py-3 text-sm font-bold uppercase tracking-wider rounded transition-colors ${
-                    location === link.href ? "text-primary bg-primary/10" : "text-white/70 hover:text-white hover:bg-white/5"
+                  className={`px-4 py-2 text-sm font-bold uppercase tracking-wider rounded transition-colors ${
+                    active ? "text-primary" : "text-white/70 hover:text-white hover:bg-white/5"
                   }`}
                 >
                   {link.label}
                 </Link>
-              )
-            )}
+              );
+            })}
           </nav>
+
+          {/* Match day / Live badge — desktop */}
+          {matchToday && (
+            <Link
+              href="/"
+              className={`hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${
+                live ? "bg-red-600 text-white" : "bg-primary text-black"
+              }`}
+            >
+              {live ? (
+                <>
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+                  </span>
+                  Live
+                </>
+              ) : (
+                <>
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-black opacity-50" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-black" />
+                  </span>
+                  Match Day
+                </>
+              )}
+            </Link>
+          )}
+
+          {/* Mobile: match day label + hamburger */}
+          <div className="md:hidden flex items-center gap-2">
+            {matchToday && (
+              <span className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full ${live ? "bg-red-600 text-white" : "bg-primary text-black"}`}>
+                {live ? "● Live" : "● Match Day"}
+              </span>
+            )}
+            <button
+              className="p-2 rounded text-white/70 hover:text-white transition-colors"
+              onClick={() => setOpen(v => !v)}
+              aria-label="Toggle menu"
+            >
+              {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
         </div>
-      )}
-    </header>
+
+        {/* Accent line */}
+        <div
+          className={`h-0.5 w-full ${
+            live ? "bg-red-500" : matchToday ? "bg-primary" : "bg-gradient-to-r from-secondary via-primary to-secondary"
+          }`}
+        />
+
+        {/* Mobile full menu */}
+        {open && (
+          <div className="md:hidden absolute top-full left-0 right-0 bg-background/98 backdrop-blur border-b border-white/5 shadow-2xl z-50 max-h-[80vh] overflow-y-auto">
+            <nav className="container mx-auto px-4 py-3 flex flex-col gap-0.5">
+              {/* The Club accordion */}
+              <button
+                onClick={() => setMobileClubOpen(v => !v)}
+                className={`flex items-center justify-between px-4 py-4 text-sm font-bold uppercase tracking-wider rounded-xl transition-colors w-full ${
+                  location.startsWith("/club") ? "text-primary bg-primary/10" : "text-white/70 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                The Club
+                <ChevronDown className={`h-4 w-4 transition-transform ${mobileClubOpen ? "rotate-180" : ""}`} />
+              </button>
+              {mobileClubOpen && (
+                <div className="pl-4 flex flex-col gap-0.5 pb-1">
+                  {THE_CLUB_LINKS.map(link => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className={`px-4 py-3.5 text-sm font-bold uppercase tracking-wider rounded-xl transition-colors ${
+                        location === link.href ? "text-primary bg-primary/10" : "text-white/60 hover:text-white hover:bg-white/5"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+
+              {NAV_LINKS.map(link =>
+                link.external ? (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setOpen(false)}
+                    className="px-4 py-4 text-sm font-bold uppercase tracking-wider rounded-xl transition-colors text-white/70 hover:text-white hover:bg-white/5"
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className={`px-4 py-4 text-sm font-bold uppercase tracking-wider rounded-xl transition-colors ${
+                      location === link.href ? "text-primary bg-primary/10" : "text-white/70 hover:text-white hover:bg-white/5"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
+
+              <div className="border-t border-white/5 mt-2 pt-2 pb-1">
+                <Link href="/admin" onClick={() => setOpen(false)} className="px-4 py-3 text-xs font-bold uppercase tracking-widest text-white/30 hover:text-white/60 transition-colors block">
+                  Admin
+                </Link>
+              </div>
+            </nav>
+          </div>
+        )}
+      </header>
+
+      {/* ── Mobile Bottom Navigation Bar ─────────── */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/98 backdrop-blur-md border-t border-white/10 safe-area-inset-bottom">
+        <div className="flex items-stretch">
+          {BOTTOM_NAV.map(({ href, label, icon: Icon }) => {
+            const active = href === "/" ? location === "/" : location.startsWith(href);
+            return (
+              <Link
+                key={href}
+                href={href}
+                className="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 transition-colors relative"
+                onClick={() => setOpen(false)}
+              >
+                {active && (
+                  <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-primary rounded-full" />
+                )}
+                <Icon className={`h-5 w-5 ${active ? "text-primary" : "text-white/40"}`} />
+                <span className={`text-[10px] font-bold uppercase tracking-wider ${active ? "text-primary" : "text-white/40"}`}>
+                  {label}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
+    </>
   );
 }

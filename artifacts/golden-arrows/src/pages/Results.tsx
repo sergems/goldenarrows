@@ -44,25 +44,43 @@ export default function Results() {
                 transition={{ delay: i * 0.06 }}
               >
                 <Link href={`/results/${result.id}`} className="block">
-                  <div className="bg-card border border-white/5 rounded-xl p-4 md:p-6 hover:border-primary/30 transition-colors flex flex-col md:flex-row items-center gap-4">
-                    <div className={`h-10 w-10 flex-shrink-0 rounded-lg border ${outcomeBg} flex items-center justify-center font-display font-bold text-lg ${outcomeColor}`}>
-                      {outcome}
-                    </div>
-
-                    <div className="text-center flex-1">
-                      <div className="text-xs text-muted-foreground mb-1">{format(new Date(result.date), "MMM d, yyyy")} &bull; {result.competition}</div>
-                      <div className="flex items-center justify-center gap-4">
-                        <span className="font-display font-bold text-base md:text-lg">{result.homeTeam}</span>
-                        <div className="bg-background border border-white/10 px-4 py-2 rounded-lg font-display font-bold text-xl text-primary">
-                          {result.homeScore} – {result.awayScore}
+                  <div className="bg-card border border-white/5 rounded-xl px-3 py-3 md:p-6 hover:border-primary/30 transition-colors">
+                    {/* Mobile: compact single-line row */}
+                    <div className="flex items-center gap-2 md:hidden">
+                      <div className={`h-8 w-8 flex-shrink-0 rounded-lg border ${outcomeBg} flex items-center justify-center font-display font-bold text-sm ${outcomeColor}`}>
+                        {outcome}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-[10px] text-muted-foreground mb-0.5">{format(new Date(result.date), "MMM d")} · {result.competition}</div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-bold text-xs truncate flex-1 text-right">{result.homeTeam}</span>
+                          <span className="bg-background border border-white/10 px-2 py-0.5 rounded font-display font-bold text-sm text-primary flex-shrink-0">
+                            {result.homeScore}–{result.awayScore}
+                          </span>
+                          <span className="font-bold text-xs truncate flex-1">{result.awayTeam}</span>
                         </div>
-                        <span className="font-display font-bold text-base md:text-lg">{result.awayTeam}</span>
                       </div>
                     </div>
 
-                    <div className="text-xs text-muted-foreground text-right hidden md:block">
-                      <div>{result.venue}</div>
-                      <div className="text-primary mt-1 font-bold uppercase tracking-wider">Match Report &rarr;</div>
+                    {/* Desktop: full layout */}
+                    <div className="hidden md:flex items-center gap-4">
+                      <div className={`h-10 w-10 flex-shrink-0 rounded-lg border ${outcomeBg} flex items-center justify-center font-display font-bold text-lg ${outcomeColor}`}>
+                        {outcome}
+                      </div>
+                      <div className="text-center flex-1">
+                        <div className="text-xs text-muted-foreground mb-1">{format(new Date(result.date), "MMM d, yyyy")} &bull; {result.competition}</div>
+                        <div className="flex items-center justify-center gap-4">
+                          <span className="font-display font-bold text-lg">{result.homeTeam}</span>
+                          <div className="bg-background border border-white/10 px-4 py-2 rounded-lg font-display font-bold text-xl text-primary">
+                            {result.homeScore} – {result.awayScore}
+                          </div>
+                          <span className="font-display font-bold text-lg">{result.awayTeam}</span>
+                        </div>
+                      </div>
+                      <div className="text-xs text-muted-foreground text-right">
+                        <div>{result.venue}</div>
+                        <div className="text-primary mt-1 font-bold uppercase tracking-wider">Match Report &rarr;</div>
+                      </div>
                     </div>
                   </div>
                 </Link>

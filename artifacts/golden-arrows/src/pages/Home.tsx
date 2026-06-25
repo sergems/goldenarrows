@@ -487,14 +487,14 @@ export default function Home() {
               </div>
               <div className="bg-background border border-white/5 rounded-xl overflow-hidden flex flex-col flex-1">
                 {/* Header */}
-                <div className="flex items-center gap-3 px-4 py-3 border-b border-white/5 text-[10px] text-white/30 uppercase tracking-widest font-bold flex-shrink-0">
-                  <span className="w-14 flex-shrink-0">Date</span>
+                <div className="flex items-center gap-1 sm:gap-3 px-2 sm:px-4 py-3 border-b border-white/5 text-[9px] sm:text-[10px] text-white/30 uppercase tracking-widest font-bold flex-shrink-0">
+                  <span className="w-10 sm:w-14 flex-shrink-0">Date</span>
                   <span className="flex-1 text-right">Home</span>
-                  <span className="w-16 text-center flex-shrink-0">Score</span>
+                  <span className="w-14 sm:w-16 text-center flex-shrink-0">Score</span>
                   <span className="flex-1">Away</span>
-                  <span className="w-6 flex-shrink-0 text-center">Res</span>
+                  <span className="w-5 sm:w-6 flex-shrink-0 text-center">Res</span>
                 </div>
-                {/* Rows — stretch to fill remaining height */}
+                {/* Rows */}
                 <div className="divide-y divide-white/5 flex flex-col flex-1">
                   {recentResults?.map((result) => {
                     const gaHome = result.homeTeam.toLowerCase().includes("golden arrows");
@@ -505,26 +505,26 @@ export default function Home() {
                     const badgeCls = gaWin ? "bg-green-600 text-white" : isDraw ? "bg-amber-500 text-black" : "bg-red-600 text-white";
                     return (
                       <Link key={result.id} href={`/results/${result.id}`} className="flex flex-1 group">
-                        <div className="flex flex-1 items-center gap-3 px-4 hover:bg-white/3 transition-colors">
-                          <span className="text-[10px] text-white/30 uppercase tracking-widest font-bold w-14 flex-shrink-0">
+                        <div className="flex flex-1 items-center gap-1 sm:gap-3 px-2 sm:px-4 py-0.5 hover:bg-white/3 transition-colors min-w-0">
+                          <span className="text-[9px] sm:text-[10px] text-white/30 uppercase tracking-widest font-bold w-10 sm:w-14 flex-shrink-0">
                             {format(new Date(result.date), "MMM d")}
                           </span>
-                          <span className={`flex-1 text-right text-sm font-bold truncate ${gaHome ? "text-primary" : "text-white/60"}`}>
+                          <span className={`flex-1 text-right text-[11px] sm:text-sm font-bold truncate ${gaHome ? "text-primary" : "text-white/60"}`}>
                             {result.homeTeam}
                           </span>
-                          <div className="flex items-center gap-1 w-16 justify-center flex-shrink-0">
-                            <div className="bg-card border border-white/10 rounded w-7 h-7 flex items-center justify-center font-display font-black text-sm text-white">
+                          <div className="flex items-center gap-0.5 sm:gap-1 w-14 sm:w-16 justify-center flex-shrink-0">
+                            <div className="bg-card border border-white/10 rounded w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center font-display font-black text-xs sm:text-sm text-white">
                               {result.homeScore}
                             </div>
-                            <span className="text-white/20 text-xs font-bold">–</span>
-                            <div className="bg-card border border-white/10 rounded w-7 h-7 flex items-center justify-center font-display font-black text-sm text-white">
+                            <span className="text-white/20 text-[10px] font-bold">–</span>
+                            <div className="bg-card border border-white/10 rounded w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center font-display font-black text-xs sm:text-sm text-white">
                               {result.awayScore}
                             </div>
                           </div>
-                          <span className={`flex-1 text-sm font-bold truncate ${gaAway ? "text-primary" : "text-white/60"}`}>
+                          <span className={`flex-1 text-[11px] sm:text-sm font-bold truncate ${gaAway ? "text-primary" : "text-white/60"}`}>
                             {result.awayTeam}
                           </span>
-                          <span className={`text-[10px] font-black uppercase w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${badgeCls}`}>
+                          <span className={`text-[8px] sm:text-[10px] font-black uppercase w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center flex-shrink-0 ${badgeCls}`}>
                             {badge}
                           </span>
                         </div>
