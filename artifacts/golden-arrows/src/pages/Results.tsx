@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { Link } from "wouter";
 import { TeamCrest } from "@/components/TeamCrest";
-import { AdBanner } from "@/components/AdBanner";
+import { AdColumn } from "@/components/AdBanner";
 
 function getOutcome(result: { homeTeam: string; homeScore: number; awayScore: number }) {
   const isHome = result.homeTeam.toLowerCase().includes("arrows") || result.homeTeam.toLowerCase().includes("golden");
@@ -32,12 +32,10 @@ export default function Results() {
 
       <div className="container mx-auto px-4 py-10 sm:py-16">
         <div className="flex gap-6 items-start">
-          {/* Left ad */}
           <div className="hidden xl:block w-40 flex-shrink-0">
-            <AdBanner slot="results-left" />
+            <AdColumn page="results" side="left" />
           </div>
 
-          {/* Main content */}
           <div className="flex-1 min-w-0 max-w-4xl mx-auto">
             {isLoading && <div className="text-center text-muted-foreground py-20">Loading results...</div>}
             <div className="space-y-3">
@@ -55,7 +53,6 @@ export default function Results() {
                   >
                     <Link href={`/results/${result.id}`} className="block">
                       <div className="bg-card border border-white/5 rounded-xl px-3 py-3 md:p-6 hover:border-primary/30 transition-colors">
-                        {/* Mobile: compact single-line row */}
                         <div className="flex items-center gap-2 md:hidden">
                           <div className={`h-8 w-8 flex-shrink-0 rounded-lg border ${outcomeBg} flex items-center justify-center font-display font-bold text-sm ${outcomeColor}`}>
                             {outcome}
@@ -78,7 +75,6 @@ export default function Results() {
                           </div>
                         </div>
 
-                        {/* Desktop: full layout */}
                         <div className="hidden md:flex items-center gap-4">
                           <div className={`h-10 w-10 flex-shrink-0 rounded-lg border ${outcomeBg} flex items-center justify-center font-display font-bold text-lg ${outcomeColor}`}>
                             {outcome}
@@ -116,9 +112,8 @@ export default function Results() {
             )}
           </div>
 
-          {/* Right ad */}
           <div className="hidden xl:block w-40 flex-shrink-0">
-            <AdBanner slot="results-right" />
+            <AdColumn page="results" side="right" />
           </div>
         </div>
       </div>

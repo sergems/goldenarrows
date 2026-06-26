@@ -1,15 +1,14 @@
 import { pgTable, text, serial, timestamp } from "drizzle-orm/pg-core";
 
-export const AD_SLOTS = [
-  "fixtures-left",
-  "fixtures-right",
-  "results-left",
-  "results-right",
-  "table-left",
-  "table-right",
-] as const;
+const PAGES = ["fixtures", "results", "table"] as const;
+const SIDES = ["left", "right"] as const;
+const POSITIONS = [1, 2, 3] as const;
 
-export type AdSlot = (typeof AD_SLOTS)[number];
+export const AD_SLOTS = PAGES.flatMap(page =>
+  SIDES.flatMap(side =>
+    POSITIONS.map(n => `${page}-${side}-${n}` as const)
+  )
+) as unknown as readonly string[];
 
 export const adsTable = pgTable("ads", {
   id: serial("id").primaryKey(),

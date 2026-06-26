@@ -1,7 +1,7 @@
 import { useGetLeagueTable } from "@workspace/api-client-react";
 import { motion } from "framer-motion";
 import { TeamCrest } from "@/components/TeamCrest";
-import { AdBanner } from "@/components/AdBanner";
+import { AdColumn } from "@/components/AdBanner";
 
 export default function LeagueTable() {
   const { data, isLoading } = useGetLeagueTable();
@@ -22,12 +22,10 @@ export default function LeagueTable() {
 
       <div className="container mx-auto px-2 sm:px-4 py-10 sm:py-16">
         <div className="flex gap-6 items-start">
-          {/* Left ad */}
           <div className="hidden xl:block w-40 flex-shrink-0">
-            <AdBanner slot="table-left" />
+            <AdColumn page="table" side="left" />
           </div>
 
-          {/* Main content */}
           <div className="flex-1 min-w-0 max-w-5xl mx-auto">
             {isLoading && <div className="text-center text-muted-foreground py-20">Loading table...</div>}
 
@@ -60,11 +58,7 @@ export default function LeagueTable() {
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: i * 0.04 }}
-                          className={
-                            row.isGoldenArrows
-                              ? "bg-primary/10 border-l-4 border-l-primary font-bold"
-                              : "hover:bg-white/2"
-                          }
+                          className={row.isGoldenArrows ? "bg-primary/10 border-l-4 border-l-primary font-bold" : "hover:bg-white/2"}
                         >
                           <td className={`px-3 sm:px-4 py-3 text-left font-display font-bold ${row.isGoldenArrows ? "text-primary text-lg" : "text-muted-foreground"}`}>
                             {row.position}
@@ -105,9 +99,8 @@ export default function LeagueTable() {
             )}
           </div>
 
-          {/* Right ad */}
           <div className="hidden xl:block w-40 flex-shrink-0">
-            <AdBanner slot="table-right" />
+            <AdColumn page="table" side="right" />
           </div>
         </div>
       </div>

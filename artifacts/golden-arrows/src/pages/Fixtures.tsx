@@ -5,7 +5,7 @@ import { Link } from "wouter";
 import { Calendar, MapPin, Ticket } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { TeamCrest } from "@/components/TeamCrest";
-import { AdBanner } from "@/components/AdBanner";
+import { AdColumn } from "@/components/AdBanner";
 
 export default function Fixtures() {
   const { data: fixtures, isLoading } = useListFixtures();
@@ -25,12 +25,10 @@ export default function Fixtures() {
 
       <div className="container mx-auto px-4 py-10 sm:py-16">
         <div className="flex gap-6 items-start">
-          {/* Left ad */}
           <div className="hidden xl:block w-40 flex-shrink-0">
-            <AdBanner slot="fixtures-left" />
+            <AdColumn page="fixtures" side="left" />
           </div>
 
-          {/* Main content */}
           <div className="flex-1 min-w-0 max-w-4xl mx-auto">
             {isLoading && (
               <div className="text-center text-muted-foreground py-20">Loading fixtures...</div>
@@ -48,7 +46,6 @@ export default function Fixtures() {
                   transition={{ delay: i * 0.07 }}
                   className="bg-card border border-white/5 rounded-xl overflow-hidden hover:border-primary/30 transition-colors"
                 >
-                  {/* Header bar */}
                   <div className="bg-black/20 px-4 sm:px-6 py-2 flex items-center justify-between gap-2 flex-wrap">
                     <Badge variant="outline" className="border-primary/30 text-primary text-xs uppercase tracking-wider font-bold">
                       {fixture.competition}
@@ -61,7 +58,6 @@ export default function Fixtures() {
                     </div>
                   </div>
 
-                  {/* Teams + VS */}
                   <div className="px-4 sm:px-6 py-6 sm:py-8">
                     <div className="flex items-center justify-between gap-3 sm:gap-6">
                       <div className="flex flex-col items-center gap-2 flex-1 min-w-0">
@@ -85,7 +81,6 @@ export default function Fixtures() {
                     </div>
                   </div>
 
-                  {/* Footer bar */}
                   <div className="px-4 sm:px-6 py-3 bg-black/10 border-t border-white/5 flex items-center justify-between flex-wrap gap-3">
                     <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
                       <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
@@ -114,9 +109,8 @@ export default function Fixtures() {
             </div>
           </div>
 
-          {/* Right ad */}
           <div className="hidden xl:block w-40 flex-shrink-0">
-            <AdBanner slot="fixtures-right" />
+            <AdColumn page="fixtures" side="right" />
           </div>
         </div>
       </div>
