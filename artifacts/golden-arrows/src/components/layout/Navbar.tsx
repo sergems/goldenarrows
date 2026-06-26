@@ -86,15 +86,6 @@ function ShopDropdown() {
 
       {open && (
         <div className="absolute top-full left-0 mt-1 w-52 bg-background border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50">
-          <a
-            href="https://goldenarrowsfc.co.za/"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setOpen(false)}
-            className="block px-4 py-3 text-sm font-bold uppercase tracking-wider transition-colors text-primary hover:text-white hover:bg-white/5 border-b border-white/5"
-          >
-            All Products
-          </a>
           {SHOP_LINKS.map(link => (
             <a
               key={link.href}
@@ -139,15 +130,6 @@ function MobileShopAccordion({ onClose }: { onClose: () => void }) {
       </div>
       {open && (
         <div className="pl-4 flex flex-col gap-0.5 pb-1">
-          <a
-            href="https://goldenarrowsfc.co.za/"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={onClose}
-            className="px-4 py-3.5 text-sm font-bold uppercase tracking-wider rounded-xl transition-colors text-primary hover:text-white hover:bg-white/5"
-          >
-            All Products
-          </a>
           {SHOP_LINKS.map(link => (
             <a
               key={link.href}
@@ -249,14 +231,7 @@ export function Navbar() {
           {/* Nav — part of centered group */}
           <nav className="flex items-center gap-0.5">
             <ClubDropdown location={location} />
-            <a
-              href="https://goldenarrowsfc.co.za/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-3 py-2 text-sm font-bold uppercase tracking-wider rounded transition-colors text-white/70 hover:text-white hover:bg-white/5"
-            >
-              Shop
-            </a>
+            <ShopDropdown />
             {NAV_LINKS.map(link => {
               const active = location === link.href || (link.href !== "/" && location.startsWith(link.href));
               return (
