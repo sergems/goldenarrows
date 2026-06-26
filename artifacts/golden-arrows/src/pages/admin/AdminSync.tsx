@@ -3,7 +3,7 @@ import { AdminLayout } from "./AdminLayout";
 import { useSyncFixtures, useSyncResults, useSyncTable } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { getListFixturesQueryKey, getListResultsQueryKey, getGetLeagueTableQueryKey } from "@workspace/api-client-react";
-import { RefreshCw, CheckCircle, AlertCircle, Calendar, Swords, TableProperties, Info } from "lucide-react";
+import { RefreshCw, CheckCircle, AlertCircle, Calendar, Swords, TableProperties, Info, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type SyncStatus = "idle" | "loading" | "success" | "error";
@@ -13,6 +13,13 @@ interface SyncState {
   message: string;
   note?: string;
 }
+
+const SCHEDULE = [
+  { label: "15:00 SAST", utc: "13:00 UTC" },
+  { label: "18:00 SAST", utc: "16:00 UTC" },
+  { label: "20:00 SAST", utc: "18:00 UTC" },
+  { label: "22:00 SAST", utc: "20:00 UTC" },
+];
 
 function SyncCard({
   icon: Icon,
@@ -175,9 +182,30 @@ export default function AdminSync() {
           {anyLoading ? (
             <span className="flex items-center gap-2"><RefreshCw className="h-4 w-4 animate-spin" /> Syncing All…</span>
           ) : (
-            <span className="flex items-center gap-2"><RefreshCw className="h-4 w-4" /> Sync All</span>
+            <span className="flex items-center gap-2"><RefreshCw className="h-4 w-4" /> Sync All Now</span>
           )}
         </Button>
+      </div>
+
+      {/* Auto-sync schedule banner */}
+      <div className="bg-card border border-white/5 rounded-xl p-5 mb-6">
+        <div className="flex items-center gap-2 mb-3">
+          <Clock className="h-4 w-4 text-primary" />
+          <span className="font-display font-bold text-sm uppercase tracking-wider">Auto-Sync Schedule</span>
+          <span className="ml-auto text-xs bg-green-500/15 text-green-400 border border-green-500/20 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Active</span>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {SCHEDULE.map(s => (
+            <div key={s.label} className="bg-background rounded-lg border border-white/5 px-3 py-2.5 text-center">
+              <div className="font-display font-black text-lg text-primary">{s.label}</div>
+              <div className="text-xs text-muted-foreground mt-0.5">{s.utc}</div>
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-muted-foreground mt-3 flex items-start gap-1.5">
+          <Info className="h-3 w-3 flex-shrink-0 mt-0.5" />
+          All three datasets (fixtures, results, table) are synced automatically at these times every day. You can still trigger a manual sync at any time above.
+        </p>
       </div>
 
       <div className="bg-primary/5 border border-primary/20 rounded-xl px-5 py-4 mb-8 flex items-start gap-3 text-sm">
