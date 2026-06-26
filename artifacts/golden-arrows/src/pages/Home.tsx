@@ -284,7 +284,7 @@ function NormalHero() {
   const currentSlide = active[idx];
 
   return (
-    <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden flex items-center">
+    <section className="relative h-[55vh] sm:h-[65vh] md:h-[80vh] min-h-[320px] md:min-h-[600px] w-full overflow-hidden flex items-center">
       {/* Background images */}
       <div className="absolute inset-0 z-0">
         {active.length > 0 ? (
@@ -294,11 +294,11 @@ function NormalHero() {
               className="absolute inset-0 transition-opacity duration-1000"
               style={{ opacity: i === idx ? 1 : 0 }}
             >
-              <img src={slide.imageUrl} alt={slide.title} className="w-full h-full object-cover" />
+              <img src={slide.imageUrl} alt={slide.title} className="w-full h-full object-cover object-top" />
             </div>
           ))
         ) : (
-          <img src={heroStadium} alt="Stadium" className="w-full h-full object-cover" />
+          <img src={heroStadium} alt="Stadium" className="w-full h-full object-cover object-top" />
         )}
       </div>
 
