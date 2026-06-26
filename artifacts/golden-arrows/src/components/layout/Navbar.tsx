@@ -52,7 +52,7 @@ function isMatchLive(dateStr: string, timeStr?: string | null) {
   return elapsed >= 0 && elapsed <= 105;
 }
 
-function ShopDropdown({ onNavigate }: { onNavigate?: () => void }) {
+function ShopDropdown() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -65,24 +65,43 @@ function ShopDropdown({ onNavigate }: { onNavigate?: () => void }) {
   }, []);
 
   return (
-    <div ref={ref} className="relative">
-      <button
-        onClick={() => setOpen(v => !v)}
-        className="flex items-center gap-1 px-3 py-2 text-sm font-bold uppercase tracking-wider rounded transition-colors text-white/70 hover:text-white hover:bg-white/5"
+    <div ref={ref} className="relative flex items-center">
+      {/* "Shop" = direct link to main store */}
+      <a
+        href="https://goldenarrowsfc.co.za/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="px-3 py-2 text-sm font-bold uppercase tracking-wider rounded-l transition-colors text-white/70 hover:text-white hover:bg-white/5"
       >
         Shop
+      </a>
+      {/* Chevron = submenu toggle */}
+      <button
+        onClick={() => setOpen(v => !v)}
+        className="px-1 py-2 text-sm rounded-r transition-colors text-white/40 hover:text-white hover:bg-white/5"
+        aria-label="Shop submenu"
+      >
         <ChevronDown className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
 
       {open && (
         <div className="absolute top-full left-0 mt-1 w-52 bg-background border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50">
+          <a
+            href="https://goldenarrowsfc.co.za/"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setOpen(false)}
+            className="block px-4 py-3 text-sm font-bold uppercase tracking-wider transition-colors text-primary hover:text-white hover:bg-white/5 border-b border-white/5"
+          >
+            All Products
+          </a>
           {SHOP_LINKS.map(link => (
             <a
               key={link.href}
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => { setOpen(false); onNavigate?.(); }}
+              onClick={() => setOpen(false)}
               className="block px-4 py-3 text-sm font-bold uppercase tracking-wider transition-colors text-white/70 hover:text-white hover:bg-white/5"
             >
               {link.label}
@@ -98,15 +117,37 @@ function MobileShopAccordion({ onClose }: { onClose: () => void }) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <button
-        onClick={() => setOpen(v => !v)}
-        className="flex items-center justify-between px-4 py-4 text-sm font-bold uppercase tracking-wider rounded-xl transition-colors w-full text-white/70 hover:text-white hover:bg-white/5"
-      >
-        Shop
-        <ChevronDown className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`} />
-      </button>
+      <div className="flex items-center rounded-xl overflow-hidden">
+        {/* "Shop" = direct link */}
+        <a
+          href="https://goldenarrowsfc.co.za/"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={onClose}
+          className="flex-1 px-4 py-4 text-sm font-bold uppercase tracking-wider transition-colors text-white/70 hover:text-white hover:bg-white/5"
+        >
+          Shop
+        </a>
+        {/* Chevron = expand submenu */}
+        <button
+          onClick={() => setOpen(v => !v)}
+          className="px-4 py-4 text-white/40 hover:text-white hover:bg-white/5 transition-colors"
+          aria-label="Shop submenu"
+        >
+          <ChevronDown className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`} />
+        </button>
+      </div>
       {open && (
         <div className="pl-4 flex flex-col gap-0.5 pb-1">
+          <a
+            href="https://goldenarrowsfc.co.za/"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onClose}
+            className="px-4 py-3.5 text-sm font-bold uppercase tracking-wider rounded-xl transition-colors text-primary hover:text-white hover:bg-white/5"
+          >
+            All Products
+          </a>
           {SHOP_LINKS.map(link => (
             <a
               key={link.href}
