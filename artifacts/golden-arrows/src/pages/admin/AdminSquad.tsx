@@ -9,6 +9,7 @@ import { AdminLayout } from "./AdminLayout";
 import { Plus, Trash2, X, Pencil, Megaphone, CheckCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { ImageUpload } from "@/components/ui/ImageUpload";
 import playerPlaceholder from "@/assets/player-placeholder.png";
 
@@ -252,6 +253,20 @@ function PlayerForm({
                 </>
               )}
             </div>
+
+            {coachMode && (
+              <div>
+                <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Bio / About</label>
+                <Textarea
+                  name="bio"
+                  value={form.bio}
+                  onChange={handle}
+                  placeholder="Short description of their background, experience, and role at the club…"
+                  rows={4}
+                />
+                <p className="text-xs text-muted-foreground mt-1.5">Shown on the Technical Team page.</p>
+              </div>
+            )}
 
             {mode === "create" && (
               <div
