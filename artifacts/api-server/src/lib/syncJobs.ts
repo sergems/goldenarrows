@@ -200,7 +200,7 @@ export async function runSyncScoreAxisTable(): Promise<{ synced: number; source:
   const teams = parseScoreAxisWidget(raw);
   if (teams.length === 0) throw new Error("ScoreAxis: no team data found in widget response");
 
-  const season = 2024;
+  const season = 2025;
   await db.delete(leagueTableTable);
   await db.insert(leagueTableTable).values(
     teams.map(t => ({

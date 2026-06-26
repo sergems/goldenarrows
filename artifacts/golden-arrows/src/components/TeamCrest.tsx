@@ -3,11 +3,9 @@ import { getTeamLogo, teamInitials } from "@/lib/teamLogos";
 
 interface TeamCrestProps {
   name: string;
-  /** override logo URL (e.g. from DB) */
   logoUrl?: string | null;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   className?: string;
-  /** no circle background — just the raw image */
   bare?: boolean;
 }
 
@@ -20,7 +18,7 @@ const SIZE_MAP = {
 };
 
 export function TeamCrest({ name, logoUrl, size = "md", className = "", bare = false }: TeamCrestProps) {
-  const resolved = logoUrl ?? getTeamLogo(name);
+  const resolved = getTeamLogo(name) ?? logoUrl ?? null;
   const [failed, setFailed] = useState(false);
   const { outer, img, text } = SIZE_MAP[size];
 
