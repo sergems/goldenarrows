@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict 8FDG8V80dBJLZNqZO4qOBhyKd5WG5gC5biKeG4K3sqT3g36SfryBb0ar3iMUIa7
+\restrict 8uhajcL0Y1Gc2ANqtUQEqFjZXTVp134zXCc4YfjxwpKQ1FQvqfk2T4e4biK4Rlm
 
 -- Dumped from database version 16.10
 -- Dumped by pg_dump version 16.10
@@ -50,6 +50,44 @@ CREATE TABLE public.admin_settings (
 
 
 ALTER TABLE public.admin_settings OWNER TO postgres;
+
+--
+-- Name: ads; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.ads (
+    id integer NOT NULL,
+    slot text NOT NULL,
+    image_url text,
+    link_url text,
+    alt_text text,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.ads OWNER TO postgres;
+
+--
+-- Name: ads_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.ads_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.ads_id_seq OWNER TO postgres;
+
+--
+-- Name: ads_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.ads_id_seq OWNED BY public.ads.id;
+
 
 --
 -- Name: enquiries; Type: TABLE; Schema: public; Owner: postgres
@@ -547,6 +585,13 @@ ALTER SEQUENCE public.teams_id_seq OWNED BY public.teams.id;
 
 
 --
+-- Name: ads id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ads ALTER COLUMN id SET DEFAULT nextval('public.ads_id_seq'::regclass);
+
+
+--
 -- Name: enquiries id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -640,6 +685,38 @@ admin_password	@GoldenArrow2026	2026-06-25 16:59:31.260498+00
 
 
 --
+-- Data for Name: ads; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.ads (id, slot, image_url, link_url, alt_text, updated_at) FROM stdin;
+85	fixtures-left-1	\N	\N	\N	2026-06-26 22:02:32.168872+00
+86	fixtures-left-2	\N	\N	\N	2026-06-26 22:02:32.168872+00
+87	fixtures-left-3	\N	\N	\N	2026-06-26 22:02:32.168872+00
+88	fixtures-right-1	\N	\N	\N	2026-06-26 22:02:32.168872+00
+89	fixtures-right-2	\N	\N	\N	2026-06-26 22:02:32.168872+00
+90	fixtures-right-3	\N	\N	\N	2026-06-26 22:02:32.168872+00
+91	results-left-1	\N	\N	\N	2026-06-26 22:02:32.168872+00
+92	results-left-2	\N	\N	\N	2026-06-26 22:02:32.168872+00
+93	results-left-3	\N	\N	\N	2026-06-26 22:02:32.168872+00
+94	results-right-1	\N	\N	\N	2026-06-26 22:02:32.168872+00
+95	results-right-2	\N	\N	\N	2026-06-26 22:02:32.168872+00
+96	results-right-3	\N	\N	\N	2026-06-26 22:02:32.168872+00
+97	table-left-1	\N	\N	\N	2026-06-26 22:02:32.168872+00
+98	table-left-2	\N	\N	\N	2026-06-26 22:02:32.168872+00
+99	table-left-3	\N	\N	\N	2026-06-26 22:02:32.168872+00
+100	table-right-1	\N	\N	\N	2026-06-26 22:02:32.168872+00
+101	table-right-2	\N	\N	\N	2026-06-26 22:02:32.168872+00
+102	table-right-3	\N	\N	\N	2026-06-26 22:02:32.168872+00
+103	fixtures-left	\N	\N	\N	2026-06-26 22:02:58.624751+00
+104	fixtures-right	\N	\N	\N	2026-06-26 22:02:58.632698+00
+105	results-left	\N	\N	\N	2026-06-26 22:02:58.635665+00
+106	results-right	\N	\N	\N	2026-06-26 22:02:58.637756+00
+107	table-left	\N	\N	\N	2026-06-26 22:02:58.641406+00
+110	table-right	\N	\N	\N	2026-06-26 22:02:58.64491+00
+\.
+
+
+--
 -- Data for Name: enquiries; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -675,22 +752,22 @@ COPY public.gallery (id, title, type, url, thumbnail_url, category, caption, pub
 --
 
 COPY public.league_table (id, "position", team, logo_url, played, won, drawn, lost, goals_for, goals_against, goal_difference, points, is_golden_arrows, updated_at, season) FROM stdin;
-129	1	Mamelodi Sundowns	\N	28	24	1	3	65	13	52	73	f	2026-06-26 21:07:13.430967+00	2024
-130	2	Orlando Pirates	\N	28	19	4	5	43	20	23	61	f	2026-06-26 21:07:13.430967+00	2024
-131	3	Stellenbosch	\N	28	13	9	6	34	21	13	48	f	2026-06-26 21:07:13.430967+00	2024
-132	4	Sekhukhune United	\N	28	13	7	8	39	31	8	46	f	2026-06-26 21:07:13.430967+00	2024
-133	5	TS Galaxy	\N	28	8	11	9	30	30	0	35	f	2026-06-26 21:07:13.430967+00	2024
-134	6	Amazulu	\N	28	10	5	13	29	34	-5	35	f	2026-06-26 21:07:13.430967+00	2024
-135	7	Polokwane City	\N	28	8	10	10	19	25	-6	34	f	2026-06-26 21:07:13.430967+00	2024
-136	8	Richards Bay	\N	28	9	6	13	19	26	-7	33	f	2026-06-26 21:07:13.430967+00	2024
-137	9	Kaizer Chiefs	\N	28	8	8	12	25	32	-7	32	f	2026-06-26 21:07:13.430967+00	2024
-138	10	Marumo Gallants	\N	28	8	8	12	26	39	-13	32	f	2026-06-26 21:07:13.430967+00	2024
-139	11	Chippa United	\N	28	8	7	13	22	28	-6	31	f	2026-06-26 21:07:13.430967+00	2024
-140	12	Golden Arrows	\N	28	7	10	11	20	32	-12	31	t	2026-06-26 21:07:13.430967+00	2024
-141	13	Magesi	\N	28	8	7	13	19	31	-12	31	f	2026-06-26 21:07:13.430967+00	2024
-142	14	Supersport United	\N	28	6	9	13	18	30	-12	27	f	2026-06-26 21:07:13.430967+00	2024
-143	15	Cape Town City	\N	28	7	6	15	15	31	-16	27	f	2026-06-26 21:07:13.430967+00	2024
-144	16	Royal AM	\N	0	0	0	0	0	0	0	0	f	2026-06-26 21:07:13.430967+00	2024
+161	1	Orlando Pirates	https://statistic-cdn.scoreaxis.com/team/2fab2dc66865b76fd0ac6175e3d600c4675008a17633fd464ef3ab3d3b59febe-60-60.png	30	21	6	3	58	12	46	69	f	2026-06-26 21:50:45.770369+00	2025
+162	2	Mamelodi Sundowns FC	https://statistic-cdn.scoreaxis.com/team/c48a1afce57edd50429551cdfae010d1de9a9ea75b0bbbc80e13b4aac9ca4402-60-60.png	30	20	8	2	57	21	36	68	f	2026-06-26 21:50:45.770369+00	2025
+163	3	Kaizer Chiefs	https://statistic-cdn.scoreaxis.com/team/4b5d40da4b020975e1d698092b3f3efae333a8ae288502bd096fc82919ea60c0-60-60.png	30	15	9	6	33	19	14	54	f	2026-06-26 21:50:45.770369+00	2025
+164	4	AmaZulu FC	https://statistic-cdn.scoreaxis.com/team/e4ba801bbc79e0c1e10d0934487259ec48192610cff5410c490a70743ae97ea1-60-60.png	30	13	8	9	32	28	4	47	f	2026-06-26 21:50:45.770369+00	2025
+165	5	Sekhukhune United	https://statistic-cdn.scoreaxis.com/team/23a95c375f61eb68e87fc64602064b00924a06fb011c71a95156ba5268db9cba-60-60.png	30	11	11	8	32	27	5	44	f	2026-06-26 21:50:45.770369+00	2025
+166	6	Lamontville Golden Arrows	https://statistic-cdn.scoreaxis.com/team/a0e358cec51e88c27636ce1663e629fc7333df96d02a42a2028a4f3a586dd8ea-60-60.png	30	11	8	11	34	33	1	41	t	2026-06-26 21:50:45.770369+00	2025
+167	7	Polokwane City	https://statistic-cdn.scoreaxis.com/team/1465d378ff733531f62ea9a3e96ca47b04d455d1a0533f5abc8948d475e1eac6-60-60.png	30	9	13	8	21	21	0	40	f	2026-06-26 21:50:45.770369+00	2025
+168	8	Durban City	https://statistic-cdn.scoreaxis.com/team/2261d63e689c53444b403371c315d8f72d7f787a86aa45326fc4440a7225c32b-60-60.png	30	10	9	11	25	26	-1	39	f	2026-06-26 21:50:45.770369+00	2025
+169	9	Stellenbosch	https://statistic-cdn.scoreaxis.com/team/52e98272013fafe28577b7aad6ad794e46545cd5bf4d03e8e952558648bb9003-60-60.png	30	9	10	11	26	30	-4	37	f	2026-06-26 21:50:45.770369+00	2025
+170	10	Siwelele	https://statistic-cdn.scoreaxis.com/team/121008f1718d0f984de69f978c1af2c0503b0b5d67679f41ba9eddb1fc2d9468-60-60.png	30	8	13	9	24	28	-4	37	f	2026-06-26 21:50:45.770369+00	2025
+171	11	Richards Bay	https://statistic-cdn.scoreaxis.com/team/f984a3169ae7af557b696e94999853948b643b5bfbaa164c58a7b428c4817e7a-60-60.png	30	7	13	10	23	30	-7	34	f	2026-06-26 21:50:45.770369+00	2025
+172	12	TS Galaxy	https://statistic-cdn.scoreaxis.com/team/81c8bf024a9ecf13b27c7eecf02b870f68047ef51406df757e8f684d5aa6f422-60-60.png	30	8	8	14	30	38	-8	32	f	2026-06-26 21:50:45.770369+00	2025
+173	13	Chippa United	https://statistic-cdn.scoreaxis.com/team/65723c4e7b466bc9410c608ea0f306af62b1e3e7799c517769ab5b78520db3b1-60-60.png	30	6	10	14	24	44	-20	28	f	2026-06-26 21:50:45.770369+00	2025
+174	14	Marumo Gallants	https://statistic-cdn.scoreaxis.com/team/67c0a7bccaf8d3c63d4ee350e59e17030028b889ae4adb1a85b39856545240da-60-60.png	30	4	13	13	21	38	-17	25	f	2026-06-26 21:50:45.770369+00	2025
+175	15	Magesi FC	https://statistic-cdn.scoreaxis.com/team/fd00a7b8a82022e844718b8cceabcb78c8c31bb287ab6554662183a01ee4575d-60-60.png	30	5	9	16	24	43	-19	24	f	2026-06-26 21:50:45.770369+00	2025
+176	16	Orbit College	https://statistic-cdn.scoreaxis.com/team/48f643d08636f5ddb00b3388b06340804d5ccc7267f053407bdb6e8a575f9296-60-60.png	30	6	6	18	21	47	-26	24	f	2026-06-26 21:50:45.770369+00	2025
 \.
 
 
@@ -842,6 +919,13 @@ COPY public.teams (id, name, crest_url, active, created_at) FROM stdin;
 
 
 --
+-- Name: ads_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.ads_id_seq', 354, true);
+
+
+--
 -- Name: enquiries_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -866,7 +950,7 @@ SELECT pg_catalog.setval('public.gallery_id_seq', 1, false);
 -- Name: league_table_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.league_table_id_seq', 144, true);
+SELECT pg_catalog.setval('public.league_table_id_seq', 176, true);
 
 
 --
@@ -931,6 +1015,22 @@ SELECT pg_catalog.setval('public.teams_id_seq', 22, true);
 
 ALTER TABLE ONLY public.admin_settings
     ADD CONSTRAINT admin_settings_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: ads ads_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ads
+    ADD CONSTRAINT ads_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ads ads_slot_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ads
+    ADD CONSTRAINT ads_slot_key UNIQUE (slot);
 
 
 --
@@ -1056,5 +1156,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 8FDG8V80dBJLZNqZO4qOBhyKd5WG5gC5biKeG4K3sqT3g36SfryBb0ar3iMUIa7
+\unrestrict 8uhajcL0Y1Gc2ANqtUQEqFjZXTVp134zXCc4YfjxwpKQ1FQvqfk2T4e4biK4Rlm
 
