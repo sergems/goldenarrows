@@ -271,7 +271,7 @@ function MatchDayHero({ fixture }: { fixture: Fixture }) {
 // ─── Normal hero ─────────────────────────────────────────────────────────────
 
 function NormalHero() {
-  const { data: slides } = useListSlides();
+  const { data: slides, isLoading } = useListSlides();
   const active = slides?.filter(s => s.active) ?? [];
   const [idx, setIdx] = useState(0);
 
@@ -283,8 +283,19 @@ function NormalHero() {
 
   const currentSlide = active[idx];
 
+  const sectionCls = "relative h-[55vh] sm:h-[65vh] md:h-[80vh] min-h-[320px] md:min-h-[600px] w-full overflow-hidden flex items-center";
+
+  // While loading, show a dark placeholder to prevent the flash of fallback content
+  if (isLoading) {
+    return (
+      <section className={sectionCls}>
+        <div className="absolute inset-0 bg-background" />
+      </section>
+    );
+  }
+
   return (
-    <section className="relative h-[55vh] sm:h-[65vh] md:h-[80vh] min-h-[320px] md:min-h-[600px] w-full overflow-hidden flex items-center">
+    <section className={sectionCls}>
       {/* Background images */}
       <div className="absolute inset-0 z-0">
         {active.length > 0 ? (
@@ -342,28 +353,7 @@ function NormalHero() {
                   </div>
                 )}
               </>
-            ) : (
-              <>
-                <p className="text-primary font-bold uppercase tracking-[0.3em] text-sm mb-4">
-                  DStv Premiership · Durban, South Africa
-                </p>
-                <h1 className="font-display text-6xl md:text-8xl lg:text-9xl text-white uppercase mb-4 drop-shadow-lg" style={{ letterSpacing: "0.08em" }}>
-                  Abafana{" "}
-                  <span className="text-primary">Bes'thende</span>
-                </h1>
-                <p className="text-lg md:text-xl text-white/80 font-medium mb-10 max-w-xl mx-auto">
-                  The Pride of KwaZulu-Natal. Passion, Spirit, and Electric Football.
-                </p>
-                <div className="flex flex-wrap justify-center gap-4">
-                  <Link href="/fixtures" className="bg-primary text-black font-bold uppercase tracking-wider px-8 py-4 rounded-sm hover:bg-primary/90 transition-colors">
-                    View Fixtures
-                  </Link>
-                  <Link href="/squad" className="bg-white/10 backdrop-blur border border-white/25 text-white font-bold uppercase tracking-wider px-8 py-4 rounded-sm hover:bg-white/20 transition-colors">
-                    Meet The Squad
-                  </Link>
-                </div>
-              </>
-            )}
+            ) : null}
           </motion.div>
         </AnimatePresence>
       </div>
