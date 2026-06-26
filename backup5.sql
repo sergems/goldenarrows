@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict yy8JoCxGTNaspE31FUyXeoLW8XybAfDrQHvzcYS9mADeyYE9rIXoNwz2q6gox40
+\restrict 8FDG8V80dBJLZNqZO4qOBhyKd5WG5gC5biKeG4K3sqT3g36SfryBb0ar3iMUIa7
 
 -- Dumped from database version 16.10
 -- Dumped by pg_dump version 16.10
@@ -192,7 +192,8 @@ CREATE TABLE public.league_table (
     goal_difference integer DEFAULT 0 NOT NULL,
     points integer DEFAULT 0 NOT NULL,
     is_golden_arrows boolean DEFAULT false NOT NULL,
-    updated_at timestamp with time zone DEFAULT now() NOT NULL
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    season integer DEFAULT 0 NOT NULL
 );
 
 
@@ -673,23 +674,23 @@ COPY public.gallery (id, title, type, url, thumbnail_url, category, caption, pub
 -- Data for Name: league_table; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.league_table (id, "position", team, logo_url, played, won, drawn, lost, goals_for, goals_against, goal_difference, points, is_golden_arrows, updated_at) FROM stdin;
-65	1	Mamelodi Sundowns	\N	28	24	1	3	65	13	52	73	f	2026-06-23 10:03:25.906325+00
-66	2	Orlando Pirates	\N	28	19	4	5	43	20	23	61	f	2026-06-23 10:03:25.906325+00
-67	3	Stellenbosch	\N	28	13	9	6	34	21	13	48	f	2026-06-23 10:03:25.906325+00
-68	4	Sekhukhune United	\N	28	13	7	8	39	31	8	46	f	2026-06-23 10:03:25.906325+00
-69	5	TS Galaxy	\N	28	8	11	9	30	30	0	35	f	2026-06-23 10:03:25.906325+00
-70	6	Amazulu	\N	28	10	5	13	29	34	-5	35	f	2026-06-23 10:03:25.906325+00
-71	7	Polokwane City	\N	28	8	10	10	19	25	-6	34	f	2026-06-23 10:03:25.906325+00
-72	8	Richards Bay	\N	28	9	6	13	19	26	-7	33	f	2026-06-23 10:03:25.906325+00
-73	9	Kaizer Chiefs	\N	28	8	8	12	25	32	-7	32	f	2026-06-23 10:03:25.906325+00
-74	10	Marumo Gallants	\N	28	8	8	12	26	39	-13	32	f	2026-06-23 10:03:25.906325+00
-75	11	Chippa United	\N	28	8	7	13	22	28	-6	31	f	2026-06-23 10:03:25.906325+00
-76	12	Golden Arrows	\N	28	7	10	11	20	32	-12	31	t	2026-06-23 10:03:25.906325+00
-77	13	Magesi	\N	28	8	7	13	19	31	-12	31	f	2026-06-23 10:03:25.906325+00
-78	14	Supersport United	\N	28	6	9	13	18	30	-12	27	f	2026-06-23 10:03:25.906325+00
-79	15	Cape Town City	\N	28	7	6	15	15	31	-16	27	f	2026-06-23 10:03:25.906325+00
-80	16	Royal AM	\N	0	0	0	0	0	0	0	0	f	2026-06-23 10:03:25.906325+00
+COPY public.league_table (id, "position", team, logo_url, played, won, drawn, lost, goals_for, goals_against, goal_difference, points, is_golden_arrows, updated_at, season) FROM stdin;
+129	1	Mamelodi Sundowns	\N	28	24	1	3	65	13	52	73	f	2026-06-26 21:07:13.430967+00	2024
+130	2	Orlando Pirates	\N	28	19	4	5	43	20	23	61	f	2026-06-26 21:07:13.430967+00	2024
+131	3	Stellenbosch	\N	28	13	9	6	34	21	13	48	f	2026-06-26 21:07:13.430967+00	2024
+132	4	Sekhukhune United	\N	28	13	7	8	39	31	8	46	f	2026-06-26 21:07:13.430967+00	2024
+133	5	TS Galaxy	\N	28	8	11	9	30	30	0	35	f	2026-06-26 21:07:13.430967+00	2024
+134	6	Amazulu	\N	28	10	5	13	29	34	-5	35	f	2026-06-26 21:07:13.430967+00	2024
+135	7	Polokwane City	\N	28	8	10	10	19	25	-6	34	f	2026-06-26 21:07:13.430967+00	2024
+136	8	Richards Bay	\N	28	9	6	13	19	26	-7	33	f	2026-06-26 21:07:13.430967+00	2024
+137	9	Kaizer Chiefs	\N	28	8	8	12	25	32	-7	32	f	2026-06-26 21:07:13.430967+00	2024
+138	10	Marumo Gallants	\N	28	8	8	12	26	39	-13	32	f	2026-06-26 21:07:13.430967+00	2024
+139	11	Chippa United	\N	28	8	7	13	22	28	-6	31	f	2026-06-26 21:07:13.430967+00	2024
+140	12	Golden Arrows	\N	28	7	10	11	20	32	-12	31	t	2026-06-26 21:07:13.430967+00	2024
+141	13	Magesi	\N	28	8	7	13	19	31	-12	31	f	2026-06-26 21:07:13.430967+00	2024
+142	14	Supersport United	\N	28	6	9	13	18	30	-12	27	f	2026-06-26 21:07:13.430967+00	2024
+143	15	Cape Town City	\N	28	7	6	15	15	31	-16	27	f	2026-06-26 21:07:13.430967+00	2024
+144	16	Royal AM	\N	0	0	0	0	0	0	0	0	f	2026-06-26 21:07:13.430967+00	2024
 \.
 
 
@@ -744,19 +745,19 @@ COPY public.players (id, name, "position", number, nationality, age, photo_url, 
 --
 
 COPY public.results (id, date, home_team, away_team, home_score, away_score, competition, venue, scorers, match_report, highlight_url, created_at) FROM stdin;
-1	2025-05-24	Golden Arrows FC	Sekhukhune United	2	1	DStv Premiership	Princess Magogo Stadium	{"Knox Mutizwa 23'","Phumlani Ntanzi 67'"}	Golden Arrows secured all three points in a hard-fought home victory over Sekhukhune United. Knox Mutizwa opened the scoring with a clinical finish before Ntanzi doubled the lead with a long-range strike. Sekhukhune pulled one back late on, but Arrows held on for a crucial win.	\N	2026-06-01 10:51:32.983276+00
-2	2025-05-17	TS Galaxy	Golden Arrows FC	1	1	DStv Premiership	Mbombela Stadium	{"Lungelo Dlamini 45'"}	A hard-earned point away at TS Galaxy. Dlamini's brilliant first-half equalizer rescued a point for Arrows.	\N	2026-06-01 10:51:34.185787+00
-3	2025-05-10	Golden Arrows FC	Swallows FC	3	0	DStv Premiership	Princess Magogo Stadium	{"Knox Mutizwa 12'","Knox Mutizwa 34'","Sibusiso Khumalo 78'"}	A dominant home performance as Arrows swept Swallows aside with a commanding 3-0 victory. Knox Mutizwa bagged a brace to continue his prolific form.	\N	2026-06-01 10:51:35.624285+00
-4	2025-05-03	Mamelodi Sundowns	Golden Arrows FC	2	0	DStv Premiership	Loftus Versfeld	{}	A tough afternoon against the league leaders. Sundowns proved too strong on the day, though Golden Arrows showed tremendous fighting spirit.	\N	2026-06-01 10:51:37.23087+00
-5	2025-04-26	Golden Arrows FC	Chippa United	2	1	DStv Premiership	Princess Magogo Stadium	{"Nduduzo Sibiya 55'","Knox Mutizwa 82'"}	Knox Mutizwa's late winner delighted the Arrows faithful as the club claimed three vital points against Chippa United.	\N	2026-06-01 10:51:38.471559+00
 6	2026-06-02	Lamontville Golden Arrows	Kaizer Chiefs	2	1	DStv Premiership	Princess Magogo Stadium	{"Mthethwa 24'","Dube 67'"}	\N	\N	2026-06-02 07:49:36.029458+00
-7	2025-04-19	Orlando Pirates	Golden Arrows FC	1	1	DStv Premiership	Orlando Stadium	{}	\N	\N	2026-06-23 10:14:55.10357+00
-8	2025-04-12	Golden Arrows FC	Stellenbosch FC	2	0	DStv Premiership	Princess Magogo Stadium	{}	\N	\N	2026-06-23 10:14:55.272199+00
-9	2025-04-05	Richards Bay FC	Golden Arrows FC	0	1	DStv Premiership	King Zwelithini Stadium	{}	\N	\N	2026-06-23 10:14:55.335486+00
-10	2025-03-29	Golden Arrows FC	AmaZulu FC	1	2	DStv Premiership	Princess Magogo Stadium	{}	\N	\N	2026-06-23 10:14:55.392586+00
-11	2025-03-22	Cape Town City	Golden Arrows FC	0	0	DStv Premiership	DHL Newlands Stadium	{}	\N	\N	2026-06-23 10:14:55.443661+00
-12	2025-03-15	Golden Arrows FC	Polokwane City	1	0	DStv Premiership	Princess Magogo Stadium	{}	\N	\N	2026-06-23 10:22:09.699075+00
-13	2025-03-08	Marumo Gallants	Golden Arrows FC	1	1	DStv Premiership	Peter Mokaba Stadium	{}	\N	\N	2026-06-23 10:22:09.829677+00
+14	2025-05-24	Golden Arrows FC	Sekhukhune United	2	1	DStv Premiership	Princess Magogo Stadium	{"Knox Mutizwa 23'","Phumlani Ntanzi 67'"}	Golden Arrows secured all three points in a hard-fought home victory over Sekhukhune United. Knox Mutizwa opened the scoring with a clinical finish before Ntanzi doubled the lead with a long-range strike. Sekhukhune pulled one back late on, but Arrows held on for a crucial win.	\N	2026-06-01 10:51:32+00
+15	2025-05-17	TS Galaxy	Golden Arrows FC	1	1	DStv Premiership	Mbombela Stadium	{"Lungelo Dlamini 45'"}	A hard-earned point away at TS Galaxy. Dlamini's brilliant first-half equalizer rescued a point for Arrows.	\N	2026-06-01 10:51:34+00
+16	2025-05-10	Golden Arrows FC	Swallows FC	3	0	DStv Premiership	Princess Magogo Stadium	{"Knox Mutizwa 12'","Knox Mutizwa 34'","Sibusiso Khumalo 78'"}	A dominant home performance as Arrows swept Swallows aside with a commanding 3-0 victory. Knox Mutizwa bagged a brace to continue his prolific form.	\N	2026-06-01 10:51:35+00
+17	2025-05-03	Mamelodi Sundowns	Golden Arrows FC	2	0	DStv Premiership	Loftus Versfeld	{}	A tough afternoon against the league leaders. Sundowns proved too strong on the day, though Golden Arrows showed tremendous fighting spirit.	\N	2026-06-01 10:51:37+00
+18	2025-04-26	Golden Arrows FC	Chippa United	2	1	DStv Premiership	Princess Magogo Stadium	{"Nduduzo Sibiya 55'","Knox Mutizwa 82'"}	Knox Mutizwa's late winner delighted the Arrows faithful as the club claimed three vital points against Chippa United.	\N	2026-06-01 10:51:38+00
+19	2025-04-19	Orlando Pirates	Golden Arrows FC	1	1	DStv Premiership	Orlando Stadium	{}	\N	\N	2026-06-23 10:14:55+00
+20	2025-04-12	Golden Arrows FC	Stellenbosch FC	2	0	DStv Premiership	Princess Magogo Stadium	{}	\N	\N	2026-06-23 10:14:55+00
+21	2025-04-05	Richards Bay FC	Golden Arrows FC	0	1	DStv Premiership	King Zwelithini Stadium	{}	\N	\N	2026-06-23 10:14:55+00
+22	2025-03-29	Golden Arrows FC	AmaZulu FC	1	2	DStv Premiership	Princess Magogo Stadium	{}	\N	\N	2026-06-23 10:14:55+00
+23	2025-03-22	Cape Town City	Golden Arrows FC	0	0	DStv Premiership	DHL Newlands Stadium	{}	\N	\N	2026-06-23 10:14:55+00
+24	2025-03-15	Golden Arrows FC	Polokwane City	1	0	DStv Premiership	Princess Magogo Stadium	{}	\N	\N	2026-06-23 10:22:09+00
+25	2025-03-08	Marumo Gallants	Golden Arrows FC	1	1	DStv Premiership	Peter Mokaba Stadium	{}	\N	\N	2026-06-23 10:22:09+00
 \.
 
 
@@ -865,7 +866,7 @@ SELECT pg_catalog.setval('public.gallery_id_seq', 1, false);
 -- Name: league_table_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.league_table_id_seq', 80, true);
+SELECT pg_catalog.setval('public.league_table_id_seq', 144, true);
 
 
 --
@@ -886,7 +887,7 @@ SELECT pg_catalog.setval('public.players_id_seq', 23, true);
 -- Name: results_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.results_id_seq', 13, true);
+SELECT pg_catalog.setval('public.results_id_seq', 25, true);
 
 
 --
@@ -1055,5 +1056,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict yy8JoCxGTNaspE31FUyXeoLW8XybAfDrQHvzcYS9mADeyYE9rIXoNwz2q6gox40
+\unrestrict 8FDG8V80dBJLZNqZO4qOBhyKd5WG5gC5biKeG4K3sqT3g36SfryBb0ar3iMUIa7
 
