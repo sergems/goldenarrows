@@ -17,4 +17,7 @@ export interface PlayerInput {
   appearances?: number;
   goals?: number;
   assists?: number;
+  instagram?: string;
+  facebook?: string;
+  twitter?: string;
 }

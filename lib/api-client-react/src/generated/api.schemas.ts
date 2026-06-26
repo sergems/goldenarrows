@@ -51,6 +51,12 @@ export interface Player {
   appearances?: number;
   goals?: number;
   assists?: number;
+  /** @nullable */
+  instagram?: string | null;
+  /** @nullable */
+  facebook?: string | null;
+  /** @nullable */
+  twitter?: string | null;
 }
 
 export interface PlayerInput {
@@ -64,6 +70,9 @@ export interface PlayerInput {
   appearances?: number;
   goals?: number;
   assists?: number;
+  instagram?: string;
+  facebook?: string;
+  twitter?: string;
 }
 
 export interface StaffMember {
@@ -76,6 +85,12 @@ export interface StaffMember {
   bio?: string | null;
   /** @nullable */
   nationality?: string | null;
+  /** @nullable */
+  instagram?: string | null;
+  /** @nullable */
+  facebook?: string | null;
+  /** @nullable */
+  twitter?: string | null;
 }
 
 export interface StaffInput {
@@ -84,6 +99,9 @@ export interface StaffInput {
   photoUrl?: string;
   bio?: string;
   nationality?: string;
+  instagram?: string;
+  facebook?: string;
+  twitter?: string;
 }
 
 export interface Fixture {

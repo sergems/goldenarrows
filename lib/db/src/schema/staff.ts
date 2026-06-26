@@ -9,6 +9,9 @@ export const staffTable = pgTable("staff", {
   photoUrl: text("photo_url"),
   bio: text("bio"),
   nationality: text("nationality"),
+  instagram: text("instagram"),
+  facebook: text("facebook"),
+  twitter: text("twitter"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 

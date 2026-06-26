@@ -328,7 +328,10 @@ export const ListPlayersResponseItem = zod.object({
   "bio": zod.string().nullish(),
   "appearances": zod.number().optional(),
   "goals": zod.number().optional(),
-  "assists": zod.number().optional()
+  "assists": zod.number().optional(),
+  "instagram": zod.string().nullish(),
+  "facebook": zod.string().nullish(),
+  "twitter": zod.string().nullish()
 })
 export const ListPlayersResponse = zod.array(ListPlayersResponseItem)
 
@@ -346,7 +349,10 @@ export const CreatePlayerBody = zod.object({
   "bio": zod.string().optional(),
   "appearances": zod.number().optional(),
   "goals": zod.number().optional(),
-  "assists": zod.number().optional()
+  "assists": zod.number().optional(),
+  "instagram": zod.string().optional(),
+  "facebook": zod.string().optional(),
+  "twitter": zod.string().optional()
 })
 
 
@@ -368,7 +374,10 @@ export const GetPlayerResponse = zod.object({
   "bio": zod.string().nullish(),
   "appearances": zod.number().optional(),
   "goals": zod.number().optional(),
-  "assists": zod.number().optional()
+  "assists": zod.number().optional(),
+  "instagram": zod.string().nullish(),
+  "facebook": zod.string().nullish(),
+  "twitter": zod.string().nullish()
 })
 
 
@@ -389,7 +398,10 @@ export const UpdatePlayerBody = zod.object({
   "bio": zod.string().optional(),
   "appearances": zod.number().optional(),
   "goals": zod.number().optional(),
-  "assists": zod.number().optional()
+  "assists": zod.number().optional(),
+  "instagram": zod.string().optional(),
+  "facebook": zod.string().optional(),
+  "twitter": zod.string().optional()
 })
 
 export const UpdatePlayerResponse = zod.object({
@@ -403,7 +415,10 @@ export const UpdatePlayerResponse = zod.object({
   "bio": zod.string().nullish(),
   "appearances": zod.number().optional(),
   "goals": zod.number().optional(),
-  "assists": zod.number().optional()
+  "assists": zod.number().optional(),
+  "instagram": zod.string().nullish(),
+  "facebook": zod.string().nullish(),
+  "twitter": zod.string().nullish()
 })
 
 
@@ -424,7 +439,10 @@ export const ListStaffResponseItem = zod.object({
   "role": zod.string(),
   "photoUrl": zod.string().nullish(),
   "bio": zod.string().nullish(),
-  "nationality": zod.string().nullish()
+  "nationality": zod.string().nullish(),
+  "instagram": zod.string().nullish(),
+  "facebook": zod.string().nullish(),
+  "twitter": zod.string().nullish()
 })
 export const ListStaffResponse = zod.array(ListStaffResponseItem)
 
@@ -437,7 +455,10 @@ export const CreateStaffBody = zod.object({
   "role": zod.string(),
   "photoUrl": zod.string().optional(),
   "bio": zod.string().optional(),
-  "nationality": zod.string().optional()
+  "nationality": zod.string().optional(),
+  "instagram": zod.string().optional(),
+  "facebook": zod.string().optional(),
+  "twitter": zod.string().optional()
 })
 
 
@@ -634,28 +655,6 @@ export const GetStatsSummaryResponse = zod.object({
   "topScorerGoals": zod.number().optional(),
   "cleanSheets": zod.number(),
   "winRate": zod.number().optional()
-})
-
-
-/**
- * @summary Pull upcoming fixtures from Football API
- */
-export const SyncFixturesResponse = zod.object({
-  "synced": zod.number(),
-  "total": zod.number(),
-  "season": zod.number(),
-  "note": zod.string().optional()
-})
-
-
-/**
- * @summary Pull completed results from Football API
- */
-export const SyncResultsResponse = zod.object({
-  "synced": zod.number(),
-  "total": zod.number(),
-  "season": zod.number(),
-  "note": zod.string().optional()
 })
 
 

@@ -28,6 +28,9 @@ function mapStaff(row: typeof staffTable.$inferSelect) {
     photoUrl: row.photoUrl,
     bio: row.bio,
     nationality: row.nationality,
+    instagram: row.instagram,
+    facebook: row.facebook,
+    twitter: row.twitter,
   };
 }
 

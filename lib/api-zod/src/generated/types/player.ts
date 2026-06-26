@@ -21,4 +21,10 @@ export interface Player {
   appearances?: number;
   goals?: number;
   assists?: number;
+  /** @nullable */
+  instagram?: string | null;
+  /** @nullable */
+  facebook?: string | null;
+  /** @nullable */
+  twitter?: string | null;
 }

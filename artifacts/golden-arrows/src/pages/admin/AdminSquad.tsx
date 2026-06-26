@@ -73,11 +73,13 @@ function buildAnnouncement(form: {
 type FormData = {
   name: string; position: string; number: number; nationality: string;
   age: number; photoUrl: string; bio: string; appearances: number; goals: number; assists: number;
+  instagram: string; facebook: string; twitter: string;
 };
 
 const DEFAULT_FORM: FormData = {
   name: "", position: "Forward", number: 1, nationality: "South African",
   age: 22, photoUrl: "", bio: "", appearances: 0, goals: 0, assists: 0,
+  instagram: "", facebook: "", twitter: "",
 };
 
 function PlayerForm({
@@ -101,6 +103,7 @@ function PlayerForm({
           nationality: initial.nationality, age: initial.age ?? 22,
           photoUrl: initial.photoUrl ?? "", bio: initial.bio ?? "",
           appearances: initial.appearances ?? 0, goals: initial.goals ?? 0, assists: initial.assists ?? 0,
+          instagram: initial.instagram ?? "", facebook: initial.facebook ?? "", twitter: initial.twitter ?? "",
         }
       : DEFAULT_FORM
   );
@@ -268,6 +271,24 @@ function PlayerForm({
               <p className="text-xs text-muted-foreground mt-1.5">
                 {coachMode ? "Shown on the Technical Team page." : "Shown on the player's profile page."}
               </p>
+            </div>
+
+            <div>
+              <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Social Media</label>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-muted-foreground w-20 flex-shrink-0">Instagram</span>
+                  <Input name="instagram" value={form.instagram} onChange={handle} placeholder="https://instagram.com/username" />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-muted-foreground w-20 flex-shrink-0">Facebook</span>
+                  <Input name="facebook" value={form.facebook} onChange={handle} placeholder="https://facebook.com/username" />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-muted-foreground w-20 flex-shrink-0">X / Twitter</span>
+                  <Input name="twitter" value={form.twitter} onChange={handle} placeholder="https://x.com/username" />
+                </div>
+              </div>
             </div>
 
             {mode === "create" && (

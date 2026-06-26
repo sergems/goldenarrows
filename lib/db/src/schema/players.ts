@@ -14,6 +14,9 @@ export const playersTable = pgTable("players", {
   appearances: integer("appearances").notNull().default(0),
   goals: integer("goals").notNull().default(0),
   assists: integer("assists").notNull().default(0),
+  instagram: text("instagram"),
+  facebook: text("facebook"),
+  twitter: text("twitter"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 

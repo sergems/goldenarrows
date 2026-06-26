@@ -744,6 +744,9 @@ components:
         appearances: { type: integer }
         goals: { type: integer }
         assists: { type: integer }
+        instagram: { type: ["string", "null"] }
+        facebook: { type: ["string", "null"] }
+        twitter: { type: ["string", "null"] }
 
     PlayerInput:
       type: object
@@ -759,6 +762,9 @@ components:
         appearances: { type: integer }
         goals: { type: integer }
         assists: { type: integer }
+        instagram: { type: string }
+        facebook: { type: string }
+        twitter: { type: string }
 
     # ── STAFF ─────────────────────────────────────────────────────────────
     StaffMember:
@@ -771,6 +777,9 @@ components:
         photoUrl: { type: ["string", "null"] }
         bio: { type: ["string", "null"] }
         nationality: { type: ["string", "null"] }
+        instagram: { type: ["string", "null"] }
+        facebook: { type: ["string", "null"] }
+        twitter: { type: ["string", "null"] }
 
     StaffInput:
       type: object
@@ -781,6 +790,9 @@ components:
         photoUrl: { type: string }
         bio: { type: string }
         nationality: { type: string }
+        instagram: { type: string }
+        facebook: { type: string }
+        twitter: { type: string }
 
     # ── FIXTURES ──────────────────────────────────────────────────────────
     Fixture:

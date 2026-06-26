@@ -89,6 +89,9 @@ function mapPlayer(row: typeof playersTable.$inferSelect) {
     appearances: row.appearances,
     goals: row.goals,
     assists: row.assists,
+    instagram: row.instagram,
+    facebook: row.facebook,
+    twitter: row.twitter,
   };
 }
 

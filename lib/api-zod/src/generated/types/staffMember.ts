@@ -16,4 +16,10 @@ export interface StaffMember {
   bio?: string | null;
   /** @nullable */
   nationality?: string | null;
+  /** @nullable */
+  instagram?: string | null;
+  /** @nullable */
+  facebook?: string | null;
+  /** @nullable */
+  twitter?: string | null;
 }

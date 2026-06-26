@@ -12,4 +12,7 @@ export interface StaffInput {
   photoUrl?: string;
   bio?: string;
   nationality?: string;
+  instagram?: string;
+  facebook?: string;
+  twitter?: string;
 }
