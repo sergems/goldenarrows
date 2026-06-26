@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict c5S7UNBW4myixvpgqLJMghYi7jUqrqMRZdgyC2eqBOyyyZq8m6iNDJ0VsOFGRAM
+\restrict yy8JoCxGTNaspE31FUyXeoLW8XybAfDrQHvzcYS9mADeyYE9rIXoNwz2q6gox40
 
 -- Dumped from database version 16.10
 -- Dumped by pg_dump version 16.10
@@ -37,6 +37,19 @@ COMMENT ON SCHEMA public IS '';
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
+
+--
+-- Name: admin_settings; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.admin_settings (
+    key text NOT NULL,
+    value text NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.admin_settings OWNER TO postgres;
 
 --
 -- Name: enquiries; Type: TABLE; Schema: public; Owner: postgres
@@ -390,7 +403,7 @@ CREATE TABLE public.social_posts (
     post_url text NOT NULL,
     display_order integer DEFAULT 0 NOT NULL,
     created_at timestamp with time zone DEFAULT now(),
-    CONSTRAINT social_posts_platform_check CHECK (((platform)::text = ANY ((ARRAY['facebook'::character varying, 'instagram'::character varying])::text[])))
+    CONSTRAINT social_posts_platform_check CHECK (((platform)::text = ANY (ARRAY[('facebook'::character varying)::text, ('instagram'::character varying)::text])))
 );
 
 
@@ -496,6 +509,43 @@ ALTER SEQUENCE public.staff_id_seq OWNED BY public.staff.id;
 
 
 --
+-- Name: teams; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.teams (
+    id integer NOT NULL,
+    name text NOT NULL,
+    crest_url text,
+    active boolean DEFAULT true NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.teams OWNER TO postgres;
+
+--
+-- Name: teams_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.teams_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.teams_id_seq OWNER TO postgres;
+
+--
+-- Name: teams_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.teams_id_seq OWNED BY public.teams.id;
+
+
+--
 -- Name: enquiries id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -573,6 +623,22 @@ ALTER TABLE ONLY public.staff ALTER COLUMN id SET DEFAULT nextval('public.staff_
 
 
 --
+-- Name: teams id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.teams ALTER COLUMN id SET DEFAULT nextval('public.teams_id_seq'::regclass);
+
+
+--
+-- Data for Name: admin_settings; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.admin_settings (key, value, updated_at) FROM stdin;
+admin_password	@GoldenArrow2026	2026-06-25 16:59:31.260498+00
+\.
+
+
+--
 -- Data for Name: enquiries; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -586,11 +652,12 @@ COPY public.enquiries (id, first_name, last_name, email, subject, message, statu
 --
 
 COPY public.fixtures (id, date, "time", home_team, away_team, competition, venue, ticket_url, completed, created_at) FROM stdin;
-1	2026-06-14	15:00	Golden Arrows FC	Mamelodi Sundowns	DStv Premiership	Princess Magogo Stadium	\N	f	2026-06-01 10:51:26.789401+00
-2	2026-06-21	15:00	AmaZulu FC	Golden Arrows FC	DStv Premiership	Moses Mabhida Stadium	\N	f	2026-06-01 10:51:28.040813+00
-3	2026-06-28	15:00	Golden Arrows FC	Orlando Pirates	DStv Premiership	Princess Magogo Stadium	\N	f	2026-06-01 10:51:29.259643+00
-4	2026-07-05	15:00	Kaizer Chiefs	Golden Arrows FC	DStv Premiership	FNB Stadium	\N	f	2026-06-01 10:51:30.702173+00
-5	2026-07-12	15:00	Golden Arrows FC	Cape Town City	DStv Premiership	Princess Magogo Stadium	\N	f	2026-06-01 10:51:31.907605+00
+6	2026-08-14	15:00	Golden Arrows FC	Mamelodi Sundowns	DStv Premiership	Princess Magogo Stadium	\N	f	2026-06-26 17:56:07.118722+00
+1	2026-06-14	15:00	Golden Arrows FC	Mamelodi Sundowns	DStv Premiership	Princess Magogo Stadium	\N	t	2026-06-01 10:51:26.789401+00
+2	2026-06-21	15:00	AmaZulu FC	Golden Arrows FC	DStv Premiership	Moses Mabhida Stadium	\N	t	2026-06-01 10:51:28.040813+00
+3	2026-06-28	15:00	Golden Arrows FC	Orlando Pirates	DStv Premiership	Princess Magogo Stadium	\N	t	2026-06-01 10:51:29.259643+00
+4	2026-07-05	15:00	Kaizer Chiefs	Golden Arrows FC	DStv Premiership	FNB Stadium	\N	t	2026-06-01 10:51:30.702173+00
+5	2026-07-12	15:00	Golden Arrows FC	Cape Town City	DStv Premiership	Princess Magogo Stadium	\N	t	2026-06-01 10:51:31.907605+00
 \.
 
 
@@ -698,8 +765,11 @@ COPY public.results (id, date, home_team, away_team, home_score, away_score, com
 --
 
 COPY public.slides (id, title, image_url, subtitle, link, link_label, sort_order, active, created_at) FROM stdin;
-1	Abafana Bes'thende	/api/uploads/1780388118425-ajmqpp.jpg	The Pride of KwaZulu-Natal. Passion, Spirit, and Electric Football.			1	t	2026-06-02 08:15:52.782447+00
-2	Golden Birthdays	/api/uploads/1780388317426-tq8o6q.png	We celebrate you			0	t	2026-06-02 08:18:55.311658+00
+4		/api/uploads/1782496002976-q3nl2t.jpg				0	t	2026-06-26 17:46:50.148305+00
+3		/api/uploads/1782494883408-x9zauo.jpg				1	t	2026-06-26 17:28:48.080947+00
+5		/api/uploads/1782497002183-g4y6tl.jpg				1	t	2026-06-26 18:03:26.558328+00
+1	Abafana Bes'thende	/api/uploads/1780388118425-ajmqpp.jpg	The Pride of KwaZulu-Natal. Passion, Spirit, and Electric Football.			2	f	2026-06-02 08:15:52.782447+00
+2	Golden Birthdays	/api/uploads/1780388317426-tq8o6q.png	We celebrate you			4	f	2026-06-02 08:18:55.311658+00
 \.
 
 
@@ -745,6 +815,32 @@ COPY public.staff (id, name, role, photo_url, bio, nationality, created_at) FROM
 
 
 --
+-- Data for Name: teams; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.teams (id, name, crest_url, active, created_at) FROM stdin;
+1	Mamelodi Sundowns	/crests/mamelodi-sundowns.png	t	2026-06-25 17:09:15.479384+00
+2	Orlando Pirates	/crests/orlando-pirates.png	t	2026-06-25 17:09:15.479384+00
+3	Stellenbosch	/crests/stellenbosch.png	t	2026-06-25 17:09:15.479384+00
+4	Sekhukhune United	/crests/sekhukhune-united.png	t	2026-06-25 17:09:15.479384+00
+5	TS Galaxy	/crests/ts-galaxy.png	t	2026-06-25 17:09:15.479384+00
+6	AmaZulu	/crests/amazulu.png	t	2026-06-25 17:09:15.479384+00
+8	Polokwane City	/crests/polokwane-city.png	t	2026-06-25 17:09:15.479384+00
+9	Richards Bay	/crests/richards-bay.png	t	2026-06-25 17:09:15.479384+00
+10	Kaizer Chiefs	/crests/kaizer-chiefs.png	t	2026-06-25 17:09:15.479384+00
+11	Marumo Gallants	/crests/marumo-gallants.png	t	2026-06-25 17:09:15.479384+00
+12	Chippa United	/crests/chippa-united.png	t	2026-06-25 17:09:15.479384+00
+13	Golden Arrows	/crests/golden-arrows.png	t	2026-06-25 17:09:15.479384+00
+16	Magesi	/crests/magesi.png	t	2026-06-25 17:09:15.479384+00
+17	Supersport United	\N	t	2026-06-25 17:09:15.479384+00
+18	Cape Town City	\N	t	2026-06-25 17:09:15.479384+00
+20	Siwelele	/crests/siwelele.png	t	2026-06-25 17:09:15.479384+00
+21	Durban City	/crests/durban-city.png	t	2026-06-25 17:09:15.479384+00
+22	Orbit College	/crests/orbit-college.png	t	2026-06-25 17:09:15.479384+00
+\.
+
+
+--
 -- Name: enquiries_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -755,7 +851,7 @@ SELECT pg_catalog.setval('public.enquiries_id_seq', 1, true);
 -- Name: fixtures_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.fixtures_id_seq', 5, true);
+SELECT pg_catalog.setval('public.fixtures_id_seq', 6, true);
 
 
 --
@@ -776,14 +872,14 @@ SELECT pg_catalog.setval('public.league_table_id_seq', 80, true);
 -- Name: news_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.news_id_seq', 14, true);
+SELECT pg_catalog.setval('public.news_id_seq', 15, true);
 
 
 --
 -- Name: players_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.players_id_seq', 22, true);
+SELECT pg_catalog.setval('public.players_id_seq', 23, true);
 
 
 --
@@ -797,7 +893,7 @@ SELECT pg_catalog.setval('public.results_id_seq', 13, true);
 -- Name: slides_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.slides_id_seq', 2, true);
+SELECT pg_catalog.setval('public.slides_id_seq', 5, true);
 
 
 --
@@ -819,6 +915,21 @@ SELECT pg_catalog.setval('public.sponsors_id_seq', 5, true);
 --
 
 SELECT pg_catalog.setval('public.staff_id_seq', 7, true);
+
+
+--
+-- Name: teams_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.teams_id_seq', 22, true);
+
+
+--
+-- Name: admin_settings admin_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.admin_settings
+    ADD CONSTRAINT admin_settings_pkey PRIMARY KEY (key);
 
 
 --
@@ -918,6 +1029,22 @@ ALTER TABLE ONLY public.staff
 
 
 --
+-- Name: teams teams_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.teams
+    ADD CONSTRAINT teams_name_key UNIQUE (name);
+
+
+--
+-- Name: teams teams_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.teams
+    ADD CONSTRAINT teams_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
 --
 
@@ -928,5 +1055,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict c5S7UNBW4myixvpgqLJMghYi7jUqrqMRZdgyC2eqBOyyyZq8m6iNDJ0VsOFGRAM
+\unrestrict yy8JoCxGTNaspE31FUyXeoLW8XybAfDrQHvzcYS9mADeyYE9rIXoNwz2q6gox40
 
