@@ -1,5 +1,5 @@
 import { logger } from "./logger";
-import { runSyncFixtures, runSyncResults, runSyncTable } from "./syncJobs";
+import { runSyncFixtures, runSyncResults, runSyncScoreAxisTable } from "./syncJobs";
 
 // SAST = UTC+2. Target times in UTC: 13, 16, 18, 20
 // Corresponds to SAST: 15:00, 18:00, 20:00, 22:00
@@ -12,12 +12,11 @@ async function runAllSyncs() {
   const hourSAST = nowSAST.getUTCHours();
   logger.info({ hourSAST }, "Scheduled sync starting");
 
-  const results = await Promise.allSettled([
-    runSyncFixtures(),
-    runSyncResults(),
-    runSyncTable(),
-  ]);
+  const scoreAxisTable = runSyncScoreAxisTable();
+  const fixturesSync = process.env.FOOTBALL_API_KEY ? runSyncFixtures() : Promise.reject(new Error("FOOTBALL_API_KEY not set"));
+  const resultsSync = process.env.FOOTBALL_API_KEY ? runSyncResults() : Promise.reject(new Error("FOOTBALL_API_KEY not set"));
 
+  const results = await Promise.allSettled([fixturesSync, resultsSync, scoreAxisTable]);
   const [fixtures, matchResults, table] = results;
 
   if (fixtures.status === "fulfilled") {
@@ -33,21 +32,16 @@ async function runAllSyncs() {
   }
 
   if (table.status === "fulfilled") {
-    logger.info({ synced: table.value.synced, season: table.value.season }, "Scheduled sync: table done");
+    logger.info({ synced: table.value.synced, source: table.value.source }, "Scheduled sync: league table done");
   } else {
-    logger.warn({ err: table.reason }, "Scheduled sync: table failed");
+    logger.warn({ err: table.reason }, "Scheduled sync: league table failed");
   }
 }
 
 export function startScheduler() {
-  if (!process.env.FOOTBALL_API_KEY) {
-    logger.warn("FOOTBALL_API_KEY not set — scheduled sync disabled");
-    return;
-  }
-
   logger.info(
     { syncTimesUTC: [...SYNC_HOURS_UTC].map(h => `${h}:00`), syncTimesSAST: "15:00, 18:00, 20:00, 22:00" },
-    "Scheduled sync enabled"
+    "Scheduled sync enabled (ScoreAxis table + Football API fixtures/results)"
   );
 
   let lastFiredHour = -1;

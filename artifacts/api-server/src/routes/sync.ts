@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { runSyncFixtures, runSyncResults, runSyncTable } from "../lib/syncJobs";
+import { runSyncFixtures, runSyncResults, runSyncTable, runSyncScoreAxisTable } from "../lib/syncJobs";
 
 const router = Router();
 
@@ -39,6 +39,15 @@ router.post("/sync/table", async (_req, res) => {
     res.json(result);
   } catch (err: unknown) {
     res.status(500).json({ error: err instanceof Error ? err.message : "Sync failed" });
+  }
+});
+
+router.post("/sync/scoreaxis-table", async (_req, res) => {
+  try {
+    const result = await runSyncScoreAxisTable();
+    res.json(result);
+  } catch (err: unknown) {
+    res.status(500).json({ error: err instanceof Error ? err.message : "ScoreAxis sync failed" });
   }
 });
 
