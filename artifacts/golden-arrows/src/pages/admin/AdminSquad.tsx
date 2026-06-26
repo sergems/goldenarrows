@@ -254,19 +254,21 @@ function PlayerForm({
               )}
             </div>
 
-            {coachMode && (
-              <div>
-                <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Bio / About</label>
-                <Textarea
-                  name="bio"
-                  value={form.bio}
-                  onChange={handle}
-                  placeholder="Short description of their background, experience, and role at the club…"
-                  rows={4}
-                />
-                <p className="text-xs text-muted-foreground mt-1.5">Shown on the Technical Team page.</p>
-              </div>
-            )}
+            <div>
+              <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Bio / About</label>
+              <Textarea
+                name="bio"
+                value={form.bio}
+                onChange={handle}
+                placeholder={coachMode
+                  ? "Short description of their background, experience, and role at the club…"
+                  : "Short bio about the player — background, style of play, career highlights…"}
+                rows={4}
+              />
+              <p className="text-xs text-muted-foreground mt-1.5">
+                {coachMode ? "Shown on the Technical Team page." : "Shown on the player's profile page."}
+              </p>
+            </div>
 
             {mode === "create" && (
               <div
