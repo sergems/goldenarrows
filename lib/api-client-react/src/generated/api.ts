@@ -46,7 +46,8 @@ import type {
   Sponsor,
   StaffInput,
   StaffMember,
-  StatsSummary
+  StatsSummary,
+  SyncResult
 } from './api.schemas';
 
 import { customFetch } from '../custom-fetch';
@@ -2469,4 +2470,214 @@ export function useGetStatsSummary<TData = Awaited<ReturnType<typeof getStatsSum
 
 
 
+
+export const getSyncFixturesUrl = () => {
+
+
+
+
+  return `/api/sync/fixtures`
+}
+
+/**
+ * @summary Pull upcoming fixtures from Football API
+ */
+export const syncFixtures = async ( options?: RequestInit): Promise<SyncResult> => {
+
+  return customFetch<SyncResult>(getSyncFixturesUrl(),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+export const getSyncFixturesMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncFixtures>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof syncFixtures>>, TError,void, TContext> => {
+
+const mutationKey = ['syncFixtures'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof syncFixtures>>, void> = () => {
+
+
+          return  syncFixtures(requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SyncFixturesMutationResult = NonNullable<Awaited<ReturnType<typeof syncFixtures>>>
+
+    export type SyncFixturesMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Pull upcoming fixtures from Football API
+ */
+export const useSyncFixtures = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncFixtures>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof syncFixtures>>,
+        TError,
+        void,
+        TContext
+      > => {
+      return useMutation(getSyncFixturesMutationOptions(options));
+    }
+
+export const getSyncResultsUrl = () => {
+
+
+
+
+  return `/api/sync/results`
+}
+
+/**
+ * @summary Pull completed results from Football API
+ */
+export const syncResults = async ( options?: RequestInit): Promise<SyncResult> => {
+
+  return customFetch<SyncResult>(getSyncResultsUrl(),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+export const getSyncResultsMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncResults>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof syncResults>>, TError,void, TContext> => {
+
+const mutationKey = ['syncResults'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof syncResults>>, void> = () => {
+
+
+          return  syncResults(requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SyncResultsMutationResult = NonNullable<Awaited<ReturnType<typeof syncResults>>>
+
+    export type SyncResultsMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Pull completed results from Football API
+ */
+export const useSyncResults = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncResults>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof syncResults>>,
+        TError,
+        void,
+        TContext
+      > => {
+      return useMutation(getSyncResultsMutationOptions(options));
+    }
+
+export const getSyncTableUrl = () => {
+
+
+
+
+  return `/api/sync/table`
+}
+
+/**
+ * @summary Pull PSL standings from Football API
+ */
+export const syncTable = async ( options?: RequestInit): Promise<SyncResult> => {
+
+  return customFetch<SyncResult>(getSyncTableUrl(),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+export const getSyncTableMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncTable>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof syncTable>>, TError,void, TContext> => {
+
+const mutationKey = ['syncTable'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof syncTable>>, void> = () => {
+
+
+          return  syncTable(requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SyncTableMutationResult = NonNullable<Awaited<ReturnType<typeof syncTable>>>
+
+    export type SyncTableMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Pull PSL standings from Football API
+ */
+export const useSyncTable = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncTable>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof syncTable>>,
+        TError,
+        void,
+        TContext
+      > => {
+      return useMutation(getSyncTableMutationOptions(options));
+    }
 

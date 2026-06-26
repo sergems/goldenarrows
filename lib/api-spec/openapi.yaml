@@ -30,6 +30,8 @@ tags:
     description: Club statistics summary
   - name: enquiries
     description: Contact form enquiries
+  - name: sync
+    description: Live data sync from Football API
 
 paths:
   /healthz:
@@ -615,6 +617,46 @@ paths:
               schema:
                 $ref: "#/components/schemas/StatsSummary"
 
+  # ── SYNC ──────────────────────────────────────────────────────────────────
+  /sync/fixtures:
+    post:
+      operationId: syncFixtures
+      tags: [sync]
+      summary: Pull upcoming fixtures from Football API
+      responses:
+        "200":
+          description: Sync result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SyncResult"
+
+  /sync/results:
+    post:
+      operationId: syncResults
+      tags: [sync]
+      summary: Pull completed results from Football API
+      responses:
+        "200":
+          description: Sync result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SyncResult"
+
+  /sync/table:
+    post:
+      operationId: syncTable
+      tags: [sync]
+      summary: Pull PSL standings from Football API
+      responses:
+        "200":
+          description: Sync result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SyncResult"
+
 components:
   schemas:
     HealthStatus:
@@ -875,6 +917,16 @@ components:
       type: object
       properties:
         status: { type: string, enum: [unread, read, resolved] }
+
+    # ── SYNC ──────────────────────────────────────────────────────────────
+    SyncResult:
+      type: object
+      required: [synced, total, season]
+      properties:
+        synced: { type: integer }
+        total: { type: integer }
+        season: { type: integer }
+        note: { type: string }
 
     # ── STATS ─────────────────────────────────────────────────────────────
     StatsSummary:

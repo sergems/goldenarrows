@@ -38,3 +38,4 @@ export * from './sponsor';
 export * from './staffInput';
 export * from './staffMember';
 export * from './statsSummary';
+export * from './syncResult';

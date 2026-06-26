@@ -44,6 +44,7 @@ import AdminSocialPosts from "@/pages/admin/AdminSocialPosts";
 import { AdminGuard } from "@/pages/admin/AdminGuard";
 import AdminChangePassword from "@/pages/admin/AdminChangePassword";
 import AdminTeams from "@/pages/admin/AdminTeams";
+import AdminSync from "@/pages/admin/AdminSync";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 30_000 } },
@@ -144,6 +145,9 @@ function Router() {
       </Route>
       <Route path="/admin/teams">
         <AdminGuard><AdminTeams /></AdminGuard>
+      </Route>
+      <Route path="/admin/sync">
+        <AdminGuard><AdminSync /></AdminGuard>
       </Route>
       <Route path="/admin/change-password">
         <AdminGuard><AdminChangePassword /></AdminGuard>

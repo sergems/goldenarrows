@@ -268,6 +268,13 @@ export interface EnquiryUpdate {
   status?: EnquiryUpdateStatus;
 }
 
+export interface SyncResult {
+  synced: number;
+  total: number;
+  season: number;
+  note?: string;
+}
+
 export interface StatsSummary {
   leaguePosition: number;
   played: number;

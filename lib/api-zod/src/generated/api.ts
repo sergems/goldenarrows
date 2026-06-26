@@ -580,3 +580,36 @@ export const GetStatsSummaryResponse = zod.object({
 })
 
 
+/**
+ * @summary Pull upcoming fixtures from Football API
+ */
+export const SyncFixturesResponse = zod.object({
+  "synced": zod.number(),
+  "total": zod.number(),
+  "season": zod.number(),
+  "note": zod.string().optional()
+})
+
+
+/**
+ * @summary Pull completed results from Football API
+ */
+export const SyncResultsResponse = zod.object({
+  "synced": zod.number(),
+  "total": zod.number(),
+  "season": zod.number(),
+  "note": zod.string().optional()
+})
+
+
+/**
+ * @summary Pull PSL standings from Football API
+ */
+export const SyncTableResponse = zod.object({
+  "synced": zod.number(),
+  "total": zod.number(),
+  "season": zod.number(),
+  "note": zod.string().optional()
+})
+
+
