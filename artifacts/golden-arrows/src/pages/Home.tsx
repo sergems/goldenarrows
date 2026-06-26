@@ -283,7 +283,7 @@ function NormalHero() {
 
   const currentSlide = active[idx];
 
-  const sectionCls = "relative h-[55vh] sm:h-[65vh] md:h-[80vh] min-h-[320px] md:min-h-[600px] w-full overflow-hidden flex items-center";
+  const sectionCls = "relative h-[60vh] sm:h-[65vh] md:h-[80vh] min-h-[400px] md:min-h-[600px] w-full overflow-hidden flex items-end sm:items-center pb-10 sm:pb-0";
 
   // While loading, show a dark placeholder to prevent the flash of fallback content
   if (isLoading) {
@@ -314,7 +314,7 @@ function NormalHero() {
       </div>
 
       {/* Per-slide text — animated on each slide change */}
-      <div className="container relative z-10 mx-auto px-4 text-center mt-16">
+      <div className="container relative z-10 mx-auto px-4 text-left sm:text-center">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide ? currentSlide.id : "default"}
@@ -325,7 +325,7 @@ function NormalHero() {
           >
             {currentSlide ? (
               <>
-                <h1 className="font-display text-6xl md:text-8xl lg:text-9xl text-white uppercase mb-4 drop-shadow-lg" style={{ letterSpacing: "0.08em" }}>
+                <h1 className="font-display text-4xl sm:text-6xl md:text-8xl lg:text-9xl text-white uppercase mb-3 drop-shadow-lg leading-none" style={{ letterSpacing: "0.06em" }}>
                   {currentSlide.title.includes(" ") ? (
                     <>
                       {currentSlide.title.split(" ").slice(0, -1).join(" ")}{" "}
@@ -338,7 +338,7 @@ function NormalHero() {
                   )}
                 </h1>
                 {currentSlide.subtitle && (
-                  <p className="text-lg md:text-xl text-white/80 font-medium mb-10 max-w-xl mx-auto">
+                  <p className="text-sm sm:text-lg md:text-xl text-white/80 font-medium mb-6 sm:mb-10 max-w-xl mx-auto sm:mx-auto">
                     {currentSlide.subtitle}
                   </p>
                 )}

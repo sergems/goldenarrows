@@ -32,15 +32,15 @@ export default function Squad() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="Goalkeepers" className="w-full">
-          <div className="flex justify-center mb-12">
-            <TabsList className="bg-card border border-white/10 h-auto p-1 flex-wrap gap-1">
+          <div className="mb-8 overflow-x-auto scrollbar-none -mx-4 px-4">
+            <TabsList className="bg-card border border-white/10 h-auto p-1 gap-1 inline-flex min-w-max w-full sm:w-auto sm:mx-auto sm:flex sm:justify-center">
               {tabs.map(tab => (
                 <TabsTrigger
                   key={tab}
                   value={tab}
-                  className="px-5 py-3 uppercase tracking-wider font-bold text-sm data-[state=active]:bg-primary data-[state=active]:text-black"
+                  className="px-3 sm:px-5 py-2.5 uppercase tracking-wider font-bold text-xs sm:text-sm whitespace-nowrap data-[state=active]:bg-primary data-[state=active]:text-black"
                 >
                   {tab}
                 </TabsTrigger>

@@ -50,37 +50,6 @@ export default function Gallery() {
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="sticky top-16 z-30 bg-background/95 backdrop-blur border-b border-white/5 py-3">
-        <div className="container mx-auto px-4 flex items-center gap-3 flex-wrap">
-          {CATEGORIES.map(c => (
-            <button
-              key={c}
-              onClick={() => setCategory(c === "All" ? undefined : c)}
-              className={`px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider transition-colors ${
-                (c === "All" && !category) || category === c
-                  ? "bg-primary text-black"
-                  : "bg-white/5 text-muted-foreground hover:bg-white/10"
-              }`}
-            >
-              {c}
-            </button>
-          ))}
-          <div className="ml-auto flex gap-2">
-            {(["photo", "video"] as const).map(t => (
-              <button
-                key={t}
-                onClick={() => setType(type === t ? undefined : t)}
-                className={`px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider transition-colors ${
-                  type === t ? "bg-primary text-black" : "bg-white/5 text-muted-foreground hover:bg-white/10"
-                }`}
-              >
-                {t === "photo" ? "📷 Photos" : "🎬 Videos"}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
 
       {/* Gallery Grid */}
       <div className="container mx-auto px-4 py-12">

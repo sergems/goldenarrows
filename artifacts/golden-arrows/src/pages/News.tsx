@@ -34,7 +34,7 @@ export default function News() {
       <div className="container mx-auto px-4 py-12">
         {/* Filters */}
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-10">
-          <div className="flex gap-2 flex-wrap justify-center">
+          <div className="hidden md:flex gap-2 flex-wrap">
             {CATEGORIES.map(cat => (
               <button
                 key={cat}
