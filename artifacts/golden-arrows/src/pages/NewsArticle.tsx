@@ -1,13 +1,9 @@
 import { useGetNewsArticle, useListNews } from "@workspace/api-client-react";
 import { useParams, Link } from "wouter";
 import { format } from "date-fns";
-import { ArrowLeft, Share2, Copy, Check, Facebook, Twitter, MessageCircle } from "lucide-react";
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { ArrowLeft, Facebook, Twitter, MessageCircle } from "lucide-react";
 
 function ShareBar({ title, url }: { title: string; url: string }) {
-  const [copied, setCopied] = useState(false);
-
   const encoded = encodeURIComponent(url);
   const encodedTitle = encodeURIComponent(title);
 
@@ -32,34 +28,10 @@ function ShareBar({ title, url }: { title: string; url: string }) {
     },
   ];
 
-  async function handleNativeShare() {
-    if (navigator.share) {
-      try {
-        await navigator.share({ title, url });
-      } catch {}
-    }
-  }
-
-  async function copyLink() {
-    await navigator.clipboard.writeText(url);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }
-
   return (
     <div className="mt-10 pt-8 border-t border-white/5">
       <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Share this article</p>
       <div className="flex flex-wrap gap-2">
-        {/* Native share — only renders on mobile where navigator.share is available */}
-        {"share" in navigator && (
-          <button
-            onClick={handleNativeShare}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-black text-xs font-bold uppercase tracking-wider hover:bg-primary/90 transition-colors"
-          >
-            <Share2 className="h-3.5 w-3.5" /> Share
-          </button>
-        )}
-
         {shareLinks.map(s => (
           <a
             key={s.label}
@@ -71,14 +43,6 @@ function ShareBar({ title, url }: { title: string; url: string }) {
             {s.icon} {s.label}
           </a>
         ))}
-
-        <button
-          onClick={copyLink}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs font-bold uppercase tracking-wider hover:bg-white/10 transition-colors"
-        >
-          {copied ? <Check className="h-3.5 w-3.5 text-primary" /> : <Copy className="h-3.5 w-3.5" />}
-          {copied ? "Copied!" : "Copy Link"}
-        </button>
       </div>
     </div>
   );
