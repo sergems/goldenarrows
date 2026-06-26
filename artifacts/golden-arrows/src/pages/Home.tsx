@@ -300,7 +300,6 @@ function NormalHero() {
         ) : (
           <img src={heroStadium} alt="Stadium" className="w-full h-full object-cover" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30 opacity-50" />
       </div>
 
       {/* Per-slide text — animated on each slide change */}
@@ -425,14 +424,14 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex items-center gap-4 font-display min-w-0">
-              <div className="flex items-center gap-2 min-w-0">
+            <div className="flex items-center gap-4 font-display">
+              <div className="flex items-center gap-2">
                 <TeamCrest name={nextFixture.homeTeam} size="lg" bare />
-                <span className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl truncate" style={{ letterSpacing: "0.04em" }}>{nextFixture.homeTeam}</span>
+                <span className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl" style={{ letterSpacing: "0.04em" }}>{nextFixture.homeTeam}</span>
               </div>
               <span className="text-white/40 text-sm bg-white/5 border border-white/10 px-3 py-1.5 rounded tracking-widest flex-shrink-0">VS</span>
-              <div className="flex items-center gap-2 min-w-0">
-                <span className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl truncate" style={{ letterSpacing: "0.04em" }}>{nextFixture.awayTeam}</span>
+              <div className="flex items-center gap-2">
+                <span className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl" style={{ letterSpacing: "0.04em" }}>{nextFixture.awayTeam}</span>
                 <TeamCrest name={nextFixture.awayTeam} size="lg" bare />
               </div>
             </div>
