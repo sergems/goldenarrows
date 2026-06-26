@@ -283,84 +283,118 @@ function NormalHero() {
 
   const currentSlide = active[idx];
 
-  const sectionCls = "relative h-[60vh] sm:h-[65vh] md:h-[80vh] min-h-[400px] md:min-h-[600px] w-full overflow-hidden flex items-end sm:items-center pb-10 sm:pb-0";
-
-  // While loading, show a dark placeholder to prevent the flash of fallback content
   if (isLoading) {
-    return (
-      <section className={sectionCls}>
-        <div className="absolute inset-0 bg-background" />
-      </section>
-    );
+    return <section className="relative w-full bg-background sm:h-[65vh] md:h-[80vh] sm:min-h-[600px]" />;
   }
 
+  const titleNode = currentSlide
+    ? currentSlide.title.includes(" ")
+      ? (
+        <>
+          {currentSlide.title.split(" ").slice(0, -1).join(" ")}{" "}
+          <span className="text-primary">{currentSlide.title.split(" ").slice(-1)[0]}</span>
+        </>
+      )
+      : <span className="text-primary">{currentSlide.title}</span>
+    : null;
+
   return (
-    <section className={sectionCls}>
-      {/* Background images */}
-      <div className="absolute inset-0 z-0">
+    <section className="relative w-full bg-background overflow-hidden">
+      {/* Desktop-only height spacer */}
+      <div className="hidden sm:block h-[65vh] md:h-[80vh] min-h-[600px]" />
+
+      {/* Images
+          Mobile  — active slide is in-flow (sets natural height); others are absolute (hidden)
+          Desktop — all slides are absolute, filling the spacer above */}
+      <div className="sm:absolute sm:inset-0 sm:z-0 relative">
         {active.length > 0 ? (
           active.map((slide, i) => (
             <div
               key={slide.id}
-              className="absolute inset-0 transition-opacity duration-1000"
+              className={`transition-opacity duration-1000 ${
+                i === idx
+                  ? "relative sm:absolute sm:inset-0"
+                  : "absolute inset-0 pointer-events-none"
+              }`}
               style={{ opacity: i === idx ? 1 : 0 }}
             >
-              <img src={slide.imageUrl} alt={slide.title} className="w-full h-full object-cover object-top" />
+              <img
+                src={slide.imageUrl}
+                alt={slide.title}
+                className="w-full h-auto sm:h-full sm:object-cover sm:object-top"
+              />
             </div>
           ))
         ) : (
-          <img src={heroStadium} alt="Stadium" className="w-full h-full object-cover object-top" />
+          <img
+            src={heroStadium}
+            alt="Stadium"
+            className="w-full h-auto sm:h-full sm:object-cover sm:object-top"
+          />
         )}
       </div>
 
-      {/* Per-slide text — animated on each slide change */}
-      <div className="container relative z-10 mx-auto px-4 text-left sm:text-center">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentSlide ? currentSlide.id : "default"}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.6 }}
-          >
-            {currentSlide ? (
-              <>
-                <h1 className="font-display text-4xl sm:text-6xl md:text-8xl lg:text-9xl text-white uppercase mb-3 drop-shadow-lg leading-none" style={{ letterSpacing: "0.06em" }}>
-                  {currentSlide.title.includes(" ") ? (
-                    <>
-                      {currentSlide.title.split(" ").slice(0, -1).join(" ")}{" "}
-                      <span className="text-primary">
-                        {currentSlide.title.split(" ").slice(-1)[0]}
-                      </span>
-                    </>
-                  ) : (
-                    <span className="text-primary">{currentSlide.title}</span>
+      {/* Gradient overlay (desktop only) */}
+      <div className="hidden sm:block absolute inset-0 z-[1] bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+      {/* Text
+          Mobile  — sits below the image, on the dark page background
+          Desktop — absolute centre overlay */}
+      <div className="relative sm:absolute sm:inset-0 sm:z-10 sm:flex sm:items-center sm:justify-center bg-background sm:bg-transparent px-4 py-6 sm:py-0">
+        <div className="container mx-auto text-left sm:text-center">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentSlide ? currentSlide.id : "default"}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.6 }}
+            >
+              {currentSlide ? (
+                <>
+                  <h1
+                    className="font-display text-4xl sm:text-6xl md:text-8xl lg:text-9xl text-white uppercase mb-3 drop-shadow-lg leading-none"
+                    style={{ letterSpacing: "0.06em" }}
+                  >
+                    {titleNode}
+                  </h1>
+                  {currentSlide.subtitle && (
+                    <p className="text-sm sm:text-lg md:text-xl text-white/80 font-medium mb-4 sm:mb-10 max-w-xl sm:mx-auto">
+                      {currentSlide.subtitle}
+                    </p>
                   )}
-                </h1>
-                {currentSlide.subtitle && (
-                  <p className="text-sm sm:text-lg md:text-xl text-white/80 font-medium mb-6 sm:mb-10 max-w-xl mx-auto sm:mx-auto">
-                    {currentSlide.subtitle}
-                  </p>
-                )}
-                {currentSlide.link && currentSlide.linkLabel && (
-                  <div className="flex flex-wrap justify-center gap-4">
-                    <Link
-                      href={currentSlide.link}
-                      className="bg-primary text-black font-bold uppercase tracking-wider px-8 py-4 rounded-sm hover:bg-primary/90 transition-colors"
-                    >
-                      {currentSlide.linkLabel}
-                    </Link>
-                  </div>
-                )}
-              </>
-            ) : null}
-          </motion.div>
-        </AnimatePresence>
+                  {currentSlide.link && currentSlide.linkLabel && (
+                    <div className="flex flex-wrap sm:justify-center gap-4">
+                      <Link
+                        href={currentSlide.link}
+                        className="bg-primary text-black font-bold uppercase tracking-wider px-8 py-4 rounded-sm hover:bg-primary/90 transition-colors"
+                      >
+                        {currentSlide.linkLabel}
+                      </Link>
+                    </div>
+                  )}
+                  {/* Slide dots — shown inline below text on mobile */}
+                  {active.length > 1 && (
+                    <div className="sm:hidden flex gap-2 mt-5">
+                      {active.map((_, i) => (
+                        <button
+                          key={i}
+                          onClick={() => setIdx(i)}
+                          className={`rounded-full transition-all duration-300 ${i === idx ? "w-6 h-2 bg-primary" : "w-2 h-2 bg-white/20 hover:bg-white/40"}`}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : null}
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
 
-      {/* Dot navigation */}
+      {/* Dot navigation — desktop only, pinned to bottom of section */}
       {active.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        <div className="hidden sm:flex absolute bottom-4 left-1/2 -translate-x-1/2 z-20 gap-2">
           {active.map((_, i) => (
             <button
               key={i}
