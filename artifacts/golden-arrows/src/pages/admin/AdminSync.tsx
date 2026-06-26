@@ -3,7 +3,7 @@ import { AdminLayout } from "./AdminLayout";
 import { useSyncFixtures, useSyncResults, useSyncTable } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { getListFixturesQueryKey, getListResultsQueryKey, getGetLeagueTableQueryKey } from "@workspace/api-client-react";
-import { RefreshCw, CheckCircle, AlertCircle, Calendar, Swords, TableProperties, Info, Clock } from "lucide-react";
+import { RefreshCw, CheckCircle, AlertCircle, Calendar, Swords, TableProperties, Info, Clock, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type SyncStatus = "idle" | "loading" | "success" | "error";
@@ -14,24 +14,25 @@ interface SyncState {
   note?: string;
 }
 
-const SCHEDULE = [
-  { label: "15:00 SAST", utc: "13:00 UTC" },
-  { label: "18:00 SAST", utc: "16:00 UTC" },
-  { label: "20:00 SAST", utc: "18:00 UTC" },
-  { label: "22:00 SAST", utc: "20:00 UTC" },
-];
+const TABLE_SCHEDULE_SLOTS = Array.from({ length: 23 }, (_, i) => {
+  const h = 12 + Math.floor(i / 2);
+  const m = i % 2 === 0 ? "00" : "30";
+  return `${h}:${m}`;
+});
 
 function SyncCard({
   icon: Icon,
   title,
   description,
   state,
+  badge,
   onSync,
 }: {
   icon: React.ElementType;
   title: string;
   description: string;
   state: SyncState;
+  badge?: React.ReactNode;
   onSync: () => void;
 }) {
   return (
@@ -41,7 +42,10 @@ function SyncCard({
           <Icon className="h-5 w-5 text-primary" />
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-display font-bold text-base uppercase tracking-tight">{title}</h3>
+          <div className="flex items-center gap-2 flex-wrap">
+            <h3 className="font-display font-bold text-base uppercase tracking-tight">{title}</h3>
+            {badge}
+          </div>
           <p className="text-sm text-muted-foreground mt-0.5">{description}</p>
         </div>
       </div>
@@ -139,19 +143,18 @@ export default function AdminSync() {
   }
 
   async function handleSyncTable() {
-    setTableState({ status: "loading", message: "Pulling PSL standings from Football API…" });
+    setTableState({ status: "loading", message: "Fetching live PSL standings from ScoreAxis…" });
     try {
       const data = await syncTable.mutateAsync({});
       qc.invalidateQueries({ queryKey: getGetLeagueTableQueryKey() });
       setTableState({
         status: "success",
-        message: `Synced ${data.synced} teams in the league table from the ${data.season} season.`,
-        note: data.note,
+        message: `Updated ${data.synced} teams in the 2025/2026 league table.`,
       });
     } catch (err) {
       setTableState({
         status: "error",
-        message: err instanceof Error ? err.message : "Sync failed. Check your FOOTBALL_API_KEY.",
+        message: err instanceof Error ? err.message : "Sync failed.",
       });
     }
   }
@@ -175,7 +178,7 @@ export default function AdminSync() {
         <div>
           <h1 className="font-display font-bold text-3xl uppercase tracking-tight">Live Data Sync</h1>
           <p className="text-muted-foreground mt-1">
-            Pull the latest fixtures, results, and standings from the PSL Football API.
+            Manually refresh fixtures, results, and PSL standings at any time.
           </p>
         </div>
         <Button onClick={handleSyncAll} disabled={anyLoading} size="lg">
@@ -187,34 +190,44 @@ export default function AdminSync() {
         </Button>
       </div>
 
-      {/* Auto-sync schedule banner */}
-      <div className="bg-card border border-white/5 rounded-xl p-5 mb-6">
-        <div className="flex items-center gap-2 mb-3">
-          <Clock className="h-4 w-4 text-primary" />
-          <span className="font-display font-bold text-sm uppercase tracking-wider">Auto-Sync Schedule</span>
+      {/* Table auto-sync schedule banner */}
+      <div className="bg-card border border-white/5 rounded-xl p-5 mb-4">
+        <div className="flex items-center gap-2 mb-3 flex-wrap">
+          <Zap className="h-4 w-4 text-primary" />
+          <span className="font-display font-bold text-sm uppercase tracking-wider">League Table — Auto-Sync</span>
           <span className="ml-auto text-xs bg-green-500/15 text-green-400 border border-green-500/20 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Active</span>
         </div>
+        <p className="text-xs text-muted-foreground mb-3">
+          Standings are fetched from <span className="text-white font-semibold">ScoreAxis</span> every <span className="text-white font-semibold">30 minutes</span> during the match window — no API key required.
+        </p>
+        <div className="flex flex-wrap gap-1.5">
+          {TABLE_SCHEDULE_SLOTS.map(t => (
+            <span key={t} className="text-[11px] font-bold font-mono bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 rounded">
+              {t}
+            </span>
+          ))}
+          <span className="text-[11px] text-muted-foreground self-center ml-1">SAST</span>
+        </div>
+      </div>
+
+      {/* Football API schedule banner */}
+      <div className="bg-card border border-white/5 rounded-xl p-5 mb-6">
+        <div className="flex items-center gap-2 mb-3">
+          <Clock className="h-4 w-4 text-muted-foreground" />
+          <span className="font-display font-bold text-sm uppercase tracking-wider text-muted-foreground">Fixtures &amp; Results — Auto-Sync</span>
+          <span className="ml-auto text-xs bg-white/5 text-white/50 border border-white/10 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">4× Daily</span>
+        </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {SCHEDULE.map(s => (
-            <div key={s.label} className="bg-background rounded-lg border border-white/5 px-3 py-2.5 text-center">
-              <div className="font-display font-black text-lg text-primary">{s.label}</div>
-              <div className="text-xs text-muted-foreground mt-0.5">{s.utc}</div>
+          {["15:00", "18:00", "20:00", "22:00"].map(t => (
+            <div key={t} className="bg-background rounded-lg border border-white/5 px-3 py-2.5 text-center">
+              <div className="font-display font-black text-lg text-white/60">{t} SAST</div>
             </div>
           ))}
         </div>
         <p className="text-xs text-muted-foreground mt-3 flex items-start gap-1.5">
           <Info className="h-3 w-3 flex-shrink-0 mt-0.5" />
-          All three datasets (fixtures, results, table) are synced automatically at these times every day. You can still trigger a manual sync at any time above.
+          Requires a <code className="text-white/60 font-mono text-xs bg-white/5 px-1 rounded">FOOTBALL_API_KEY</code> secret. Free plan covers completed seasons only.
         </p>
-      </div>
-
-      <div className="bg-primary/5 border border-primary/20 rounded-xl px-5 py-4 mb-8 flex items-start gap-3 text-sm">
-        <Info className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
-        <div className="text-white/80">
-          Data is sourced from <span className="font-bold text-white">API-Sports (v3.football.api-sports.io)</span> using
-          your <code className="text-primary font-mono text-xs bg-primary/10 px-1.5 py-0.5 rounded">FOOTBALL_API_KEY</code>.
-          Free plan users can access completed seasons only. Syncing will not overwrite manually entered data that already exists.
-        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -235,8 +248,13 @@ export default function AdminSync() {
         <SyncCard
           icon={TableProperties}
           title="League Table"
-          description="Full PSL standings including all teams, points, goal difference, and form."
+          description="Live 2025/2026 PSL standings pulled directly from ScoreAxis — always up to date."
           state={tableState}
+          badge={
+            <span className="text-[10px] bg-primary/15 text-primary border border-primary/25 px-1.5 py-0.5 rounded uppercase tracking-wider font-bold">
+              ScoreAxis
+            </span>
+          }
           onSync={handleSyncTable}
         />
       </div>

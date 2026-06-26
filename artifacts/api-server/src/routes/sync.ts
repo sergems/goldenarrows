@@ -30,24 +30,11 @@ router.post("/sync/results", async (_req, res) => {
 });
 
 router.post("/sync/table", async (_req, res) => {
-  if (!process.env.FOOTBALL_API_KEY) {
-    res.status(503).json({ error: "FOOTBALL_API_KEY not set" });
-    return;
-  }
-  try {
-    const result = await runSyncTable();
-    res.json(result);
-  } catch (err: unknown) {
-    res.status(500).json({ error: err instanceof Error ? err.message : "Sync failed" });
-  }
-});
-
-router.post("/sync/scoreaxis-table", async (_req, res) => {
   try {
     const result = await runSyncScoreAxisTable();
     res.json(result);
   } catch (err: unknown) {
-    res.status(500).json({ error: err instanceof Error ? err.message : "ScoreAxis sync failed" });
+    res.status(500).json({ error: err instanceof Error ? err.message : "Sync failed" });
   }
 });
 

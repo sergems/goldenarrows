@@ -1,6 +1,7 @@
 import { db } from "@workspace/db";
 import { fixturesTable, resultsTable, leagueTableTable } from "@workspace/db";
 import { and, gte, lte } from "drizzle-orm";
+import { execFile } from "child_process";
 
 const API_KEY = process.env.FOOTBALL_API_KEY;
 const BASE = "https://v3.football.api-sports.io";
@@ -143,13 +144,6 @@ const SCOREAXIS_WIDGET_URL =
   "&position=1&goals=1&gamesCount=1&diff=1&winCount=1&drawCount=1&loseCount=1" +
   "&lastGames=1&points=1&teamsLimit=all&links=0";
 
-const SCOREAXIS_HEADERS = {
-  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-  "Accept": "*/*",
-  "Accept-Language": "en-US,en;q=0.9",
-  "Referer": "https://www.scoreaxis.com/",
-};
-
 function parseScoreAxisWidget(raw: string): Array<{
   position: number; team: string; logoUrl: string | null;
   played: number; won: number; drawn: number; lost: number;
@@ -192,10 +186,27 @@ function parseScoreAxisWidget(raw: string): Array<{
   return teams;
 }
 
+function curlFetch(url: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    execFile("curl", [
+      "-s",
+      "--max-time", "20",
+      "-A", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "-H", "Accept: text/javascript, application/javascript, */*; q=0.01",
+      "-H", "Accept-Language: en-US,en;q=0.9",
+      "-H", "Referer: https://www.scoreaxis.com/",
+      "-H", "X-Requested-With: XMLHttpRequest",
+      url,
+    ], { maxBuffer: 5 * 1024 * 1024 }, (err, stdout, stderr) => {
+      if (err) return reject(new Error(`curl error: ${err.message}`));
+      if (!stdout) return reject(new Error(`curl returned empty response. stderr: ${stderr}`));
+      resolve(stdout);
+    });
+  });
+}
+
 export async function runSyncScoreAxisTable(): Promise<{ synced: number; source: string }> {
-  const res = await fetch(SCOREAXIS_WIDGET_URL, { headers: SCOREAXIS_HEADERS });
-  if (!res.ok) throw new Error(`ScoreAxis fetch failed: ${res.status}`);
-  const raw = await res.text();
+  const raw = await curlFetch(SCOREAXIS_WIDGET_URL);
 
   const teams = parseScoreAxisWidget(raw);
   if (teams.length === 0) throw new Error("ScoreAxis: no team data found in widget response");
