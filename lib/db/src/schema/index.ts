@@ -8,3 +8,4 @@ export * from "./sponsors";
 export * from "./league";
 export * from "./enquiries";
 export * from "./slides";
+export * from "./ads";

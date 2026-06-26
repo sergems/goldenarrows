@@ -32,8 +32,68 @@ tags:
     description: Contact form enquiries
   - name: sync
     description: Live data sync from Football API
+  - name: ads
+    description: Ad banner slots for Fixtures, Results, and League Table pages
 
 paths:
+  # ── ADS ───────────────────────────────────────────────────────────────────
+  /ads:
+    get:
+      operationId: listAds
+      tags: [ads]
+      summary: List all ad slots
+      responses:
+        "200":
+          description: All ad slots
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Ad"
+
+  /ads/{slot}:
+    get:
+      operationId: getAd
+      tags: [ads]
+      summary: Get a single ad slot
+      parameters:
+        - in: path
+          name: slot
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Ad slot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ad"
+        "404":
+          description: Not found
+    put:
+      operationId: updateAd
+      tags: [ads]
+      summary: Update an ad slot (admin)
+      parameters:
+        - in: path
+          name: slot
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdUpdate"
+      responses:
+        "200":
+          description: Updated ad slot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ad"
+
   /healthz:
     get:
       operationId: healthCheck
@@ -954,3 +1014,22 @@ components:
         topScorerGoals: { type: integer }
         cleanSheets: { type: integer }
         winRate: { type: number }
+
+    # ── ADS ───────────────────────────────────────────────────────────────
+    Ad:
+      type: object
+      required: [id, slot, updatedAt]
+      properties:
+        id: { type: integer }
+        slot: { type: string }
+        imageUrl: { type: string, nullable: true }
+        linkUrl: { type: string, nullable: true }
+        altText: { type: string, nullable: true }
+        updatedAt: { type: string }
+
+    AdUpdate:
+      type: object
+      properties:
+        imageUrl: { type: string, nullable: true }
+        linkUrl: { type: string, nullable: true }
+        altText: { type: string, nullable: true }

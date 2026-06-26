@@ -20,6 +20,8 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  Ad,
+  AdUpdate,
   Enquiry,
   EnquiryInput,
   EnquiryUpdate,
@@ -61,6 +63,232 @@ type AwaitedInput<T> = PromiseLike<T> | T;
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
+
+export const getListAdsUrl = () => {
+
+
+
+
+  return `/api/ads`
+}
+
+/**
+ * @summary List all ad slots
+ */
+export const listAds = async ( options?: RequestInit): Promise<Ad[]> => {
+
+  return customFetch<Ad[]>(getListAdsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListAdsQueryKey = () => {
+    return [
+    `/api/ads`
+    ] as const;
+    }
+
+
+export const getListAdsQueryOptions = <TData = Awaited<ReturnType<typeof listAds>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listAds>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListAdsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listAds>>> = ({ signal }) => listAds({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listAds>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListAdsQueryResult = NonNullable<Awaited<ReturnType<typeof listAds>>>
+export type ListAdsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List all ad slots
+ */
+
+export function useListAds<TData = Awaited<ReturnType<typeof listAds>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listAds>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListAdsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getGetAdUrl = (slot: string,) => {
+
+
+
+
+  return `/api/ads/${slot}`
+}
+
+/**
+ * @summary Get a single ad slot
+ */
+export const getAd = async (slot: string, options?: RequestInit): Promise<Ad> => {
+
+  return customFetch<Ad>(getGetAdUrl(slot),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetAdQueryKey = (slot: string,) => {
+    return [
+    `/api/ads/${slot}`
+    ] as const;
+    }
+
+
+export const getGetAdQueryOptions = <TData = Awaited<ReturnType<typeof getAd>>, TError = ErrorType<void>>(slot: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAd>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdQueryKey(slot);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAd>>> = ({ signal }) => getAd(slot, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(slot), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAd>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAdQueryResult = NonNullable<Awaited<ReturnType<typeof getAd>>>
+export type GetAdQueryError = ErrorType<void>
+
+
+/**
+ * @summary Get a single ad slot
+ */
+
+export function useGetAd<TData = Awaited<ReturnType<typeof getAd>>, TError = ErrorType<void>>(
+ slot: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAd>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetAdQueryOptions(slot,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getUpdateAdUrl = (slot: string,) => {
+
+
+
+
+  return `/api/ads/${slot}`
+}
+
+/**
+ * @summary Update an ad slot (admin)
+ */
+export const updateAd = async (slot: string,
+    adUpdate: AdUpdate, options?: RequestInit): Promise<Ad> => {
+
+  return customFetch<Ad>(getUpdateAdUrl(slot),
+  {
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      adUpdate,)
+  }
+);}
+
+
+
+
+export const getUpdateAdMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAd>>, TError,{slot: string;data: BodyType<AdUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateAd>>, TError,{slot: string;data: BodyType<AdUpdate>}, TContext> => {
+
+const mutationKey = ['updateAd'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAd>>, {slot: string;data: BodyType<AdUpdate>}> = (props) => {
+          const {slot,data} = props ?? {};
+
+          return  updateAd(slot,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateAdMutationResult = NonNullable<Awaited<ReturnType<typeof updateAd>>>
+    export type UpdateAdMutationBody = BodyType<AdUpdate>
+    export type UpdateAdMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Update an ad slot (admin)
+ */
+export const useUpdateAd = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAd>>, TError,{slot: string;data: BodyType<AdUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof updateAd>>,
+        TError,
+        {slot: string;data: BodyType<AdUpdate>},
+        TContext
+      > => {
+      return useMutation(getUpdateAdMutationOptions(options));
+    }
 
 export const getHealthCheckUrl = () => {
 

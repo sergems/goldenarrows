@@ -6,6 +6,8 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from './ad';
+export * from './adUpdate';
 export * from './enquiry';
 export * from './enquiryInput';
 export * from './enquiryStatus';

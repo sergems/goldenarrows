@@ -296,6 +296,21 @@ export interface StatsSummary {
   winRate?: number;
 }
 
+export interface Ad {
+  id: number;
+  slot: string;
+  imageUrl?: string | null;
+  linkUrl?: string | null;
+  altText?: string | null;
+  updatedAt: string;
+}
+
+export interface AdUpdate {
+  imageUrl?: string | null;
+  linkUrl?: string | null;
+  altText?: string | null;
+}
+
 export type ListEnquiriesParams = {
 status?: string;
 limit?: number;

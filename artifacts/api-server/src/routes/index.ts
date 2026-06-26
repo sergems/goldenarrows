@@ -16,6 +16,7 @@ import syncRouter from "./sync";
 import socialRouter from "./social";
 import adminRouter from "./admin";
 import teamsRouter from "./teams";
+import adsRouter from "./ads";
 
 const router: IRouter = Router();
 
@@ -36,5 +37,6 @@ router.use(sponsorsRouter);
 router.use(statsRouter);
 router.use(syncRouter);
 router.use(socialRouter);
+router.use(adsRouter);
 
 export default router;

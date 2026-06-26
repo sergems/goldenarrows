@@ -9,6 +9,60 @@ import * as zod from 'zod';
 
 
 /**
+ * @summary List all ad slots
+ */
+export const ListAdsResponseItem = zod.object({
+  "id": zod.number(),
+  "slot": zod.string(),
+  "imageUrl": zod.string().nullish(),
+  "linkUrl": zod.string().nullish(),
+  "altText": zod.string().nullish(),
+  "updatedAt": zod.string()
+})
+export const ListAdsResponse = zod.array(ListAdsResponseItem)
+
+
+/**
+ * @summary Get a single ad slot
+ */
+export const GetAdParams = zod.object({
+  "slot": zod.coerce.string()
+})
+
+export const GetAdResponse = zod.object({
+  "id": zod.number(),
+  "slot": zod.string(),
+  "imageUrl": zod.string().nullish(),
+  "linkUrl": zod.string().nullish(),
+  "altText": zod.string().nullish(),
+  "updatedAt": zod.string()
+})
+
+
+/**
+ * @summary Update an ad slot (admin)
+ */
+export const UpdateAdParams = zod.object({
+  "slot": zod.coerce.string()
+})
+
+export const UpdateAdBody = zod.object({
+  "imageUrl": zod.string().nullish(),
+  "linkUrl": zod.string().nullish(),
+  "altText": zod.string().nullish()
+})
+
+export const UpdateAdResponse = zod.object({
+  "id": zod.number(),
+  "slot": zod.string(),
+  "imageUrl": zod.string().nullish(),
+  "linkUrl": zod.string().nullish(),
+  "altText": zod.string().nullish(),
+  "updatedAt": zod.string()
+})
+
+
+/**
  * @summary Health check
  */
 export const HealthCheckResponse = zod.object({
