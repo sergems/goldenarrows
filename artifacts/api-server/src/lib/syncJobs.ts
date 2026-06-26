@@ -16,13 +16,14 @@ async function apiFetch(path: string) {
 }
 
 export async function getLatestAccessibleSeason(): Promise<number> {
-  for (const year of [2024, 2023, 2022]) {
+  const currentYear = new Date().getFullYear();
+  for (const year of [currentYear, currentYear - 1, currentYear - 2, currentYear - 3]) {
     try {
       const data = await apiFetch(`/standings?league=${PSL_LEAGUE_ID}&season=${year}`);
       if (data.response?.[0]?.league?.standings?.[0]?.length > 0) return year;
     } catch { /* try next */ }
   }
-  return 2024;
+  return currentYear - 1;
 }
 
 export async function runSyncFixtures() {
