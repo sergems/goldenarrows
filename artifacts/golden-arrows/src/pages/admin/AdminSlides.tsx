@@ -64,8 +64,8 @@ function SlideForm({
             onChange={url => setForm(f => ({ ...f, imageUrl: url }))}
           />
           <div>
-            <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Slide Title *</label>
-            <Input name="title" value={form.title} onChange={handle} required placeholder="e.g. Abafana Bes'thende" />
+            <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Slide Title</label>
+            <Input name="title" value={form.title} onChange={handle} placeholder="e.g. Abafana Bes'thende" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Subtitle</label>
