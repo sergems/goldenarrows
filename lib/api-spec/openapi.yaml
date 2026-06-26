@@ -676,32 +676,6 @@ paths:
                 $ref: "#/components/schemas/StatsSummary"
 
   # ── SYNC ──────────────────────────────────────────────────────────────────
-  /sync/fixtures:
-    post:
-      operationId: syncFixtures
-      tags: [sync]
-      summary: Pull upcoming fixtures from Football API
-      responses:
-        "200":
-          description: Sync result
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SyncResult"
-
-  /sync/results:
-    post:
-      operationId: syncResults
-      tags: [sync]
-      summary: Pull completed results from Football API
-      responses:
-        "200":
-          description: Sync result
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SyncResult"
-
   /sync/table:
     post:
       operationId: syncTable

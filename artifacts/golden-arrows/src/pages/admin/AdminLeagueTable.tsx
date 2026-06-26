@@ -39,7 +39,7 @@ export default function AdminLeagueTable() {
     setLoading(true);
     const res = await fetch("/api/league/table");
     const data = await res.json();
-    setRows(data);
+    setRows(data?.entries ?? data);
     setLoading(false);
   };
 
@@ -87,7 +87,7 @@ export default function AdminLeagueTable() {
           </Button>
           <Button variant="outline" onClick={syncFromApi} disabled={syncing || loading} className="flex items-center gap-2" title="Pull live standings from API-Football">
             <RefreshCw className={`h-4 w-4 ${syncing ? "animate-spin" : ""}`} />
-            {syncing ? "Syncing…" : "Sync from API"}
+            {syncing ? "Syncing…" : "Sync from ScoreAxis"}
           </Button>
           <Button onClick={save} disabled={saving || loading} className="flex items-center gap-2">
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
@@ -104,9 +104,6 @@ export default function AdminLeagueTable() {
         }`}>
           <AlertCircle className="h-4 w-4 flex-shrink-0" />
           {syncMsg.text}
-          {syncMsg.type === "err" && syncMsg.text.includes("FOOTBALL_API_KEY") && (
-            <span className="ml-1">— add it as a secret in your Replit environment.</span>
-          )}
         </div>
       )}
 

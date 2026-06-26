@@ -255,7 +255,7 @@ export default function AdminDashboard() {
   const { data: enquiries } = useListEnquiries({ limit: 50 });
   const { data: unreadEnquiries } = useListEnquiries({ status: "unread" });
   const { data: nextFixture } = useGetNextFixture();
-  const gaRow = table?.find(r => r.isGoldenArrows);
+  const gaRow = table?.entries?.find(r => r.isGoldenArrows);
   const unreadCount = unreadEnquiries?.length ?? 0;
 
   const CARDS = [
