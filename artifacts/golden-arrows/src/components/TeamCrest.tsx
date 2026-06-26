@@ -7,6 +7,8 @@ interface TeamCrestProps {
   logoUrl?: string | null;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   className?: string;
+  /** no circle background — just the raw image */
+  bare?: boolean;
 }
 
 const SIZE_MAP = {
@@ -17,7 +19,7 @@ const SIZE_MAP = {
   xl: { outer: "h-20 w-20", img: "h-18 w-18", text: "text-lg" },
 };
 
-export function TeamCrest({ name, logoUrl, size = "md", className = "" }: TeamCrestProps) {
+export function TeamCrest({ name, logoUrl, size = "md", className = "", bare = false }: TeamCrestProps) {
   const resolved = logoUrl ?? getTeamLogo(name);
   const [failed, setFailed] = useState(false);
   const { outer, img, text } = SIZE_MAP[size];
@@ -27,6 +29,16 @@ export function TeamCrest({ name, logoUrl, size = "md", className = "" }: TeamCr
     name.toLowerCase().includes("lamontville");
 
   if (resolved && !failed) {
+    if (bare) {
+      return (
+        <img
+          src={resolved}
+          alt={name}
+          className={`${outer} object-contain flex-shrink-0 ${className}`}
+          onError={() => setFailed(true)}
+        />
+      );
+    }
     return (
       <div
         className={`${outer} rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden bg-white/5 ${className}`}

@@ -425,15 +425,15 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex items-center gap-6 font-display">
-              <div className="flex items-center gap-3">
-                <TeamCrest name={nextFixture.homeTeam} size="lg" />
-                <span className="text-xl md:text-3xl" style={{ letterSpacing: "0.04em" }}>{nextFixture.homeTeam}</span>
+            <div className="flex items-center gap-4 font-display min-w-0">
+              <div className="flex items-center gap-2 min-w-0">
+                <TeamCrest name={nextFixture.homeTeam} size="lg" bare />
+                <span className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl truncate" style={{ letterSpacing: "0.04em" }}>{nextFixture.homeTeam}</span>
               </div>
-              <span className="text-white/40 text-sm bg-white/5 border border-white/10 px-3 py-1.5 rounded tracking-widest">VS</span>
-              <div className="flex items-center gap-3">
-                <span className="text-xl md:text-3xl" style={{ letterSpacing: "0.04em" }}>{nextFixture.awayTeam}</span>
-                <TeamCrest name={nextFixture.awayTeam} size="lg" />
+              <span className="text-white/40 text-sm bg-white/5 border border-white/10 px-3 py-1.5 rounded tracking-widest flex-shrink-0">VS</span>
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl truncate" style={{ letterSpacing: "0.04em" }}>{nextFixture.awayTeam}</span>
+                <TeamCrest name={nextFixture.awayTeam} size="lg" bare />
               </div>
             </div>
 
