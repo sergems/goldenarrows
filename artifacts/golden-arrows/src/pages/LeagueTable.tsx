@@ -2,8 +2,15 @@ import { useGetLeagueTable } from "@workspace/api-client-react";
 import { motion } from "framer-motion";
 import { TeamCrest } from "@/components/TeamCrest";
 
+function seasonLabel(year: number): string {
+  if (!year) return "";
+  return `${year}/${String(year + 1).slice(2)}`;
+}
+
 export default function LeagueTable() {
-  const { data: table, isLoading } = useGetLeagueTable();
+  const { data, isLoading } = useGetLeagueTable();
+  const table = data?.entries;
+  const season = data?.season ?? 0;
 
   return (
     <div className="min-h-screen">
@@ -13,7 +20,7 @@ export default function LeagueTable() {
             PSL <span className="text-primary">League Table</span>
           </h1>
           <p className="text-muted-foreground text-xs mt-0.5">
-            Current DStv Premiership standings. Golden Arrows highlighted in gold.
+            DStv Premiership standings{season ? ` · ${seasonLabel(season)} season` : ""}. Golden Arrows highlighted in gold.
           </p>
         </div>
       </div>
@@ -95,7 +102,11 @@ export default function LeagueTable() {
         )}
 
         <div className="mt-6 text-xs text-muted-foreground text-center">
-          DStv Premiership standings &bull; Updated regularly from official PSL data
+          {season ? (
+            <>DStv Premiership &bull; {seasonLabel(season)} season &bull; Synced from official PSL data</>
+          ) : (
+            <>DStv Premiership standings &bull; Updated regularly from official PSL data</>
+          )}
         </div>
       </div>
     </div>

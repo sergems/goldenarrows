@@ -117,6 +117,7 @@ export interface MatchResult {
 }
 
 export interface LeagueTableEntry {
+  season?: number;
   position: number;
   team: string;
   /** @nullable */
@@ -130,6 +131,11 @@ export interface LeagueTableEntry {
   goalDifference: number;
   points: number;
   isGoldenArrows?: boolean;
+}
+
+export interface LeagueTableResponse {
+  season: number;
+  entries: LeagueTableEntry[];
 }
 
 export type GalleryItemType = typeof GalleryItemType[keyof typeof GalleryItemType];

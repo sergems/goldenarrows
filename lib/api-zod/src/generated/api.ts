@@ -488,7 +488,10 @@ export const GetResultResponse = zod.object({
 /**
  * @summary Get current PSL league standings
  */
-export const GetLeagueTableResponseItem = zod.object({
+export const GetLeagueTableResponse = zod.object({
+  "season": zod.number(),
+  "entries": zod.array(zod.object({
+  "season": zod.number().optional(),
   "position": zod.number(),
   "team": zod.string(),
   "logoUrl": zod.string().nullish(),
@@ -501,8 +504,8 @@ export const GetLeagueTableResponseItem = zod.object({
   "goalDifference": zod.number(),
   "points": zod.number(),
   "isGoldenArrows": zod.boolean().optional()
+}))
 })
-export const GetLeagueTableResponse = zod.array(GetLeagueTableResponseItem)
 
 
 /**

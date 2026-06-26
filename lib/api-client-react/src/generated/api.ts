@@ -27,7 +27,7 @@ import type {
   GalleryInput,
   GalleryItem,
   HealthStatus,
-  LeagueTableEntry,
+  LeagueTableResponse,
   ListEnquiriesParams,
   ListFixturesParams,
   ListGalleryParams,
@@ -2026,9 +2026,9 @@ export const getGetLeagueTableUrl = () => {
 /**
  * @summary Get current PSL league standings
  */
-export const getLeagueTable = async ( options?: RequestInit): Promise<LeagueTableEntry[]> => {
+export const getLeagueTable = async ( options?: RequestInit): Promise<LeagueTableResponse> => {
 
-  return customFetch<LeagueTableEntry[]>(getGetLeagueTableUrl(),
+  return customFetch<LeagueTableResponse>(getGetLeagueTableUrl(),
   {
     ...options,
     method: 'GET'

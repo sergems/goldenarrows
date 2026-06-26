@@ -7,6 +7,7 @@
  */
 
 export interface LeagueTableEntry {
+  season?: number;
   position: number;
   team: string;
   /** @nullable */

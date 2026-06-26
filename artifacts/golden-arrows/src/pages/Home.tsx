@@ -380,7 +380,7 @@ export default function Home() {
   const { data: news } = useListNews({ limit: 3 });
   const { data: nextFixture } = useGetNextFixture();
   const { data: recentResults } = useListResults({ limit: 7 });
-  const { data: table } = useGetLeagueTable();
+  const { data: tableData } = useGetLeagueTable();
   const { data: players } = useListPlayers();
 
   const matchToday = nextFixture ? isSameDay(nextFixture.date) : false;
@@ -557,7 +557,7 @@ export default function Home() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/5">
-                    {table?.slice(0, 10).map((row) => (
+                    {tableData?.entries?.slice(0, 10).map((row) => (
                       <tr key={row.team} className={`transition-colors ${row.isGoldenArrows ? "bg-primary/10" : "hover:bg-white/2"}`}>
                         <td className={`px-4 py-2.5 text-left text-xs font-bold ${row.isGoldenArrows ? "text-primary" : "text-white/30"}`}>
                           {row.position}

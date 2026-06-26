@@ -18,6 +18,7 @@ export * from './galleryItem';
 export * from './galleryItemType';
 export * from './healthStatus';
 export * from './leagueTableEntry';
+export * from './leagueTableResponse';
 export * from './listEnquiriesParams';
 export * from './listFixturesParams';
 export * from './listGalleryParams';

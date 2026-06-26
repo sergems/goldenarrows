@@ -4,6 +4,7 @@ import { z } from "zod/v4";
 
 export const leagueTableTable = pgTable("league_table", {
   id: serial("id").primaryKey(),
+  season: integer("season").notNull().default(0),
   position: integer("position").notNull(),
   team: text("team").notNull(),
   logoUrl: text("logo_url"),

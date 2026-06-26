@@ -1,5 +1,6 @@
 import { db } from "@workspace/db";
 import { fixturesTable, resultsTable, leagueTableTable } from "@workspace/db";
+import { and, gte, lte } from "drizzle-orm";
 
 const API_KEY = process.env.FOOTBALL_API_KEY;
 const BASE = "https://v3.football.api-sports.io";
@@ -24,6 +25,14 @@ export async function getLatestAccessibleSeason(): Promise<number> {
     } catch { /* try next */ }
   }
   return currentYear - 1;
+}
+
+/** Season year X = Aug X to Jun X+1. Returns date range as YYYY-MM-DD strings. */
+function seasonDateRange(year: number): { from: string; to: string } {
+  return {
+    from: `${year}-07-01`,
+    to: `${year + 1}-06-30`,
+  };
 }
 
 export async function runSyncFixtures() {
@@ -65,6 +74,18 @@ export async function runSyncResults() {
     league: { name: string };
   }>;
 
+  const { from, to } = seasonDateRange(season);
+
+  // Only clear and replace if the API actually returned results (guard against empty free-plan response)
+  if (matches.length > 0) {
+    await db.delete(resultsTable).where(
+      and(
+        gte(resultsTable.date, from),
+        lte(resultsTable.date, to)
+      )
+    );
+  }
+
   let inserted = 0;
   for (const m of matches) {
     const date = new Date(m.fixture.date).toISOString().slice(0, 10);
@@ -77,7 +98,7 @@ export async function runSyncResults() {
       competition: m.league.name,
       venue: m.fixture.venue?.name ?? null,
       scorers: [],
-    }).onConflictDoNothing();
+    });
     inserted++;
   }
   return { synced: inserted, total: matches.length, season };
@@ -98,6 +119,7 @@ export async function runSyncTable() {
   await db.delete(leagueTableTable);
   await db.insert(leagueTableTable).values(
     standings.map(s => ({
+      season,
       position: s.rank,
       team: s.team.name,
       played: s.all.played,

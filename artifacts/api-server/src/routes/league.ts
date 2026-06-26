@@ -8,6 +8,7 @@ const router = Router();
 function mapRow(row: typeof leagueTableTable.$inferSelect) {
   return {
     id: row.id,
+    season: row.season,
     position: row.position,
     team: row.team,
     logoUrl: row.logoUrl,
@@ -25,7 +26,8 @@ function mapRow(row: typeof leagueTableTable.$inferSelect) {
 
 router.get("/league/table", async (_req, res) => {
   const rows = await db.select().from(leagueTableTable).orderBy(asc(leagueTableTable.position));
-  res.json(rows.map(mapRow));
+  const season = rows[0]?.season ?? 0;
+  res.json({ season, entries: rows.map(mapRow) });
 });
 
 router.patch("/league/table/:id", async (req, res) => {

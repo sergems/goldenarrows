@@ -522,13 +522,11 @@ paths:
       summary: Get current PSL league standings
       responses:
         "200":
-          description: League table
+          description: League table with season
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/LeagueTableEntry"
+                $ref: "#/components/schemas/LeagueTableResponse"
 
   # ── GALLERY ───────────────────────────────────────────────────────────────
   /gallery:
@@ -782,10 +780,21 @@ components:
         highlightUrl: { type: ["string", "null"] }
 
     # ── LEAGUE TABLE ──────────────────────────────────────────────────────
+    LeagueTableResponse:
+      type: object
+      required: [season, entries]
+      properties:
+        season: { type: integer }
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/LeagueTableEntry"
+
     LeagueTableEntry:
       type: object
       required: [position, team, played, won, drawn, lost, goalsFor, goalsAgainst, goalDifference, points]
       properties:
+        season: { type: integer }
         position: { type: integer }
         team: { type: string }
         logoUrl: { type: ["string", "null"] }
