@@ -7,12 +7,12 @@ export default function LeagueTable() {
 
   return (
     <div className="min-h-screen">
-      <div className="bg-card py-16 sm:py-20 border-b border-white/5">
+      <div className="bg-card py-3 border-b border-white/5">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="font-display font-bold text-4xl sm:text-5xl uppercase tracking-tight mb-4">
+          <h1 className="font-display font-bold text-2xl sm:text-3xl uppercase tracking-tight leading-tight">
             PSL <span className="text-primary">League Table</span>
           </h1>
-          <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base">
+          <p className="text-muted-foreground text-xs mt-0.5">
             Current DStv Premiership standings. Golden Arrows highlighted in gold.
           </p>
         </div>

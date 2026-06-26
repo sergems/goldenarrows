@@ -33,13 +33,12 @@ export default function Contact() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <div className="bg-card py-20 border-b border-white/5">
+      <div className="bg-card py-3 border-b border-white/5">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-primary font-bold uppercase tracking-[0.3em] text-xs mb-3">Get in Touch</p>
-          <h1 className="font-display text-5xl uppercase mb-4" style={{ letterSpacing: "0.06em" }}>
+          <h1 className="font-display font-bold text-2xl sm:text-3xl uppercase tracking-tight leading-tight">
             Contact <span className="text-primary">Us</span>
           </h1>
-          <p className="text-muted-foreground max-w-xl mx-auto">
+          <p className="text-muted-foreground text-xs mt-0.5">
             Reach out to Lamontville Golden Arrows FC — we'd love to hear from you.
           </p>
         </div>

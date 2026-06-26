@@ -6,12 +6,12 @@ export default function TechnicalTeam() {
 
   return (
     <div className="min-h-screen">
-      <div className="bg-card py-20 border-b border-white/5">
+      <div className="bg-card py-3 border-b border-white/5">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="font-display font-bold text-5xl uppercase tracking-tight mb-4">
+          <h1 className="font-display font-bold text-2xl sm:text-3xl uppercase tracking-tight leading-tight">
             Technical <span className="text-primary">Team</span>
           </h1>
-          <p className="text-muted-foreground max-w-xl mx-auto">
+          <p className="text-muted-foreground text-xs mt-0.5">
             The dedicated coaching and support staff behind Abafana Bes'thende's success.
           </p>
         </div>

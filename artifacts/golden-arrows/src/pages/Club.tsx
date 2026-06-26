@@ -13,13 +13,13 @@ const TIMELINE = [
 export default function Club() {
   return (
     <div className="min-h-screen">
-      <div className="bg-card py-20 border-b border-white/5">
+      <div className="bg-card py-3 border-b border-white/5">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="font-display font-bold text-5xl uppercase tracking-tight mb-4">
+          <h1 className="font-display font-bold text-2xl sm:text-3xl uppercase tracking-tight leading-tight">
             About The <span className="text-primary">Club</span>
           </h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            The story of Lamontville Golden Arrows FC — a club built on passion, community, and the love of the beautiful game in KwaZulu-Natal.
+          <p className="text-muted-foreground text-xs mt-0.5">
+            Passion, community, and the love of the beautiful game in KwaZulu-Natal.
           </p>
         </div>
       </div>

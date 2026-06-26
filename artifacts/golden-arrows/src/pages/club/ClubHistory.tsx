@@ -27,18 +27,18 @@ const TIMELINE = [
 export default function ClubHistory() {
   return (
     <div className="min-h-screen">
-      <div className="bg-card py-20 border-b border-white/5">
+      <div className="bg-card py-3 border-b border-white/5">
         <div className="container mx-auto px-4 text-center">
-          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mb-4">
+          <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground mb-1">
             <Link href="/club" className="hover:text-primary transition-colors">The Club</Link>
             <ChevronRight className="h-3 w-3" />
             <span className="text-foreground">History</span>
           </div>
-          <h1 className="font-display font-bold text-5xl uppercase tracking-tight mb-4">
+          <h1 className="font-display font-bold text-2xl sm:text-3xl uppercase tracking-tight leading-tight">
             Club <span className="text-primary">History</span>
           </h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            From Lamontville's streets to the Betway Premiership — the story of Abafana Bes'thende since 1943.
+          <p className="text-muted-foreground text-xs mt-0.5">
+            From Lamontville's streets to the Betway Premiership since 1943.
           </p>
         </div>
       </div>
