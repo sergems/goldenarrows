@@ -129,7 +129,6 @@ function MatchDayHero({ fixture }: { fixture: Fixture }) {
     <section className="relative min-h-[80vh] w-full overflow-hidden flex items-center">
       {/* Background — slider with heavy green tint */}
       <HeroBackground>
-        <div className="absolute inset-0 bg-black/4" />
         {live && (
           <div className="absolute inset-0 animate-pulse bg-red-900/10" />
         )}
