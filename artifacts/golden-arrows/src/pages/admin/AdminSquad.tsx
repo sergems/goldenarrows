@@ -12,17 +12,26 @@ import { Input } from "@/components/ui/input";
 import { ImageUpload } from "@/components/ui/ImageUpload";
 import playerPlaceholder from "@/assets/player-placeholder.png";
 
-const POSITIONS = [
-  "Goalkeeper",
-  "Defender",
-  "Midfielder",
-  "Forward",
+const PLAYER_POSITIONS = ["Goalkeeper", "Defender", "Midfielder", "Forward"];
+
+const COACHING_STAFF_ROLES = [
   "Coach",
   "Assistant Coach",
+  "Head Coach",
+  "Assistant Head Coach",
+  "Goalkeeper Coach",
+  "Fitness & Conditioning Coach",
+  "Technical Director",
+  "Sports Scientist",
+  "Video Analyst",
+  "Team Doctor",
+  "Physiotherapist",
+  "Team Manager",
+  "Kit Manager",
+  "Scout",
 ];
 
-const COACHING_POSITIONS = ["Coach", "Assistant Coach"];
-const isCoach = (pos: string) => COACHING_POSITIONS.includes(pos);
+const isCoach = (pos: string) => !PLAYER_POSITIONS.includes(pos);
 
 function slugify(name: string) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -32,15 +41,16 @@ function buildAnnouncement(form: {
   name: string; position: string; nationality: string; age: number; number: number; photoUrl: string;
 }) {
   const isCoachingRole = isCoach(form.position);
+  const role = form.position;
   const title = isCoachingRole
-    ? `Golden Arrows Appoint ${form.name} as ${form.position}`
+    ? `Golden Arrows Appoint ${form.name} as ${role}`
     : `Golden Arrows Sign ${form.name}`;
   const slug = `${isCoachingRole ? "golden-arrows-appoint" : "golden-arrows-sign"}-${slugify(form.name)}-${Date.now()}`;
   const article = isCoachingRole
-    ? `${form.nationality} ${form.position.toLowerCase()} ${form.name} joins Lamontville Golden Arrows FC as ${form.position.toLowerCase()}. ` +
+    ? `${form.nationality} ${role.toLowerCase()} ${form.name} joins Lamontville Golden Arrows FC as ${role.toLowerCase()}. ` +
       `${form.age > 0 ? `The ${form.age}-year-old` : "The"} experienced tactician is set to guide Abafana Bes'thende this season.\n\n` +
       `"We are thrilled to welcome ${form.name.split(" ")[0]} to the club and look forward to the expertise they will bring," said a club spokesperson.`
-    : `${form.nationality} ${form.position.toLowerCase()} ${form.name} joins Lamontville Golden Arrows FC. ` +
+    : `${form.nationality} ${role.toLowerCase()} ${form.name} joins Lamontville Golden Arrows FC. ` +
       `The ${form.age > 0 ? `${form.age}-year-old` : "new"} signing wears the number ${form.number} shirt and is set to strengthen the Abafana Bes'thende squad.\n\n` +
       `"We are delighted to welcome ${form.name.split(" ")[0]} to the club," said a club spokesperson.\n\n` +
       `${form.name} is available immediately and the club wishes him every success in the famous Golden Arrows colours.`;
@@ -48,8 +58,8 @@ function buildAnnouncement(form: {
   return {
     title, slug,
     excerpt: isCoachingRole
-      ? `Lamontville Golden Arrows FC are pleased to announce the appointment of ${form.name} as ${form.position}.`
-      : `Lamontville Golden Arrows FC are delighted to announce the signing of ${form.name}, ${form.nationality} ${form.position.toLowerCase()}.`,
+      ? `Lamontville Golden Arrows FC are pleased to announce the appointment of ${form.name} as ${role}.`
+      : `Lamontville Golden Arrows FC are delighted to announce the signing of ${form.name}, ${form.nationality} ${role.toLowerCase()}.`,
     content: article,
     category: isCoachingRole ? "Club News" : "Transfer News",
     imageUrl: form.photoUrl || "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80",
@@ -93,6 +103,13 @@ function PlayerForm({
         }
       : DEFAULT_FORM
   );
+
+  const isKnownCoachingRole = COACHING_STAFF_ROLES.includes(form.position);
+  const isKnownPlayerRole = PLAYER_POSITIONS.includes(form.position);
+  const initialSelectValue =
+    isKnownCoachingRole || isKnownPlayerRole ? form.position : "Other";
+
+  const [positionSelect, setPositionSelect] = useState(initialSelectValue);
   const [createAnnouncement, setCreateAnnouncement] = useState(mode === "create");
   const [done, setDone] = useState<{ name: string; withArticle: boolean; isCoach: boolean } | null>(null);
 
@@ -101,6 +118,16 @@ function PlayerForm({
   function handle(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     const val = e.target.type === "number" ? Number(e.target.value) : e.target.value;
     setForm(f => ({ ...f, [e.target.name]: val }));
+  }
+
+  function handlePositionSelect(e: React.ChangeEvent<HTMLSelectElement>) {
+    const val = e.target.value;
+    setPositionSelect(val);
+    if (val !== "Other") {
+      setForm(f => ({ ...f, position: val }));
+    } else {
+      setForm(f => ({ ...f, position: "" }));
+    }
   }
 
   const isPending = createPlayer.isPending || updatePlayer.isPending || createNews.isPending;
@@ -137,7 +164,7 @@ function PlayerForm({
           <div className="p-10 text-center">
             <CheckCircle className="h-12 w-12 text-primary mx-auto mb-4" />
             <div className="font-display font-bold text-xl uppercase mb-2" style={{ letterSpacing: "0.06em" }}>
-              {done.isCoach ? "Coach Added!" : "Player Added!"}
+              {done.isCoach ? "Staff Added!" : "Player Added!"}
             </div>
             <p className="text-muted-foreground text-sm mb-2">
               <strong className="text-foreground">{done.name}</strong> has been added to the squad.
@@ -148,7 +175,7 @@ function PlayerForm({
               </div>
             )}
             <div className="flex gap-3 justify-center">
-              <Button variant="outline" onClick={() => { setDone(null); setForm(DEFAULT_FORM); setCreateAnnouncement(true); }}>Add Another</Button>
+              <Button variant="outline" onClick={() => { setDone(null); setForm(DEFAULT_FORM); setPositionSelect("Forward"); setCreateAnnouncement(true); }}>Add Another</Button>
               <Button onClick={onClose}>Done</Button>
             </div>
           </div>
@@ -165,21 +192,35 @@ function PlayerForm({
                 <Input name="name" value={form.name} onChange={handle} required placeholder="e.g. Sibusiso Mthethwa" />
               </div>
 
-              <div>
+              <div className={positionSelect === "Other" ? "col-span-1" : "col-span-1"}>
                 <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Role / Position</label>
-                <select name="position" value={form.position} onChange={handle} className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm">
+                <select
+                  value={positionSelect}
+                  onChange={handlePositionSelect}
+                  className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
+                >
                   <optgroup label="Players">
-                    <option>Goalkeeper</option>
-                    <option>Defender</option>
-                    <option>Midfielder</option>
-                    <option>Forward</option>
+                    {PLAYER_POSITIONS.map(p => <option key={p}>{p}</option>)}
                   </optgroup>
                   <optgroup label="Coaching Staff">
-                    <option>Coach</option>
-                    <option>Assistant Coach</option>
+                    {COACHING_STAFF_ROLES.map(r => <option key={r}>{r}</option>)}
+                    <option value="Other">Other (custom)…</option>
                   </optgroup>
                 </select>
               </div>
+
+              {positionSelect === "Other" && (
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1.5 block font-bold uppercase tracking-wider">Custom Role *</label>
+                  <Input
+                    name="position"
+                    value={form.position}
+                    onChange={handle}
+                    required
+                    placeholder="e.g. Ball Analyst"
+                  />
+                </div>
+              )}
 
               {!coachMode && (
                 <div>
@@ -231,7 +272,7 @@ function PlayerForm({
                   </div>
                   <p className="text-xs text-muted-foreground leading-snug">
                     {coachMode
-                      ? `Publishes a "Golden Arrows Appoint ${form.name || "[Name]"} as ${form.position}" news article.`
+                      ? `Publishes a "Golden Arrows Appoint ${form.name || "[Name]"} as ${form.position || "[Role]"}" news article.`
                       : `Publishes a "Golden Arrows Sign ${form.name || "[Player Name]"}" news article in Transfer News.`}
                   </p>
                 </div>
@@ -256,12 +297,8 @@ function PlayerForm({
   );
 }
 
-const SECTION_ORDER = ["Coach", "Assistant Coach", "Goalkeeper", "Defender", "Midfielder", "Forward"];
-
-function positionGroup(pos: string): string {
-  if (COACHING_POSITIONS.includes(pos)) return pos;
-  return pos; // exact position
-}
+const PLAYER_SECTION_ORDER = ["Goalkeeper", "Defender", "Midfielder", "Forward"];
+const TECHNICAL_TEAM_KEY = "Technical Team";
 
 export default function AdminSquad() {
   const queryClient = useQueryClient();
@@ -276,18 +313,33 @@ export default function AdminSquad() {
     queryClient.invalidateQueries({ queryKey: getListPlayersQueryKey() });
   }
 
-  // Group and sort
   const groups: Record<string, typeof players> = {};
-  SECTION_ORDER.forEach(pos => { groups[pos] = []; });
+  [TECHNICAL_TEAM_KEY, ...PLAYER_SECTION_ORDER].forEach(k => { groups[k] = []; });
+
   players?.forEach(p => {
-    const key = SECTION_ORDER.find(s => s.toLowerCase() === p.position.toLowerCase()) ?? p.position;
-    if (!groups[key]) groups[key] = [];
-    groups[key]!.push(p);
+    if (isCoach(p.position)) {
+      groups[TECHNICAL_TEAM_KEY]!.push(p);
+    } else {
+      const key = PLAYER_SECTION_ORDER.find(s => s.toLowerCase() === p.position.toLowerCase()) ?? p.position;
+      if (!groups[key]) groups[key] = [];
+      groups[key]!.push(p);
+    }
   });
+
+  const DISPLAY_ORDER = [TECHNICAL_TEAM_KEY, ...PLAYER_SECTION_ORDER];
 
   const totalCount = players?.length ?? 0;
   const coachCount = players?.filter(p => isCoach(p.position)).length ?? 0;
   const playerCount = totalCount - coachCount;
+
+  const sectionLabel = (key: string) => {
+    if (key === TECHNICAL_TEAM_KEY) return "Technical Team";
+    if (key === "Goalkeeper") return "Goalkeepers";
+    if (key === "Defender") return "Defenders";
+    if (key === "Midfielder") return "Midfielders";
+    if (key === "Forward") return "Forwards";
+    return key;
+  };
 
   return (
     <AdminLayout>
@@ -298,7 +350,7 @@ export default function AdminSquad() {
         <div>
           <h1 className="font-display font-bold text-3xl uppercase tracking-tight">Squad Management</h1>
           <p className="text-muted-foreground mt-1">
-            {playerCount} player{playerCount !== 1 ? "s" : ""} · {coachCount} coaching staff
+            {playerCount} player{playerCount !== 1 ? "s" : ""} · {coachCount} technical staff
           </p>
         </div>
         <Button onClick={() => setShowCreate(true)} className="flex items-center gap-2">
@@ -308,14 +360,13 @@ export default function AdminSquad() {
 
       {isLoading && <div className="text-muted-foreground">Loading...</div>}
 
-      {!isLoading && Object.entries(groups).map(([section, members]) => {
+      {!isLoading && DISPLAY_ORDER.map(section => {
+        const members = groups[section];
         if (!members || members.length === 0) return null;
         return (
           <div key={section} className="mb-10">
             <h2 className="font-display font-bold text-lg uppercase tracking-wider text-muted-foreground mb-4 border-b border-white/5 pb-2">
-              {section === "Coach" ? "Head Coach" : section === "Goalkeeper" ? "Goalkeepers" :
-               section === "Defender" ? "Defenders" : section === "Midfielder" ? "Midfielders" :
-               section === "Forward" ? "Forwards" : section}
+              {sectionLabel(section)}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {members.map(person => (
