@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict 8uhajcL0Y1Gc2ANqtUQEqFjZXTVp134zXCc4YfjxwpKQ1FQvqfk2T4e4biK4Rlm
+\restrict lIxT81uefsE6OpRiml3NbGHjpOrMaNqMQhyyrzZlmIIuKQju7qUJFI1CqZefWRF
 
 -- Dumped from database version 16.10
 -- Dumped by pg_dump version 16.10
@@ -319,7 +319,10 @@ CREATE TABLE public.players (
     appearances integer DEFAULT 0 NOT NULL,
     goals integer DEFAULT 0 NOT NULL,
     assists integer DEFAULT 0 NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    instagram text,
+    facebook text,
+    twitter text
 );
 
 
@@ -519,7 +522,10 @@ CREATE TABLE public.staff (
     photo_url text,
     bio text,
     nationality text,
-    created_at timestamp with time zone DEFAULT now() NOT NULL
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    instagram text,
+    facebook text,
+    twitter text
 );
 
 
@@ -689,9 +695,6 @@ admin_password	@GoldenArrow2026	2026-06-25 16:59:31.260498+00
 --
 
 COPY public.ads (id, slot, image_url, link_url, alt_text, updated_at) FROM stdin;
-85	fixtures-left-1	\N	\N	\N	2026-06-26 22:02:32.168872+00
-86	fixtures-left-2	\N	\N	\N	2026-06-26 22:02:32.168872+00
-87	fixtures-left-3	\N	\N	\N	2026-06-26 22:02:32.168872+00
 88	fixtures-right-1	\N	\N	\N	2026-06-26 22:02:32.168872+00
 89	fixtures-right-2	\N	\N	\N	2026-06-26 22:02:32.168872+00
 90	fixtures-right-3	\N	\N	\N	2026-06-26 22:02:32.168872+00
@@ -713,6 +716,9 @@ COPY public.ads (id, slot, image_url, link_url, alt_text, updated_at) FROM stdin
 106	results-right	\N	\N	\N	2026-06-26 22:02:58.637756+00
 107	table-left	\N	\N	\N	2026-06-26 22:02:58.641406+00
 110	table-right	\N	\N	\N	2026-06-26 22:02:58.64491+00
+87	fixtures-left-3	\N	\N	\N	2026-06-26 22:48:33.625+00
+86	fixtures-left-2	\N	\N	\N	2026-06-26 22:48:37.268+00
+85	fixtures-left-1	/api/uploads/1782556689182-vbm17d.jpeg	\N	\N	2026-06-27 10:38:15.527+00
 \.
 
 
@@ -752,22 +758,22 @@ COPY public.gallery (id, title, type, url, thumbnail_url, category, caption, pub
 --
 
 COPY public.league_table (id, "position", team, logo_url, played, won, drawn, lost, goals_for, goals_against, goal_difference, points, is_golden_arrows, updated_at, season) FROM stdin;
-161	1	Orlando Pirates	https://statistic-cdn.scoreaxis.com/team/2fab2dc66865b76fd0ac6175e3d600c4675008a17633fd464ef3ab3d3b59febe-60-60.png	30	21	6	3	58	12	46	69	f	2026-06-26 21:50:45.770369+00	2025
-162	2	Mamelodi Sundowns FC	https://statistic-cdn.scoreaxis.com/team/c48a1afce57edd50429551cdfae010d1de9a9ea75b0bbbc80e13b4aac9ca4402-60-60.png	30	20	8	2	57	21	36	68	f	2026-06-26 21:50:45.770369+00	2025
-163	3	Kaizer Chiefs	https://statistic-cdn.scoreaxis.com/team/4b5d40da4b020975e1d698092b3f3efae333a8ae288502bd096fc82919ea60c0-60-60.png	30	15	9	6	33	19	14	54	f	2026-06-26 21:50:45.770369+00	2025
-164	4	AmaZulu FC	https://statistic-cdn.scoreaxis.com/team/e4ba801bbc79e0c1e10d0934487259ec48192610cff5410c490a70743ae97ea1-60-60.png	30	13	8	9	32	28	4	47	f	2026-06-26 21:50:45.770369+00	2025
-165	5	Sekhukhune United	https://statistic-cdn.scoreaxis.com/team/23a95c375f61eb68e87fc64602064b00924a06fb011c71a95156ba5268db9cba-60-60.png	30	11	11	8	32	27	5	44	f	2026-06-26 21:50:45.770369+00	2025
-166	6	Lamontville Golden Arrows	https://statistic-cdn.scoreaxis.com/team/a0e358cec51e88c27636ce1663e629fc7333df96d02a42a2028a4f3a586dd8ea-60-60.png	30	11	8	11	34	33	1	41	t	2026-06-26 21:50:45.770369+00	2025
-167	7	Polokwane City	https://statistic-cdn.scoreaxis.com/team/1465d378ff733531f62ea9a3e96ca47b04d455d1a0533f5abc8948d475e1eac6-60-60.png	30	9	13	8	21	21	0	40	f	2026-06-26 21:50:45.770369+00	2025
-168	8	Durban City	https://statistic-cdn.scoreaxis.com/team/2261d63e689c53444b403371c315d8f72d7f787a86aa45326fc4440a7225c32b-60-60.png	30	10	9	11	25	26	-1	39	f	2026-06-26 21:50:45.770369+00	2025
-169	9	Stellenbosch	https://statistic-cdn.scoreaxis.com/team/52e98272013fafe28577b7aad6ad794e46545cd5bf4d03e8e952558648bb9003-60-60.png	30	9	10	11	26	30	-4	37	f	2026-06-26 21:50:45.770369+00	2025
-170	10	Siwelele	https://statistic-cdn.scoreaxis.com/team/121008f1718d0f984de69f978c1af2c0503b0b5d67679f41ba9eddb1fc2d9468-60-60.png	30	8	13	9	24	28	-4	37	f	2026-06-26 21:50:45.770369+00	2025
-171	11	Richards Bay	https://statistic-cdn.scoreaxis.com/team/f984a3169ae7af557b696e94999853948b643b5bfbaa164c58a7b428c4817e7a-60-60.png	30	7	13	10	23	30	-7	34	f	2026-06-26 21:50:45.770369+00	2025
-172	12	TS Galaxy	https://statistic-cdn.scoreaxis.com/team/81c8bf024a9ecf13b27c7eecf02b870f68047ef51406df757e8f684d5aa6f422-60-60.png	30	8	8	14	30	38	-8	32	f	2026-06-26 21:50:45.770369+00	2025
-173	13	Chippa United	https://statistic-cdn.scoreaxis.com/team/65723c4e7b466bc9410c608ea0f306af62b1e3e7799c517769ab5b78520db3b1-60-60.png	30	6	10	14	24	44	-20	28	f	2026-06-26 21:50:45.770369+00	2025
-174	14	Marumo Gallants	https://statistic-cdn.scoreaxis.com/team/67c0a7bccaf8d3c63d4ee350e59e17030028b889ae4adb1a85b39856545240da-60-60.png	30	4	13	13	21	38	-17	25	f	2026-06-26 21:50:45.770369+00	2025
-175	15	Magesi FC	https://statistic-cdn.scoreaxis.com/team/fd00a7b8a82022e844718b8cceabcb78c8c31bb287ab6554662183a01ee4575d-60-60.png	30	5	9	16	24	43	-19	24	f	2026-06-26 21:50:45.770369+00	2025
-176	16	Orbit College	https://statistic-cdn.scoreaxis.com/team/48f643d08636f5ddb00b3388b06340804d5ccc7267f053407bdb6e8a575f9296-60-60.png	30	6	6	18	21	47	-26	24	f	2026-06-26 21:50:45.770369+00	2025
+193	1	Orlando Pirates	https://statistic-cdn.scoreaxis.com/team/2fab2dc66865b76fd0ac6175e3d600c4675008a17633fd464ef3ab3d3b59febe-60-60.png	30	21	6	3	58	12	46	69	f	2026-06-27 11:00:12.630409+00	2025
+194	2	Mamelodi Sundowns FC	https://statistic-cdn.scoreaxis.com/team/c48a1afce57edd50429551cdfae010d1de9a9ea75b0bbbc80e13b4aac9ca4402-60-60.png	30	20	8	2	57	21	36	68	f	2026-06-27 11:00:12.630409+00	2025
+195	3	Kaizer Chiefs	https://statistic-cdn.scoreaxis.com/team/4b5d40da4b020975e1d698092b3f3efae333a8ae288502bd096fc82919ea60c0-60-60.png	30	15	9	6	33	19	14	54	f	2026-06-27 11:00:12.630409+00	2025
+196	4	AmaZulu FC	https://statistic-cdn.scoreaxis.com/team/e4ba801bbc79e0c1e10d0934487259ec48192610cff5410c490a70743ae97ea1-60-60.png	30	13	8	9	32	28	4	47	f	2026-06-27 11:00:12.630409+00	2025
+197	5	Sekhukhune United	https://statistic-cdn.scoreaxis.com/team/23a95c375f61eb68e87fc64602064b00924a06fb011c71a95156ba5268db9cba-60-60.png	30	11	11	8	32	27	5	44	f	2026-06-27 11:00:12.630409+00	2025
+198	6	Lamontville Golden Arrows	https://statistic-cdn.scoreaxis.com/team/a0e358cec51e88c27636ce1663e629fc7333df96d02a42a2028a4f3a586dd8ea-60-60.png	30	11	8	11	34	33	1	41	t	2026-06-27 11:00:12.630409+00	2025
+199	7	Polokwane City	https://statistic-cdn.scoreaxis.com/team/1465d378ff733531f62ea9a3e96ca47b04d455d1a0533f5abc8948d475e1eac6-60-60.png	30	9	13	8	21	21	0	40	f	2026-06-27 11:00:12.630409+00	2025
+200	8	Durban City	https://statistic-cdn.scoreaxis.com/team/2261d63e689c53444b403371c315d8f72d7f787a86aa45326fc4440a7225c32b-60-60.png	30	10	9	11	25	26	-1	39	f	2026-06-27 11:00:12.630409+00	2025
+201	9	Stellenbosch	https://statistic-cdn.scoreaxis.com/team/52e98272013fafe28577b7aad6ad794e46545cd5bf4d03e8e952558648bb9003-60-60.png	30	9	10	11	26	30	-4	37	f	2026-06-27 11:00:12.630409+00	2025
+202	10	Siwelele	https://statistic-cdn.scoreaxis.com/team/121008f1718d0f984de69f978c1af2c0503b0b5d67679f41ba9eddb1fc2d9468-60-60.png	30	8	13	9	24	28	-4	37	f	2026-06-27 11:00:12.630409+00	2025
+203	11	Richards Bay	https://statistic-cdn.scoreaxis.com/team/f984a3169ae7af557b696e94999853948b643b5bfbaa164c58a7b428c4817e7a-60-60.png	30	7	13	10	23	30	-7	34	f	2026-06-27 11:00:12.630409+00	2025
+204	12	TS Galaxy	https://statistic-cdn.scoreaxis.com/team/81c8bf024a9ecf13b27c7eecf02b870f68047ef51406df757e8f684d5aa6f422-60-60.png	30	8	8	14	30	38	-8	32	f	2026-06-27 11:00:12.630409+00	2025
+205	13	Chippa United	https://statistic-cdn.scoreaxis.com/team/65723c4e7b466bc9410c608ea0f306af62b1e3e7799c517769ab5b78520db3b1-60-60.png	30	6	10	14	24	44	-20	28	f	2026-06-27 11:00:12.630409+00	2025
+206	14	Marumo Gallants	https://statistic-cdn.scoreaxis.com/team/67c0a7bccaf8d3c63d4ee350e59e17030028b889ae4adb1a85b39856545240da-60-60.png	30	4	13	13	21	38	-17	25	f	2026-06-27 11:00:12.630409+00	2025
+207	15	Magesi FC	https://statistic-cdn.scoreaxis.com/team/fd00a7b8a82022e844718b8cceabcb78c8c31bb287ab6554662183a01ee4575d-60-60.png	30	5	9	16	24	43	-19	24	f	2026-06-27 11:00:12.630409+00	2025
+208	16	Orbit College	https://statistic-cdn.scoreaxis.com/team/48f643d08636f5ddb00b3388b06340804d5ccc7267f053407bdb6e8a575f9296-60-60.png	30	6	6	18	21	47	-26	24	f	2026-06-27 11:00:12.630409+00	2025
 \.
 
 
@@ -776,15 +782,15 @@ COPY public.league_table (id, "position", team, logo_url, played, won, drawn, lo
 --
 
 COPY public.news (id, title, slug, excerpt, content, category, image_url, featured, author, tags, published_at, created_at) FROM stdin;
-2	Knox Mutizwa Named PSL Player of the Month	knox-mutizwa-player-month	Our talismanic striker Knox Mutizwa has been recognised for his outstanding contributions in April, collecting 5 crucial goals.	Our talismanic striker Knox Mutizwa has been recognised for his outstanding contributions in April, collecting 5 crucial goals.	club-news	https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=800	t	Arrows Media	{awards,knox-mutizwa}	2026-05-21 10:52:12.143813+00	2026-06-01 10:52:12.143813+00
 3	Pre-Season Camp Announced for July 2025	preseason-camp-july-2025	The squad will head to a specially arranged pre-season training camp to prepare for the 2025/26 DStv Premiership season.	The squad will head to a specially arranged pre-season training camp to prepare for the 2025/26 DStv Premiership season.	club-news	https://images.unsplash.com/photo-1517649763962-0c623066013b?w=800	f	Arrows Media	{pre-season,training}	2026-05-08 10:52:13.500985+00	2026-06-01 10:52:13.500985+00
 4	Junior Arrows Youth Academy Trials Open	youth-academy-trials-2025	Golden Arrows FC is pleased to announce open trials for the Junior Arrows Youth Academy for talented players aged 10-16.	Golden Arrows FC is pleased to announce open trials for the Junior Arrows Youth Academy for talented players aged 10-16.	community	https://images.unsplash.com/photo-1594381898411-846e7d193883?w=800	f	Community Team	{youth,academy,community}	2026-05-11 10:52:14.754139+00	2026-06-01 10:52:14.754139+00
 5	Club Partners With Durban Community Schools	community-schools-partnership	As part of our ongoing commitment to KwaZulu-Natal, Golden Arrows has launched a new educational partnership with 10 Durban schools.	As part of our ongoing commitment to KwaZulu-Natal, Golden Arrows has launched a new educational partnership with 10 Durban schools.	community	https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800	f	Community Team	{community,education,KZN}	2026-05-10 10:52:15.913125+00	2026-06-01 10:52:15.913125+00
 6	New Away Kit Unveiled for 2025/26 Season	away-kit-unveil-2025-26	Golden Arrows FC is delighted to unveil the stunning new away kit for the upcoming 2025/26 DStv Premiership season.	Golden Arrows FC is delighted to unveil the stunning new away kit for the upcoming 2025/26 DStv Premiership season.	club-news	https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800	f	Arrows Media	{kit,fashion,2025-26}	2026-05-06 10:52:17.261668+00	2026-06-01 10:52:17.261668+00
-11	Golden Arrows Sign Sere Mulayi	golden-arrows-sign-sere-mulayi-1780851457720	Lamontville Golden Arrows FC are delighted to announce the signing of Sere Mulayi, Zambian forward.	Zambian forward Sere Mulayi joins Lamontville Golden Arrows FC. The 22-year-old signing wears the number 95 shirt and is set to strengthen the Abafana Bes'thende squad.\n\n"We are delighted to welcome Sere to the club," said a club spokesperson.\n\nSere Mulayi is available immediately and the club wishes him every success in the famous Golden Arrows colours.	Transfer News	/api/uploads/1780851445683-bp6ddt.jpeg	f	Golden Arrows FC	{Transfer,Squad,Signing}	2026-06-07 16:57:40.084629+00	2026-06-07 16:57:40.084629+00
-12	Golden Arrows Sign JUNIOR SEDE DION	golden-arrows-sign-junior-sede-dion-1782208857182	Lamontville Golden Arrows FC are delighted to announce the signing of JUNIOR SEDE DION, IVORIEN forward.	IVORIEN forward JUNIOR SEDE DION joins Lamontville Golden Arrows FC. The 28-year-old signing wears the number 18 shirt and is set to strengthen the Abafana Bes'thende squad.\n\n"We are delighted to welcome JUNIOR to the club," said a club spokesperson.\n\nJUNIOR SEDE DION is available immediately and the club wishes him every success in the famous Golden Arrows colours.	Transfer News	/api/uploads/1782208717247-gow8e3.png	f	Golden Arrows FC	{Transfer,Squad,Signing}	2026-06-23 10:00:59.757227+00	2026-06-23 10:00:59.757227+00
-13	Golden Arrows Appoint Jacob Mokhasi as Assistant Coach	golden-arrows-appoint-jacob-mokhasi-1782403540691	Lamontville Golden Arrows FC are pleased to announce the appointment of Jacob Mokhasi as Assistant Coach.	South African assistant coach Jacob Mokhasi joins Lamontville Golden Arrows FC as assistant coach. The 35-year-old experienced tactician is set to guide Abafana Bes'thende this season.\n\n"We are thrilled to welcome Jacob to the club and look forward to the expertise they will bring," said a club spokesperson.	Club News	/api/uploads/1782403494954-y6ipqw.jpg	f	Golden Arrows FC	{Coaching,Management,"Club News"}	2026-06-25 16:05:44.742237+00	2026-06-25 16:05:44.742237+00
-14	Golden Arrows Appoint James Madidilane as Assistant Coach	golden-arrows-appoint-james-madidilane-1782403583493	Lamontville Golden Arrows FC are pleased to announce the appointment of James Madidilane as Assistant Coach.	South African assistant coach James Madidilane joins Lamontville Golden Arrows FC as assistant coach. The 47-year-old experienced tactician is set to guide Abafana Bes'thende this season.\n\n"We are thrilled to welcome James to the club and look forward to the expertise they will bring," said a club spokesperson.	Club News	/api/uploads/1782403554118-47z5wk.jpg	f	Golden Arrows FC	{Coaching,Management,"Club News"}	2026-06-25 16:06:27.553155+00	2026-06-25 16:06:27.553155+00
+2	Knox Mutizwa Named PSL Player of the Month	knox-mutizwa-player-month	Our talismanic striker Knox Mutizwa has been recognised for his outstanding contributions in April, collecting 5 crucial goals.	Our talismanic striker Knox Mutizwa has been recognised for his outstanding contributions in April, collecting 5 crucial goals.	club-news	https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=800	f	Arrows Media	{awards,knox-mutizwa}	2026-05-21 10:52:12.143813+00	2026-06-01 10:52:12.143813+00
+12	Golden Arrows Sign JUNIOR SEDE DION	golden-arrows-sign-junior-sede-dion-1782208857182	Lamontville Golden Arrows FC are delighted to announce the signing of JUNIOR SEDE DION, IVORIEN forward.	IVORIEN forward JUNIOR SEDE DION joins Lamontville Golden Arrows FC. The 28-year-old signing wears the number 18 shirt and is set to strengthen the Abafana Bes'thende squad.\n\n"We are delighted to welcome JUNIOR to the club," said a club spokesperson.\n\nJUNIOR SEDE DION is available immediately and the club wishes him every success in the famous Golden Arrows colours.	Transfer News	/api/uploads/1782208717247-gow8e3.png	t	Golden Arrows FC	{Transfer,Squad,Signing}	2026-06-23 10:00:59.757227+00	2026-06-23 10:00:59.757227+00
+16	Golden Arrows Appoint Jacob Mokhasi as Assistant Coach	golden-arrows-appoint-jacob-mokhasi-1782513581194	Lamontville Golden Arrows FC are pleased to announce the appointment of Jacob Mokhasi as Assistant Coach.	South African assistant coach Jacob Mokhasi joins Lamontville Golden Arrows FC as assistant coach. The 43-year-old experienced tactician is set to guide Abafana Bes'thende this season.\n\n"We are thrilled to welcome Jacob to the club and look forward to the expertise they will bring," said a club spokesperson.	Club News	/api/uploads/1782547816432-jy93zw.jpeg	f	Golden Arrows FC	{Coaching,Management,"Club News"}	2026-06-26 22:39:46.722864+00	2026-06-26 22:39:46.722864+00
+14	Golden Arrows Appoint James Madidilane as Assistant Coach	golden-arrows-appoint-james-madidilane-1782403583493	Lamontville Golden Arrows FC are pleased to announce the appointment of James Madidilane as Assistant Coach.	South African assistant coach James Madidilane joins Lamontville Golden Arrows FC as assistant coach. The 47-year-old experienced tactician is set to guide Abafana Bes'thende this season.\n\n"We are thrilled to welcome James to the club and look forward to the expertise they will bring," said a club spokesperson.	Club News	/api/uploads/1782547836705-jr70ok.jpeg	f	Golden Arrows FC	{Coaching,Management,"Club News"}	2026-06-25 16:06:27.553155+00	2026-06-25 16:06:27.553155+00
+13	Golden Arrows Appoint Jacob Mokhasi as Assistant Coach	golden-arrows-appoint-jacob-mokhasi-1782403540691	Lamontville Golden Arrows FC are pleased to announce the appointment of Jacob Mokhasi as Assistant Coach.	South African assistant coach Jacob Mokhasi joins Lamontville Golden Arrows FC as assistant coach. The 35-year-old experienced tactician is set to guide Abafana Bes'thende this season.\n\n"We are thrilled to welcome Jacob to the club and look forward to the expertise they will bring," said a club spokesperson.	Club News	/api/uploads/1782547853250-vhhsu1.jpeg	f	Golden Arrows FC	{Coaching,Management,"Club News"}	2026-06-25 16:05:44.742237+00	2026-06-25 16:05:44.742237+00
 \.
 
 
@@ -792,28 +798,28 @@ COPY public.news (id, title, slug, excerpt, content, category, image_url, featur
 -- Data for Name: players; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.players (id, name, "position", number, nationality, age, photo_url, bio, appearances, goals, assists, created_at) FROM stdin;
-2	Nkosinathi Sibisi	Goalkeeper	16	South African	24	\N	Promising backup goalkeeper pushing for a starting spot.	4	0	0	2026-06-01 10:50:33.020218+00
-3	Nhlanhla Vilakazi	Defender	5	South African	27	\N	Commanding center-back and club captain. A leader on and off the pitch.	21	1	2	2026-06-01 10:50:34.897998+00
-4	Mondli Mpungose	Defender	3	South African	25	\N	Pacey left-back who contributes going forward.	19	0	1	2026-06-01 10:50:36.051642+00
-5	Thabo Molefe	Defender	4	South African	28	\N	Experienced right-back, strong in the tackle.	20	2	0	2026-06-01 10:50:37.188766+00
-6	Sibusiso Mthembu	Defender	6	South African	23	\N	Young center-back with excellent reading of the game.	15	0	0	2026-06-01 10:50:38.426137+00
-7	Phumlani Ntanzi	Midfielder	8	South African	26	\N	Creative midfielder and the engine of Golden Arrows. An assist machine.	23	4	7	2026-06-01 10:50:39.758824+00
-8	Lungelo Dlamini	Midfielder	10	South African	24	\N	Technically gifted number 10, brilliant in tight spaces.	22	5	4	2026-06-01 10:50:40.872542+00
-9	Mxolisi Macuphu	Midfielder	14	South African	28	\N	Defensive midfielder who wins the ball and distributes simply.	18	2	3	2026-06-01 10:50:42.082897+00
-10	Nkosinathi Mthembu	Midfielder	7	South African	22	\N	Exciting wide midfielder with pace and directness.	16	3	2	2026-06-01 10:50:43.306283+00
-11	Knox Mutizwa	Forward	9	Zimbabwean	30	\N	Club legend and top scorer. Knox's goals have fired Golden Arrows to numerous victories. Lightning quick, clinical finish.	24	12	3	2026-06-01 10:50:44.563234+00
-12	Sibusiso Khumalo	Forward	11	South African	25	\N	Explosive left winger with electric pace and a nose for goal.	20	8	4	2026-06-01 10:50:45.788081+00
-13	Nduduzo Sibiya	Forward	21	South African	22	\N	Versatile attacker who can play anywhere across the front line.	14	5	2	2026-06-01 10:50:47.110223+00
-14	Serge Malema	Forward	17	South African	26			11	26	0	2026-06-01 13:49:24.794201+00
-15	Sibusiso Ngidi	Forward	27	South African	22			0	0	0	2026-06-02 07:48:11.075545+00
-16	Alan Boots	Goalkeeper	58	Zambian	26			0	0	0	2026-06-02 07:50:31.483385+00
-17	Junoir Lukichwa	Forward	16	South African	22			0	0	0	2026-06-02 18:41:56.906215+00
-18	Junior Lukichwa	Forward	19	Congolese	22			0	0	0	2026-06-02 18:44:23.308901+00
-19	Sere Mulayi	Forward	95	Zambian	22	/api/uploads/1780851445683-bp6ddt.jpeg		5	12	0	2026-06-07 16:57:39.787165+00
-20	JUNIOR SEDE DION	Forward	18	IVORIEN	28	/api/uploads/1782208717247-gow8e3.png		19	14	0	2026-06-23 10:00:59.317784+00
-21	Jacob Mokhasi	Assistant Coach	1	South African	35	/api/uploads/1782403494954-y6ipqw.jpg		0	0	0	2026-06-25 16:05:44.471382+00
-22	James Madidilane	Assistant Coach	1	South African	47	/api/uploads/1782403554118-47z5wk.jpg		0	0	0	2026-06-25 16:06:27.115019+00
+COPY public.players (id, name, "position", number, nationality, age, photo_url, bio, appearances, goals, assists, created_at, instagram, facebook, twitter) FROM stdin;
+2	Nkosinathi Sibisi	Goalkeeper	16	South African	24	\N	Promising backup goalkeeper pushing for a starting spot.	4	0	0	2026-06-01 10:50:33.020218+00	\N	\N	\N
+3	Nhlanhla Vilakazi	Defender	5	South African	27	\N	Commanding center-back and club captain. A leader on and off the pitch.	21	1	2	2026-06-01 10:50:34.897998+00	\N	\N	\N
+4	Mondli Mpungose	Defender	3	South African	25	\N	Pacey left-back who contributes going forward.	19	0	1	2026-06-01 10:50:36.051642+00	\N	\N	\N
+5	Thabo Molefe	Defender	4	South African	28	\N	Experienced right-back, strong in the tackle.	20	2	0	2026-06-01 10:50:37.188766+00	\N	\N	\N
+6	Sibusiso Mthembu	Defender	6	South African	23	\N	Young center-back with excellent reading of the game.	15	0	0	2026-06-01 10:50:38.426137+00	\N	\N	\N
+7	Phumlani Ntanzi	Midfielder	8	South African	26	\N	Creative midfielder and the engine of Golden Arrows. An assist machine.	23	4	7	2026-06-01 10:50:39.758824+00	\N	\N	\N
+8	Lungelo Dlamini	Midfielder	10	South African	24	\N	Technically gifted number 10, brilliant in tight spaces.	22	5	4	2026-06-01 10:50:40.872542+00	\N	\N	\N
+9	Mxolisi Macuphu	Midfielder	14	South African	28	\N	Defensive midfielder who wins the ball and distributes simply.	18	2	3	2026-06-01 10:50:42.082897+00	\N	\N	\N
+10	Nkosinathi Mthembu	Midfielder	7	South African	22	\N	Exciting wide midfielder with pace and directness.	16	3	2	2026-06-01 10:50:43.306283+00	\N	\N	\N
+11	Knox Mutizwa	Forward	9	Zimbabwean	30	\N	Club legend and top scorer. Knox's goals have fired Golden Arrows to numerous victories. Lightning quick, clinical finish.	24	12	3	2026-06-01 10:50:44.563234+00	\N	\N	\N
+12	Sibusiso Khumalo	Forward	11	South African	25	\N	Explosive left winger with electric pace and a nose for goal.	20	8	4	2026-06-01 10:50:45.788081+00	\N	\N	\N
+13	Nduduzo Sibiya	Forward	21	South African	22	\N	Versatile attacker who can play anywhere across the front line.	14	5	2	2026-06-01 10:50:47.110223+00	\N	\N	\N
+14	Serge Malema	Forward	17	South African	26			11	26	0	2026-06-01 13:49:24.794201+00	\N	\N	\N
+15	Sibusiso Ngidi	Forward	27	South African	22			0	0	0	2026-06-02 07:48:11.075545+00	\N	\N	\N
+16	Alan Boots	Goalkeeper	58	Zambian	26			0	0	0	2026-06-02 07:50:31.483385+00	\N	\N	\N
+17	Junoir Lukichwa	Forward	16	South African	22			0	0	0	2026-06-02 18:41:56.906215+00	\N	\N	\N
+18	Junior Lukichwa	Forward	19	Congolese	22			0	0	0	2026-06-02 18:44:23.308901+00	\N	\N	\N
+20	JUNIOR SEDE DION	Forward	18	IVORIEN	28	/api/uploads/1782208717247-gow8e3.png		19	14	0	2026-06-23 10:00:59.317784+00	\N	\N	\N
+22	James Madidilane	Assistant Coach	1	South African	47	/api/uploads/1782513476689-pipmf0.jpg		0	0	0	2026-06-25 16:06:27.115019+00	\N	\N	\N
+24	Jacob Mokhasi	Assistant Coach	1	South African	43	/api/uploads/1782513498338-hn0kvj.jpg		0	0	0	2026-06-26 22:39:46.376266+00	\N	\N	\N
+21	Jacob Mokhasi	Assistant Coach	1	South African	35	/api/uploads/1782513454064-k3sb9m.jpg	Represented South Africa at various youth levels, including the U-23 team. Notably part of the South African U-23 squad that participated in the Toulon Tournament in France.\nAfter retiring from professional play, Mokhasi transitioned into coaching, bringing his extensive experience to the development of future goalkeepers. \nIn July 2024, he joined Marumo Gallants as the goalkeeper coach, contributing to the team's technical staff.	0	0	0	2026-06-25 16:05:44.471382+00	\N	\N	\N
 \.
 
 
@@ -881,14 +887,14 @@ COPY public.sponsors (id, name, logo_url, website_url, tier, created_at) FROM st
 -- Data for Name: staff; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.staff (id, name, role, photo_url, bio, nationality, created_at) FROM stdin;
-1	Vusumuzi Vilakazi	Head Coach	\N	Experienced PSL coach with a calm, tactical approach. Has led the team through several memorable campaigns.	South African	2026-06-01 10:51:17.458187+00
-2	Sbusiso Dlamini	Assistant Coach	\N	Works closely with the head coach on training sessions and match preparation.	South African	2026-06-01 10:51:18.654436+00
-3	Lungelo Ntanzi	Goalkeeper Coach	\N	Specialist goalkeeper coach who develops our shot-stoppers.	South African	2026-06-01 10:51:20.015876+00
-4	Nhlanhla Cele	Fitness Coach	\N	Ensures players maintain peak physical condition throughout the season.	South African	2026-06-01 10:51:21.468931+00
-5	Dr. Sipho Khumalo	Club Doctor	\N	Leads the medical team, overseeing player health and injury management.	South African	2026-06-01 10:51:22.875671+00
-6	Thulani Mthembu	Physiotherapist	\N	Expert physio dedicated to player rehabilitation and injury prevention.	South African	2026-06-01 10:51:24.278286+00
-7	Nomvula Zulu	Sports Analyst	\N	Provides data-driven insights to guide tactical decisions and opponent analysis.	South African	2026-06-01 10:51:25.656108+00
+COPY public.staff (id, name, role, photo_url, bio, nationality, created_at, instagram, facebook, twitter) FROM stdin;
+1	Vusumuzi Vilakazi	Head Coach	\N	Experienced PSL coach with a calm, tactical approach. Has led the team through several memorable campaigns.	South African	2026-06-01 10:51:17.458187+00	\N	\N	\N
+2	Sbusiso Dlamini	Assistant Coach	\N	Works closely with the head coach on training sessions and match preparation.	South African	2026-06-01 10:51:18.654436+00	\N	\N	\N
+3	Lungelo Ntanzi	Goalkeeper Coach	\N	Specialist goalkeeper coach who develops our shot-stoppers.	South African	2026-06-01 10:51:20.015876+00	\N	\N	\N
+4	Nhlanhla Cele	Fitness Coach	\N	Ensures players maintain peak physical condition throughout the season.	South African	2026-06-01 10:51:21.468931+00	\N	\N	\N
+5	Dr. Sipho Khumalo	Club Doctor	\N	Leads the medical team, overseeing player health and injury management.	South African	2026-06-01 10:51:22.875671+00	\N	\N	\N
+6	Thulani Mthembu	Physiotherapist	\N	Expert physio dedicated to player rehabilitation and injury prevention.	South African	2026-06-01 10:51:24.278286+00	\N	\N	\N
+7	Nomvula Zulu	Sports Analyst	\N	Provides data-driven insights to guide tactical decisions and opponent analysis.	South African	2026-06-01 10:51:25.656108+00	\N	\N	\N
 \.
 
 
@@ -922,7 +928,7 @@ COPY public.teams (id, name, crest_url, active, created_at) FROM stdin;
 -- Name: ads_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.ads_id_seq', 354, true);
+SELECT pg_catalog.setval('public.ads_id_seq', 2849, true);
 
 
 --
@@ -950,21 +956,21 @@ SELECT pg_catalog.setval('public.gallery_id_seq', 1, false);
 -- Name: league_table_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.league_table_id_seq', 176, true);
+SELECT pg_catalog.setval('public.league_table_id_seq', 208, true);
 
 
 --
 -- Name: news_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.news_id_seq', 15, true);
+SELECT pg_catalog.setval('public.news_id_seq', 16, true);
 
 
 --
 -- Name: players_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.players_id_seq', 23, true);
+SELECT pg_catalog.setval('public.players_id_seq', 24, true);
 
 
 --
@@ -1156,5 +1162,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 8uhajcL0Y1Gc2ANqtUQEqFjZXTVp134zXCc4YfjxwpKQ1FQvqfk2T4e4biK4Rlm
+\unrestrict lIxT81uefsE6OpRiml3NbGHjpOrMaNqMQhyyrzZlmIIuKQju7qUJFI1CqZefWRF
 
