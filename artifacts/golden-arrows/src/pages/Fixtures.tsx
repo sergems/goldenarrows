@@ -23,13 +23,13 @@ export default function Fixtures() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-10 sm:py-16">
+      <div className="max-w-5xl mx-auto px-4 py-10 sm:py-16">
         <div className="flex gap-6 items-start">
           <div className="hidden xl:block w-40 flex-shrink-0">
             <AdColumn page="fixtures" side="left" />
           </div>
 
-          <div className="flex-1 min-w-0 max-w-4xl mx-auto">
+          <div className="flex-1 min-w-0">
             {isLoading && (
               <div className="text-center text-muted-foreground py-20">Loading fixtures...</div>
             )}
@@ -117,3 +117,4 @@ export default function Fixtures() {
     </div>
   );
 }
+

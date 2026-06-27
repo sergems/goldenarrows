@@ -31,7 +31,7 @@ export default function News() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-6 sm:py-12">
+      <div className="max-w-5xl mx-auto px-4 py-6 sm:py-12">
         {/* Filters */}
         <div className="flex flex-col md:flex-row gap-3 items-center justify-between mb-5 sm:mb-10">
           <div className="hidden md:flex gap-2 flex-wrap">
