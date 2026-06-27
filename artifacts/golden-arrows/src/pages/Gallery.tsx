@@ -52,7 +52,7 @@ export default function Gallery() {
 
 
       {/* Gallery Grid */}
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-6 sm:py-12">
         {isLoading && (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {Array.from({ length: 8 }).map((_, i) => (
@@ -102,10 +102,10 @@ export default function Gallery() {
       </div>
 
       {/* ── From Our Social Media Family ─────────────── */}
-      <section className="bg-card border-t border-white/5 py-14">
+      <section className="bg-card border-t border-white/5 py-8 sm:py-14">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-10">
-            <h2 className="font-display font-bold text-4xl uppercase tracking-tight mb-2">
+          <div className="text-center mb-6 sm:mb-10">
+            <h2 className="font-display font-bold text-2xl sm:text-4xl uppercase tracking-tight mb-2">
               From Our <span className="text-primary">Social Media Family</span>
             </h2>
             <p className="text-muted-foreground text-sm">Follow us and stay connected with Abafana Bes'thende</p>

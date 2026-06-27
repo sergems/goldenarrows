@@ -425,7 +425,7 @@ export default function Home() {
       {nextFixture && !matchToday && (
         <section className="relative z-20 mx-4 -mt-8 rounded-xl overflow-hidden shadow-2xl border border-white/10 bg-card">
           <div className="h-1 w-full bg-gradient-to-r from-secondary via-primary to-secondary" />
-          <div className="container mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-8 flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-8">
             <div className="text-center md:text-left">
               <div className="text-primary font-bold tracking-[0.25em] uppercase text-xs mb-2">Next Match</div>
               <div className="font-display text-xl" style={{ letterSpacing: "0.05em" }}>{nextFixture.competition}</div>
@@ -454,9 +454,9 @@ export default function Home() {
       )}
 
       {/* ── Latest News ──────────────────────────── */}
-      <section className="py-20 container mx-auto px-4">
-        <div className="flex justify-between items-end mb-10">
-          <h2 className="font-display text-4xl uppercase" style={{ letterSpacing: "0.06em" }}>
+      <section className="py-8 sm:py-20 container mx-auto px-4">
+        <div className="flex justify-between items-end mb-5 sm:mb-10">
+          <h2 className="font-display text-2xl sm:text-4xl uppercase" style={{ letterSpacing: "0.06em" }}>
             Latest <span className="text-primary">News</span>
           </h2>
           <Link href="/news" className="text-white/50 hover:text-primary transition-colors font-medium uppercase tracking-wider text-sm hidden md:block">
@@ -486,7 +486,7 @@ export default function Home() {
       </section>
 
       {/* ── Results + Table ──────────────────────── */}
-      <section className="bg-card py-20 border-y border-white/5">
+      <section className="bg-card py-8 sm:py-20 border-y border-white/5">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-stretch">
 
@@ -604,8 +604,8 @@ export default function Home() {
       </section>
 
       {/* ── Player Spotlight ─────────────────────── */}
-      <section className="py-20 container mx-auto px-4">
-        <h2 className="font-display text-4xl uppercase text-center mb-12" style={{ letterSpacing: "0.06em" }}>
+      <section className="py-8 sm:py-20 container mx-auto px-4">
+        <h2 className="font-display text-2xl sm:text-4xl uppercase text-center mb-6 sm:mb-12" style={{ letterSpacing: "0.06em" }}>
           Player <span className="text-primary">Spotlight</span>
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
@@ -635,11 +635,11 @@ export default function Home() {
       </section>
 
       {/* ── Club Honours ─────────────────────────── */}
-      <section className="bg-card border-y border-white/5 py-20">
+      <section className="bg-card border-y border-white/5 py-8 sm:py-20">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <p className="text-primary font-bold uppercase tracking-[0.3em] text-xs mb-3">A Legacy of Success</p>
-            <h2 className="font-display text-4xl uppercase" style={{ letterSpacing: "0.08em" }}>
+          <div className="text-center mb-5 sm:mb-12">
+            <p className="text-primary font-bold uppercase tracking-[0.3em] text-xs mb-2 sm:mb-3">A Legacy of Success</p>
+            <h2 className="font-display text-2xl sm:text-4xl uppercase" style={{ letterSpacing: "0.08em" }}>
               Club <span className="text-primary">Honours</span>
             </h2>
           </div>
@@ -650,9 +650,9 @@ export default function Home() {
       </section>
 
       {/* ── Sponsors ─────────────────────────────── */}
-      <section className="bg-white py-14">
+      <section className="bg-white py-6 sm:py-14">
         <div className="container mx-auto px-4">
-          <p className="text-center text-xs font-bold uppercase tracking-[0.3em] text-black/40 mb-10">
+          <p className="text-center text-xs font-bold uppercase tracking-[0.3em] text-black/40 mb-4 sm:mb-10">
             Our Partners & Sponsors
           </p>
           <div className="flex flex-wrap justify-center items-center gap-10 md:gap-20">

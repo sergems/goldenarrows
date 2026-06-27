@@ -31,9 +31,9 @@ export default function News() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-6 sm:py-12">
         {/* Filters */}
-        <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-10">
+        <div className="flex flex-col md:flex-row gap-3 items-center justify-between mb-5 sm:mb-10">
           <div className="hidden md:flex gap-2 flex-wrap">
             {CATEGORIES.map(cat => (
               <button
@@ -65,7 +65,7 @@ export default function News() {
 
         {/* Featured Article */}
         {featured && !search && (
-          <Link href={`/news/${featured.id}`} className="block mb-12">
+          <Link href={`/news/${featured.id}`} className="block mb-6 sm:mb-12">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
