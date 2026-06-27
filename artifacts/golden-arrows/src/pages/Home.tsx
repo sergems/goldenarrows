@@ -299,13 +299,13 @@ function NormalHero() {
     : null;
 
   return (
-    <section className="relative w-full bg-background overflow-hidden">
-      {/* Desktop-only height spacer */}
+    <section className="relative w-full bg-black overflow-hidden">
+      {/* Desktop height spacer (hidden on mobile — image sets the height naturally) */}
       <div className="hidden sm:block h-[65vh] md:h-[80vh] min-h-[600px]" />
 
       {/* Images
-          Mobile  — active slide is in-flow (sets natural height); others are absolute (hidden)
-          Desktop — all slides are absolute, filling the spacer above */}
+          Mobile  — active slide is in-flow (natural height, no crop); others are absolute
+          Desktop — all slides are absolute, filling the spacer */}
       <div className="sm:absolute sm:inset-0 sm:z-0 relative">
         {active.length > 0 ? (
           active.map((slide, i) => (
@@ -334,14 +334,12 @@ function NormalHero() {
         )}
       </div>
 
-      {/* Gradient overlay (desktop only) */}
-      <div className="hidden sm:block absolute inset-0 z-[1] bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+      {/* Gradient — bottom-up, makes text readable on all screen sizes */}
+      <div className="absolute inset-x-0 bottom-0 z-[1] h-3/4 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
 
-      {/* Text
-          Mobile  — sits below the image, on the dark page background
-          Desktop — absolute centre overlay */}
-      <div className="relative sm:absolute sm:inset-0 sm:z-10 sm:flex sm:items-center sm:justify-center bg-background sm:bg-transparent px-4 py-6 sm:py-0">
-        <div className="container mx-auto text-left sm:text-center">
+      {/* Text — always overlaid on the image, anchored to the bottom */}
+      <div className="absolute inset-x-0 bottom-0 z-10 px-4 pb-5 sm:pb-14 text-center">
+        <div className="container mx-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentSlide ? currentSlide.id : "default"}
@@ -353,57 +351,45 @@ function NormalHero() {
               {currentSlide ? (
                 <>
                   <h1
-                    className="font-display text-4xl sm:text-6xl md:text-8xl lg:text-9xl text-white uppercase mb-3 drop-shadow-lg leading-none"
+                    className="font-display text-4xl sm:text-6xl md:text-8xl lg:text-9xl text-white uppercase mb-2 sm:mb-4 drop-shadow-lg leading-none"
                     style={{ letterSpacing: "0.06em" }}
                   >
                     {titleNode}
                   </h1>
                   {currentSlide.subtitle && (
-                    <p className="text-sm sm:text-lg md:text-xl text-white/80 font-medium mb-4 sm:mb-10 max-w-xl sm:mx-auto">
+                    <p className="text-sm sm:text-lg md:text-xl text-white/80 font-medium mb-3 sm:mb-8 max-w-xl mx-auto">
                       {currentSlide.subtitle}
                     </p>
                   )}
                   {currentSlide.link && currentSlide.linkLabel && (
-                    <div className="flex flex-wrap sm:justify-center gap-4">
+                    <div className="flex flex-wrap justify-center gap-4 mb-3 sm:mb-0">
                       <Link
                         href={currentSlide.link}
-                        className="bg-primary text-black font-bold uppercase tracking-wider px-8 py-4 rounded-sm hover:bg-primary/90 transition-colors"
+                        className="bg-primary text-black font-bold uppercase tracking-wider px-6 sm:px-8 py-3 sm:py-4 rounded-sm hover:bg-primary/90 transition-colors text-sm sm:text-base"
                       >
                         {currentSlide.linkLabel}
                       </Link>
-                    </div>
-                  )}
-                  {/* Slide dots — shown inline below text on mobile */}
-                  {active.length > 1 && (
-                    <div className="sm:hidden flex gap-2 mt-5">
-                      {active.map((_, i) => (
-                        <button
-                          key={i}
-                          onClick={() => setIdx(i)}
-                          className={`rounded-full transition-all duration-300 ${i === idx ? "w-6 h-2 bg-primary" : "w-2 h-2 bg-white/20 hover:bg-white/40"}`}
-                        />
-                      ))}
                     </div>
                   )}
                 </>
               ) : null}
             </motion.div>
           </AnimatePresence>
+
+          {/* Dot navigation — inline below text, same position on all screen sizes */}
+          {active.length > 1 && (
+            <div className="flex gap-2 justify-center mt-3">
+              {active.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setIdx(i)}
+                  className={`rounded-full transition-all duration-300 ${i === idx ? "w-6 h-2 bg-primary" : "w-2 h-2 bg-white/40 hover:bg-white/60"}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Dot navigation — desktop only, pinned to bottom of section */}
-      {active.length > 1 && (
-        <div className="hidden sm:flex absolute bottom-4 left-1/2 -translate-x-1/2 z-20 gap-2">
-          {active.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setIdx(i)}
-              className={`rounded-full transition-all duration-300 ${i === idx ? "w-6 h-2 bg-primary" : "w-2 h-2 bg-white/40 hover:bg-white/60"}`}
-            />
-          ))}
-        </div>
-      )}
     </section>
   );
 }
