@@ -104,7 +104,7 @@ export default function News() {
                   <img
                     src={item.imageUrl}
                     alt={item.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute top-3 left-3 bg-primary text-black text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded">
                     {item.category}

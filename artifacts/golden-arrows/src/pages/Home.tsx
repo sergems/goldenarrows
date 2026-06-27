@@ -469,7 +469,7 @@ export default function Home() {
             <motion.div key={item.id} whileHover={{ y: -5 }} className="group cursor-pointer">
               <Link href={`/news/${item.id}`}>
                 <div className="aspect-[4/3] rounded-lg overflow-hidden mb-4 relative bg-card">
-                  <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105" />
                   <div className="absolute top-4 left-4 bg-primary text-black text-xs font-bold uppercase tracking-wider px-3 py-1 rounded">
                     {item.category}
                   </div>
